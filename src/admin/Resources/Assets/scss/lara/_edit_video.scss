@@ -1,0 +1,66 @@
+.nav-video-tabs {
+	li {
+		width: 50%;
+
+		.nav-link.subtabs {
+			width: 100%;
+		}
+	}
+}
+
+.cf-lara-file-list {
+	.box-header {
+		&.cf-box-header {
+			background-color: $orange-light-bg;
+		}
+	}
+
+	.cf-uid {
+		font-size: 11px;
+	}
+
+	.cf-video-iframe {
+		border: none;
+		height: 100%;
+		width: 100%;
+	}
+
+	.cf-file-info-panel {
+		position: relative;
+		height: 160px;
+	}
+
+	.video-no-preview {
+		width: 100%;
+		height: 150px;
+		padding-top: 30px;
+		background-color: $lara-form-input-bg;
+		color: $lara-medium-dark-grey;
+	}
+
+	.cf-cdn-thumbnail {
+		max-width: 100%;
+		height: auto;
+	}
+
+	.cf-row-divider {
+		border-bottom: solid 1px $lara-box-border;
+	}
+}
+
+.box-tools-videofiles {
+	position: relative;
+	width: 100%;
+	top: 0;
+	right: 0
+}
+
+.video-info-panel,
+.videofile-info-panel {
+	position: relative;
+	height: 160px;
+}
+
+.video-row-border-bottom {
+	border-bottom: solid 1px $lara-box-border;
+}

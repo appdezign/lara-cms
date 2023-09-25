@@ -1,0 +1,13 @@
+.alert {
+	margin: 0;
+	padding: 0.5rem 1rem;
+	border-radius: 2px !important;
+	opacity: 1;
+	transition: opacity ease-in-out 500ms;
+	&.hide {
+		opacity: 0;
+		transition: opacity ease-in-out 500ms;
+	}
+}
+
+

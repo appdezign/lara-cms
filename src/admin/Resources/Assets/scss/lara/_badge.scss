@@ -1,0 +1,11 @@
+.badge {
+	&.lara-info-badge {
+		cursor: pointer;
+		color: $pure-white;
+		background-color: $lara-success;
+		border-radius: 1000px;
+		&:hover {
+			color: $pure-white;
+		}
+	}
+}

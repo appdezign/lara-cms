@@ -1,0 +1,27 @@
+.box-header {
+	&.box-header-menu {
+		display: block !important;
+		margin-bottom: 20px;
+		background: none;
+		border-top: solid 1px $table-header-border;
+		border-bottom: solid 1px $table-header-border;
+	}
+}
+
+ul.nested-set {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+
+.app-sidebar {
+	.fa-icon.fa-icon-2 {
+		display: flex;
+		align-content: center;
+		.far,
+		.fad {
+			font-size: 1.4rem !important;
+		}
+	}
+}

@@ -1,0 +1,14 @@
+
+	public function $METHOD$(Request $request) {
+
+		// custom method
+
+		dd($request);
+
+		$viewfile = $this->getFrontViewFile($this->entity);
+
+		return view($viewfile, [
+			'data' => $this->data,
+		]);
+
+	}

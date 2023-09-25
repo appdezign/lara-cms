@@ -1,0 +1,22 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use Lara\Admin\Http\Controllers\Base\BaseController;
+
+use Eve\Models\$MODEL$;
+
+class $CLASS$ extends BaseController
+{
+
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
+	protected function make(): $MODEL$
+	{
+		return $MODEL$::create();
+	}
+
+}

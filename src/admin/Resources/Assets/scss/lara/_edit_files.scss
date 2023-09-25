@@ -1,0 +1,20 @@
+.box-tools-files {
+	position: relative;
+	width: 100%;
+	top: 0;
+	right: 0;
+}
+
+.lara-file-list {
+	.lara-file-list-item {
+		border-bottom: solid 1px $lara-box-border;
+	}
+	.file-types {
+		i {
+			font-size: 48px;
+			color: $lara-medium-grey;
+		}
+	}
+}
+
+

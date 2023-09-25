@@ -1,0 +1,128 @@
+.layout-container {
+	padding: 25px 0;
+	background-color: $lara-edit-panel-bg;
+	text-align: center;
+}
+
+.layout-container-inner {
+	width: 300px;
+	margin: 0 auto;
+	padding: 10px 30px;
+	font-size: 11px;
+	font-weight: 300;
+	color: $lara-medium-light-grey;
+
+	background-color: $pure-white;
+}
+
+.layout-item-header {
+	margin: 0 0 5px 0 !important;
+	padding: 5px 2px;
+	text-align: center;
+	border: solid 1px $lara-box-border-dark;
+}
+
+.layout-item-hero {
+	margin: 0 0 5px 0 !important;
+	padding: 5px 2px;
+	text-align: center;
+	border: solid 1px $lara-success;
+}
+
+.layout-item-hero-inner {
+	padding: 20px 0;
+}
+
+.layout-item-page-title {
+	margin: 0 0 5px 0 !important;
+	padding: 5px 2px;
+	text-align: center;
+	border: solid 1px $lara-success;
+	border-radius: 2px
+}
+
+.layout-item-main {
+	margin: 0 0 5px 0 !important;
+	padding: 0;
+}
+
+/* sidebar right */
+.layout-item-right {
+	padding: 0 0 0 5px;
+}
+
+.layout-item-right-inner {
+	padding: 60px 0;
+	text-align: center;
+	border: solid 1px $lara-success;
+}
+
+.layout-item-content-right {
+	padding: 0 5px 0 0;
+}
+
+.layout-item-content-right-inner {
+	padding: 60px 0;
+	text-align: center;
+	border: solid 1px $lara-success;
+}
+
+/* sidebar left */
+.layout-item-left {
+	padding: 0 5px 0 0;
+}
+
+.layout-item-left-inner {
+	padding: 60px 0;
+	text-align: center;
+	border: solid 1px $lara-success;
+}
+
+.layout-item-content-left {
+	padding: 0 0 0 5px;
+}
+
+.layout-item-content-left-inner {
+	padding: 60px 0;
+	text-align: center;
+	border: solid 1px $lara-success;
+}
+
+/* sidebar left right */
+.layout-item-content-left-right {
+	padding: 0 5px 0 5px;
+}
+
+.layout-item-content-left-right-inner {
+	padding: 60px 0;
+	text-align: center;
+	border: solid 1px $lara-success;
+}
+
+/* full width */
+.layout-item-content-full {
+	padding: 60px 2px;
+	text-align: center;
+	border: solid 1px $lara-success;
+}
+
+.layout-item-share {
+	margin: 0 0 5px 0 !important;
+	padding: 5px 2px;
+	text-align: center;
+	border: solid 1px $lara-success;
+}
+
+.layout-item-cta {
+	margin: 0 0 5px 0 !important;
+	padding: 5px 2px;
+	text-align: center;
+	border: solid 1px $lara-success;
+}
+
+.layout-item-footer {
+	margin: 0 !important;
+	padding: 5px 2px;
+	text-align: center;
+	border: solid 1px $lara-box-border-dark;
+}

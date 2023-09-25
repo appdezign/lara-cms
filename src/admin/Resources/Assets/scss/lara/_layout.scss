@@ -1,0 +1,49 @@
+/* ~~~~~~~~ Main Wrapper ~~~~~~~~ */
+@media(min-width: 992px) {
+	.app-wrapper {
+		margin-top: 50px !important;
+	}
+}
+
+/* ~~~~~~~~ Toolbar / Pagetitle ~~~~~~~~ */
+.app-toolbar {
+	margin-bottom: 1.5rem!important;
+	padding-top: 0.75rem!important;
+	padding-bottom: 0.75rem!important;
+	background-color: $pure-white !important;
+}
+
+/* ~~~~~~~~ Container ~~~~~~~~ */
+
+.container-fluid {
+	max-width: 1320px;
+}
+
+@media (min-width: 1200px) {
+	.container,
+	.container-lg,
+	.container-md,
+	.container-sm,
+	.container-xl,
+	.container-xxl {
+		max-width: 1320px;
+	}
+}
+
+@media (min-width: 1400px) {
+	.container,
+	.container-lg,
+	.container-md,
+	.container-sm,
+	.container-xl,
+	.container-xxl {
+		max-width: 1320px;
+	}
+}
+
+
+/* ~~~~~~~~ Page Title ~~~~~~~~ */
+
+.module-page-title {
+	min-height: 35px;
+}

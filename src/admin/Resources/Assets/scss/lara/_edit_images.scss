@@ -1,0 +1,101 @@
+.nav-line-tabs {
+	.nav-item {
+		.nav-link.active {
+			color: $lara-danger !important;
+
+			i {
+				color: $lara-danger !important;
+			}
+		}
+	}
+}
+
+.lara-dropzone {
+	.dropzone2 {
+		min-height: 0;
+		border: none;
+		background: none;
+		padding: 0;
+
+		.dropzone-previews {
+			min-height: 150px;
+			border: 2px dashed rgba($lara-info, 0.5);
+			background: $lara-box-header-bg;
+			padding: 20px 20px;
+		}
+
+		.dz-message {
+			font-size: 20px;
+			font-weight: 300;
+		}
+
+		&.dz-clickable * {
+			cursor: pointer;
+		}
+	}
+}
+
+.lara-file-list .image-row-header,
+.lara-image-list .image-row-header {
+	margin-bottom: 10px;
+	padding: 6px 0;
+	border-top: solid 1px $table-header-border;
+	border-bottom: solid 1px $table-header-border;
+
+	h4 {
+		margin: 10px 0;
+		font-size: 18px;
+		font-weight: 300;
+		color: $lara-danger;
+	}
+}
+
+.image-tags {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+
+	.image-tag {
+		display: inline-block;
+		float: left;
+		margin-right: 10px;
+		padding: 8px;
+		font-size: 12px;
+		line-height: 12px;
+		color: $pure-white;
+		background-color: $lara-success;
+	}
+}
+
+.file-edit-panel,
+.video-edit-panel,
+.videofile-edit-panel,
+.larawidget-edit-panel,
+.image-edit-panel {
+	padding: 20px 20px 40px 20px;
+	background-color: $lara-edit-panel-bg;
+	border: solid 1px $lara-edit-panel-border;
+}
+
+/* reorder gallery images */
+.img-featured-small {
+	position: relative;
+}
+
+.box-tools-images {
+	position: relative;
+	width: 100%;
+	top: 0;
+	right: 0;
+}
+
+.image-row-border-bottom {
+	border-bottom: solid 1px $lara-box-border;
+}
+
+.image-info-panel {
+	position: relative;
+	height: 200px;
+}

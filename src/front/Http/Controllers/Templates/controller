@@ -1,0 +1,22 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use Lara\Front\Http\Controllers\Base\BaseFrontController;
+
+use Illuminate\Http\Request;
+
+use Eve\Models\$MODEL$;
+
+class $CLASS$ extends BaseFrontController
+{
+
+	public function __construct(Request $request) {
+		parent::__construct($request);
+	}
+
+	protected function make(): $MODEL$ {
+		return $MODEL$::create();
+	}
+
+}

@@ -1,0 +1,14 @@
+/* ~~~~~~~~ Main Content Card ~~~~~~~~ */
+
+.card {
+	&.card-border {
+		border-radius: 2px !important;
+		border: solid 1px $lara-box-border-dark;
+	}
+	&.main-content {
+		border-radius: 2px !important;
+		.card-header {
+			display: block !important;
+		}
+	}
+}

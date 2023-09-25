@@ -1,0 +1,236 @@
+/* ~~~~~~~~ Edit Pages ~~~~~~~~ */
+
+.app-header {
+	a.btn-icon-close {
+		i {
+			font-size: 24px;
+			color: $lara-dark-text;
+		}
+
+		&:hover {
+			color: $lara-primary;
+		}
+	}
+}
+
+/* ~~~~~~~~ Content Box ~~~~~~~~ */
+.content-box {
+	.content-box-header {
+
+	}
+
+	.content-box-body {
+		padding-top: 1rem;
+		padding-bottom: 1rem;
+	}
+}
+
+
+/* ~~~~~~~~ Legacy Box ~~~~~~~~ */
+.box {
+	position: relative;
+	width: 100%;
+	margin-bottom: 20px;
+	background: $pure-white;
+	box-shadow: none;
+
+	&.box-default {
+		border: solid 1px $lara-box-border;
+	}
+
+	&.status-safe {
+		.box-header {
+			h3 {
+				color: $lara-primary;
+			}
+		}
+	}
+
+	&.status-warning {
+		.box-header {
+			h3 {
+				color: $lara-danger;
+			}
+		}
+	}
+
+	.box-header {
+		display: flex;
+		justify-content: space-between;
+		padding: 8px 15px;
+		background-color: $lara-box-header-bg;
+
+		&.with-border {
+			border-bottom: 1px solid $lara-box-border;
+		}
+
+		.box-title {
+			margin: 0;
+			font-size: 13px;
+			font-weight: 400;
+			color: rgb(120, 120, 140);
+		}
+	}
+
+	.box-body {
+		padding: 25px 15px;
+	}
+}
+
+.lang-version {
+	display: inline-block;
+	padding: 4px 7px;
+	border: solid 1px $lara-box-border;
+
+	&.active {
+		border-color: $lara-danger;
+	}
+}
+
+.lang-version-parent-title {
+	display: inline-block;
+	padding: 4px 8px;
+	text-align: center;
+}
+
+.lang-version-child-title {
+	color: $lara-medium-dark-grey;
+}
+
+.og-preview {
+	width: 500px;
+	max-width: 100%;
+	margin: 0 auto;
+	border: solid 1px $lara-light-grey;
+	box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.15);
+	text-align: left;
+
+	.og-preview-content {
+		padding: 15px;
+
+		.og-preview-sitename {
+			margin-bottom: 10px;
+			font-size: 12px;
+			color: $lara-medium-light-grey;
+		}
+
+		.og-preview-title {
+			margin: 10px 0;
+			font-size: 16px;
+		}
+
+		.og-preview-text {
+			margin-bottom: 10px;
+			font-size: 12px;
+			color: $lara-medium-grey;
+		}
+	}
+}
+
+
+/* ~~~~~~~~ Legacy Forms ~~~~~~~~ */
+
+.form-group {
+	margin-bottom: 15px;
+}
+
+.form-control {
+	padding: 6px 12px;
+	font-size: 14px;
+}
+
+.tox-tinymce {
+	border-radius: 0 !important;
+}
+
+.tox {
+	.tox-toolbar,
+	.tox-toolbar__overflow,
+	.tox-toolbar__primary,
+	.tox-menubar {
+		background-color: rgb(242, 246, 250) !important;
+	}
+}
+
+.date-flat-pickr {
+	position: relative;
+	width: 100%;
+	height: 100%;
+
+	padding-left: 37px;
+
+	.flatpickr-input[readonly] {
+		background-color: $pure-white !important;
+
+		&:hover {
+			background-color: $lara-form-input-bg !important;
+		}
+
+		&:disabled {
+			color: $gray-500 !important;
+			background-color: $lara-form-input-bg !important;
+			border-color: $lara-form-input-border !important;
+		}
+	}
+
+	.flat-pickr-button {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		height: 35px;
+		width: 35px;
+		padding-top: 6px;
+		padding-left: 8px;
+		cursor: pointer;
+		background-color: $pure-white;
+		border: solid 1px $lara-form-input-border;
+
+		&:hover {
+			background-color: $lara-form-input-bg;
+		}
+
+		i {
+			font-size: 18px;
+		}
+	}
+
+
+}
+
+.character-counter {
+	margin: 5px 0 20px 12px;
+	color: $lara-medium-dark-grey;
+}
+
+.google-preview {
+	.snippet-preview {
+		padding: 25px 40px;
+		box-shadow: 1px 1px 12px rgb(0, 0, 0, 0.25);
+
+		.preview-title a {
+			font-family: Arial, sans-serif;
+			font-size: 18px;
+			font-weight: 400;
+			color: $google-blue;
+		}
+
+		.preview-url {
+			font-family: Arial, sans-serif;
+			font-size: 14px;
+			font-weight: 400;
+			color: $google-green;
+		}
+
+		.preview-content {
+			font-family: Arial, sans-serif;
+			font-size: 13px;
+			font-weight: 400;
+			color: $google-grey;
+		}
+	}
+}
+
+i.slug-lock-icon {
+	color: $body-text-color !important;
+}

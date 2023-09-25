@@ -1,0 +1,100 @@
+/* ~~~~~~~~ Forms ~~~~~~~~ */
+.form-control {
+	border-radius: 2px !important;
+	font-weight: 400 !important;
+}
+
+.form-control:disabled,
+.form-control:read-only,
+.select2-container--bootstrap5.select2-container--disabled .form-select {
+	background-color: $lara-form-input-bg !important;
+	border: solid 1px $lara-form-input-border;
+}
+
+.form-select,
+.form-select-sm {
+	border-radius: 2px !important;
+}
+
+.select2-container--bootstrap5 .select2-dropdown {
+	border-radius: 2px !important;
+	border: solid 1px $lara-box-border-dark !important;
+	box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.08);
+
+	.select2-search .select2-search__field {
+		border-radius: 2px !important;
+	}
+}
+
+.table-lara .form-check {
+	&.form-check-batch {
+		width:23px;
+	}
+}
+
+@media(min-width: 768px) {
+	.table-lara .form-check {
+		margin-left: 15px;
+	}
+}
+
+.form-check-input[type=checkbox] {
+	border-radius: 2px;
+}
+
+.form-check-input {
+	border: solid 1px $lara-box-border-dark;
+}
+
+.select-all-icon {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.menu-slug-edit-prefix {
+	padding-right: 0;
+
+	.menu-slug-edit-prefix-inner {
+		padding: 6px;
+		font-size: 14px;
+		font-weight: 400;
+		color: #a1a5b7;
+		background-color: rgb(246, 248, 250);
+		border-width: 1px 0 1px 1px;
+		border-color: rgb(220, 225, 230);
+		border-style: solid;
+		border-radius: 2px 0 0 2px !important;
+	}
+}
+
+.menu-slug-edit-prefix-input {
+	padding-left: 0;
+	input {
+		border-radius: 0 2px 2px 0 !important;
+	}
+}
+
+.select-two-xs {
+	width: 80px;
+}
+.select-two-sm {
+	width: 100px;
+}
+.select-two-md {
+	width: 120px;
+}
+.select-two-lg {
+	width: 140px;
+}
+.select-two-xl {
+	width: 160px;
+}
+.select-two-xxl {
+	width: 180px;
+}
+.select-two-xxxl {
+	width: 200px;
+}
+

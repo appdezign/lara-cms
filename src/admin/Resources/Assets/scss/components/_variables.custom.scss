@@ -1,0 +1,44 @@
+//
+// To make future updates easier consider overriding the global variables from _variables.bootstrap.scss and _variables.custom.scss for current demo in this file.
+// Note that this file is included first and variables defined in _variables.bootstrap.scss and _variables.custom.scss
+// are not accessible in this file but you can override any global variable as shown below:
+//
+
+// Bootstrap color system
+$white: 											#ffffff;
+
+// Theme colors
+// Primary
+$primary:       									#1969d7;
+$primary-active:                                    #1051ab;
+$primary-light:    								    #f1faff;
+$primary-light-dark: #232d41;
+$primary-inverse:  									$white;
+
+// Success
+$success:       									#2ab5f6;
+$success-active:    								#14a0dc;
+$success-light: #ebf5ff;
+$success-light-dark: #28323c;
+$success-inverse:  									$white;
+
+// Info
+$info:                                              #6366f1;
+$info-active: #5055d0;
+$info-light:    									#f8f5ff;
+$info-light-dark: #2d3250;
+$info-inverse:  									$white;
+
+// Danger
+$danger:       									    #d81b60;
+$danger-active:    									#be0046;
+$danger-light:    									#fff5f8;
+$danger-light-dark:    								#3a2434;
+$danger-inverse:  									$white;
+
+// Warning
+$warning:       									#ffc700;
+$warning-active:    								#f1bc00;
+$warning-light:    									#fff8dd;
+$warning-light-dark:    							#392f28;
+$warning-inverse:  									$white;

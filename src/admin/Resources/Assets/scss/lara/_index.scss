@@ -1,0 +1,178 @@
+/* ~~~~~~~~ Main Index Table ~~~~~~~~ */
+
+/* ~~~~~~~~ Index Toolbar ~~~~~~~~ */
+
+.index-toolbar {
+	min-height: 45px;
+
+	.tools i {
+		font-size: 16px;
+	}
+}
+
+.index-batch {
+	min-height: 45px;
+}
+
+.select-all-icon i {
+	font-size: 24px;
+	color: $lara-dark-grey;
+}
+
+.index-toolbar .filters,
+.index-toolbar .search,
+.index-toolbar .tools {
+	padding-bottom: 0.75rem;
+}
+
+.table-lara {
+	&.table-row-bordered {
+		thead tr {
+			border-top: solid 1px $table-header-border !important;
+			border-bottom: solid 1px $table-header-border !important;
+			th {
+				color: $lara-box-header-color;
+			}
+		}
+
+		tbody tr {
+			&:first-child {
+				> td {
+					padding-top: 16px;
+
+					&.action-icons {
+						padding-top: 7px;
+					}
+				}
+			}
+
+			&:last-child {
+				> td {
+					padding-bottom: 16px;
+
+					&.action-icons {
+						padding-bottom: 7px;
+					}
+				}
+			}
+		}
+
+		tfoot tr {
+			border-top: solid 1px $table-header-border !important;
+			border-bottom: solid 1px $table-header-border !important;
+		}
+	}
+
+	.status > i {
+		font-size: 16px !important;
+
+		&.status-publish {
+			color: $lara-status-publish;
+		}
+
+		&.status-hide {
+			color: $lara-status-hide;
+		}
+
+		&.status-concept {
+			color: $lara-status-concept;
+		}
+
+		&.status-sticky {
+			color: $lara-danger;
+		}
+	}
+
+	i[class*=" fa-"] {
+		color: $lara-font-color;
+	}
+
+	td {
+		&.action-icons {
+			padding-top: 0;
+			padding-bottom: 0;
+
+			a {
+				border: solid 1px transparent;
+				padding: 0.7rem 0.5rem 0.5rem;
+				border-radius: 2px !important;
+
+				i {
+					color: $lara-darker-grey;
+					font-size: 20px;
+				}
+
+				&:hover {
+					border-color: $lara-primary;
+
+					i {
+						color: $lara-primary;
+					}
+				}
+
+			}
+
+			div {
+				i {
+					font-size: 20px;
+				}
+			}
+
+			.text-muted {
+				i {
+					color: $lara-text-muted;
+				}
+			}
+		}
+
+		&.media-icons i {
+			font-size: 15px;
+		}
+
+		.locked-icon {
+			padding-top: 2px;
+			i {
+				font-size: 16px;
+				color: rgb(40, 50, 60);
+			}
+		}
+
+	}
+
+}
+
+.table.table-lara tr:first-child,
+.table.table-lara th:first-child,
+.table.table-lara td:first-child {
+	padding-left: 9px !important;
+}
+
+.table.table-lara tr:last-child,
+.table.table-lara th:last-child,
+.table.table-lara td:last-child {
+	padding-right: 9px !important;
+}
+
+.action-icon-disabled {
+	padding: 0.7rem 0.5rem 0.5rem;
+	i {
+		font-size: 20px;
+	}
+}
+
+
+/* ~~~~~~~~ Pagination ~~~~~~~~ */
+.pagination {
+	.page-item {
+		margin-right: 0.125rem;
+
+		.page-link {
+			border-radius: 2px !important;
+		}
+
+	}
+}
+
+.pagination-page-select {
+	width: 80px;
+}

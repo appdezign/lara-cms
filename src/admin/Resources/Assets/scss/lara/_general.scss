@@ -1,0 +1,110 @@
+/* ~~~~~~~~ General ~~~~~~~~ */
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+a {
+	color: $lara-primary;
+}
+
+a:hover {
+	color: $lara-danger;
+}
+
+.app-default, body {
+	background-color: $pure-white;
+}
+
+body.module-dashboard-index {
+	background-color: $lara-edit-panel-bg;
+}
+
+.btn {
+	border-radius: 2px !important;
+}
+
+.page-heading {
+	&.text-dark {
+		color: $lara-box-header-color !important;
+	}
+
+	.spam-tag {
+		font-weight: 300;
+		color: $lara-danger;
+	}
+}
+
+
+.action-icons {
+	a {
+		display: block;
+		padding: 0.7rem 0.5rem 0.5rem;
+		border: solid 1px transparent;
+		border-radius: 2px !important;
+
+
+		i {
+			font-size: 20px;
+			line-height: 1;
+			color: $lara-darker-grey;
+		}
+
+		&:hover {
+
+			border-color: $lara-primary;
+
+			i {
+				color: $lara-primary;
+			}
+		}
+
+	}
+
+	.btn:not(.btn-outline):not(.btn-dashed):not(.border-hover):not(.border-active):not(.btn-flush):not(.btn-icon) {
+		border: solid 1px transparent !important;
+		padding: 0.7rem 0.5rem 0.5rem !important;
+
+		i {
+			padding: 0;
+			font-size: 20px;
+			line-height: 1;
+			color: $lara-darker-grey;
+		}
+
+		&:hover {
+			border-color: rgba($lara-primary, 0.5) !important;
+
+			i {
+				color: $lara-primary;
+			}
+		}
+
+	}
+
+}
+
+.geo-map-canvas {
+	width: 100%;
+	height: 500px;
+	border: solid 1px $lara-box-border;
+}
+
+.trans-dupl-border {
+	border-bottom: solid 1px $lara-primary;
+}
+
+.lara-admin-logo-title {
+	font-size: 32px;
+}
+
+
+
+
+
+
+
+
+
+

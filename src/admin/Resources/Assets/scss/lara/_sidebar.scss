@@ -1,0 +1,78 @@
+/* ~~~~~~~~ Sidebar Left ~~~~~~~~ */
+
+[data-kt-app-layout=dark-sidebar] .app-sidebar {
+	background-color: $lara-sidebar-bg;
+
+	.app-sidebar-logo {
+		height: 50px !important;
+		background: linear-gradient(to right, $lara-gradient-blue 0%, $lara-gradient-blue-dark 100%);
+		border-bottom: solid 1px $lara-dark-card-border;
+
+		&.builder {
+			background: linear-gradient(to right, $lara-gradient-purple 0%, $lara-gradient-purple-dark 100%);
+		}
+
+		.text-logo {
+			position: relative;
+			padding-right: 10px;
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			font-size: 20px;
+			font-weight: 300;
+			color: $pure-white;
+			letter-spacing: 1px;
+
+			.text-logo-minor {
+				position: absolute;
+				top: 3px;
+				right: 2px;
+				font-size: 13px;
+				font-weight: 400;
+				color: $lara-success;
+			}
+		}
+	}
+
+	.menu {
+		.menu-item {
+			.menu-link {
+				&.active {
+					background-color: $lara-sidebar-active-bg;
+				}
+
+				.menu-title {
+					color: $lara-sidebar-text-color;
+				}
+			}
+		}
+	}
+}
+
+.app-sidebar-mobile-logo {
+	.text-logo {
+		position: relative;
+		padding-right: 10px;
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-size: 20px;
+		font-weight: 300;
+		color: $pure-white;
+		letter-spacing: 1px;
+
+		.text-logo-minor {
+			position: absolute;
+			top: 3px;
+			right: 2px;
+			font-size: 13px;
+			font-weight: 400;
+			color: $lara-success;
+		}
+	}
+}
+
+.menu-accordion {
+	.menu-item {
+		.menu-link {
+			padding: 0.25rem 1rem !important;
+		}
+	}
+}
+

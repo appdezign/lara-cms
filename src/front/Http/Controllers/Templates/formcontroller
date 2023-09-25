@@ -1,0 +1,26 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use Lara\Front\Http\Controllers\Base\FormController;
+
+use Illuminate\Http\Request;
+
+use Eve\Models\$MODEL$;
+
+class $CLASS$ extends FormController {
+
+	protected $emailSubject;
+
+	public function __construct(Request $request) {
+		parent::__construct($request);
+
+		$this->emailSubject = "This is my brand new subject";
+
+	}
+
+	protected function make(): $MODEL$ {
+		return $MODEL$::create();
+	}
+
+}

@@ -1,0 +1,18 @@
+/* ~~~~~~~~ Dashboard Cards ~~~~~~~~ */
+
+.module-dashboard {
+	.card {
+		border-radius: 2px !important;
+
+		.card-header {
+			padding: 0 1rem;
+			min-height: 40px;
+
+			.card-title {
+				font-size: 14px !important;
+				font-weight: normal;
+				color: $lara-box-header-color;
+			}
+		}
+	}
+}

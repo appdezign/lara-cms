@@ -1,0 +1,124 @@
+$lara-primary: #1969d7;
+$lara-success: #2ab5f6;
+$lara-info: #7239ea;
+$lara-danger: #d81b60;
+$lara-warning: #ffc700;
+
+$pure-white: #fff;
+$pure-black: #000;
+
+$body-text-color: #181C32;
+
+$lara-box-border: rgb(200, 210, 225);
+$lara-box-border-dark: rgb(200, 210, 225);
+$lara-box-header-bg: rgb(248, 250, 252);
+$lara-box-header-color: rgb(100, 120, 150);
+
+$lara-edit-panel-bg: rgb(235, 240, 248);
+$lara-edit-panel-border: rgb(200, 210, 225);
+
+$table-header-border: rgb(190, 210, 240);
+$table-border-color: rgb(239, 242, 245);
+
+$lara-dark-text: rgb(60, 70, 85);
+
+$lara-form-input-bg: rgb(246, 248, 250);
+$lara-form-input-border: rgb(220, 225, 230);
+
+
+$lara-gradient-blue: #324D78;
+$lara-gradient-blue-dark: #2A4064;
+$lara-gradient-blue-darker: #223450;
+
+$lara-gradient-purple: #373796;
+$lara-gradient-purple-dark: #30307d;
+$lara-gradient-purple-darker: #282864;
+
+$lara-sidebar-bg: rgb(21, 28, 41);
+$lara-sidebar-active-bg: rgb(41, 48, 61);
+$lara-sidebar-text-color: rgb(150, 160, 170);
+
+$lara-font-color: rgb(120,140,165);
+$lara-text-muted: rgb(200, 210, 220);
+
+$lara-darker-grey: rgb(60, 80, 105);
+$lara-dark-grey: rgb(80, 100, 125);
+$lara-medium-darker-grey: rgb(100, 120, 145);
+$lara-medium-dark-grey: rgb(120, 140, 165);
+$lara-medium-grey: rgb(140, 160, 185);
+$lara-medium-light-grey: rgb(160, 180, 205);
+$lara-medium-lighter-grey: rgb(180, 200, 225);
+$lara-light-grey: rgb(200, 210, 225);
+$lara-lighter-grey: rgb(220, 230, 245);
+
+$lara-dark-card-border: #2b2b40;
+
+$lara-status-publish: #009664;
+$lara-status-hide: #ff7d00;
+$lara-status-concept: #c80032;
+
+$google-blue: #1a0dab;
+$google-green: #006621;
+$google-grey: #444;
+
+$orange-light-bg: #fff0e6;
+
+/* ~~~~~~~~ colors ~~~~~~~~ */
+.color-primary {
+	color: $lara-primary !important;
+}
+
+.color-success {
+	color: $lara-success !important;
+}
+
+.color-info {
+	color: $lara-info !important;
+}
+
+.color-warning {
+	color: $lara-warning !important;
+}
+
+.color-danger {
+	color: $lara-danger !important;
+}
+
+.color-black {
+	color: $pure-black !important;
+}
+
+.color-white {
+	color: $pure-white !important;
+}
+.bg-white {
+	background-color: $pure-white !important;
+}
+
+.bg-primary {
+	background-color: $lara-primary !important;
+}
+
+.bg-success {
+	background-color: $lara-success !important;
+}
+
+.bg-info {
+	background-color: $lara-info !important;
+}
+
+.bg-warning {
+	background-color: $lara-warning !important;
+}
+
+.bg-danger {
+	background-color: $lara-danger !important;
+}
+
+.bg-lara-box-header {
+	background-color: $lara-box-header-bg !important;
+}
+
+.bg-orange-light {
+	background-color: $orange-light-bg !important;
+}
