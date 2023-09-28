@@ -17,9 +17,6 @@
 			<a href="#" class="app-sidebar-mobile-logo d-lg-none">
 				<div class="text-logo">
 					Lara {{ $laraversion->major }}
-					<div class="text-logo-minor">
-						{{ $laraversion->minor }}
-					</div>
 				</div>
 			</a>
 		</div>

@@ -68,10 +68,19 @@ trait LaraSync
 									$object->save();
 
 									if ($laraEntity->hasSeo()) {
-										$object->seo->seo_title = $remote->seo_title;
-										$object->seo->seo_description = $remote->seo_description;
-										$object->seo->seo_keywords = $remote->seo_keywords;
-										$object->seo->save();
+										$seo = $object->seo;
+										if($seo) {
+											$seo->seo_title = $remote->seo_title;
+											$seo->seo_description = $remote->seo_description;
+											$seo->seo_keywords = $remote->seo_keywords;
+											$seo->save();
+										} else {
+											$object->seo()->create([
+												'seo_title'       => $remote->seo_title,
+												'seo_description' => $remote->seo_description,
+												'seo_keywords'    => $remote->seo_keywords,
+											]);
+										}
 									}
 
 									// purge local images from DB
