@@ -29,6 +29,7 @@
 					</x-slot>
 
 					<select class="form-select form-select-sm"
+					        id="new_parent_id"
 					        name="new_parent_id"
 					        data-control="select2"
 					        data-hide-search="true">
