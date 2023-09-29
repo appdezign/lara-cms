@@ -212,11 +212,7 @@ trait LaraAdminHelpers
 	private function getActiveFrontTheme()
 	{
 
-		if (config('lara.client_five_theme')) {
-			// Bootstrap 5 theme
-			$theme = config('lara.client_five_theme');
-		} elseif (config('lara.client_theme')) {
-			// Bootstrap 3 theme
+		if (config('lara.client_theme')) {
 			$theme = config('lara.client_theme');
 		} else {
 			// Fallback
