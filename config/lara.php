@@ -58,7 +58,6 @@ return [
 
 	// BS5
 	'client_theme' => env('LARA_CLIENT_THEME', 'demo'),
-	'client_five_theme' => env('LARA_CLIENT_FIVE_THEME', 'demofive'),
 
 	'lara_remember_login' => env('LARA_REMEMBER_LOGIN', false),
 
