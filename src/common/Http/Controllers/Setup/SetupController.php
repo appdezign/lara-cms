@@ -34,8 +34,8 @@ class SetupController extends Controller {
 
 	public function __construct() {
 
-		$this->source = config('lara.lara_path') . '/common/src/Database/_Migrations';
-		$this->dest = config('lara.lara_path') . '/common/src/Database/Migrations';
+		$this->source = config('lara.lara_path') . '/src/common/Database/_Migrations';
+		$this->dest = config('lara.lara_path') . '/src/common/Database/Migrations';
 
 	}
 
