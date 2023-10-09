@@ -2,8 +2,35 @@
 
 return [
 
+	'manual' => [
+		'online' => [
+			'url' => 'https://userguide.laracms.nl/'
+		],
+	],
+
 	'page' => [
-		'always_show_lead' => false,
+		'cgroups_with_lead' => [
+			'email'
+		],
+	],
+
+	'settings' => [
+		'company_team_photo_ratio' => [
+			'1x1' => '1x1',
+			'2x1' => '2x1',
+			'3x1' => '3x1',
+			'3x2' => '3x2',
+			'4x1' => '4x1',
+			'4x3' => '4x3',
+			'16x9' => '16x9',
+			'2x3' => '2x3',
+			'3x4' => '3x4',
+		],
+	],
+
+	'menu' => [
+		'max_children' => '10',
+		'disable_parent_change' => false,
 	],
 
 	'hero_sizes' => [
@@ -280,11 +307,6 @@ return [
 			'type'  => 'time',
 			'check' => true,
 		],
-		'dob'           => [
-			'name'  => 'dob',
-			'type'  => 'date',
-			'check' => true,
-		],
 		'integer'       => [
 			'name'  => 'integer',
 			'type'  => 'integer',
@@ -385,11 +407,6 @@ return [
 		],
 		'date'    => [
 			'name'  => 'date',
-			'type'  => 'date',
-			'check' => true,
-		],
-		'dob'     => [
-			'name'  => 'dob',
 			'type'  => 'date',
 			'check' => true,
 		],
