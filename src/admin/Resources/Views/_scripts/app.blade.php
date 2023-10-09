@@ -16,8 +16,15 @@
 			let lastTab = sessionStorage.getItem('lastTab');
 			if (lastTab) {
 				const activeTabElement = document.querySelector('[data-bs-target="' + lastTab + '"]');
-				const activeTab = new bootstrap.Tab(activeTabElement)
-				activeTab.show()
+				if(activeTabElement) {
+					const activeTab = new bootstrap.Tab(activeTabElement)
+					activeTab.show()
+				} else {
+					// activate first tab
+					const activeTabElement = document.querySelector('.js-first-tab');
+					const activeTab = new bootstrap.Tab(activeTabElement)
+					activeTab.show()
+				}
 			} else {
 				// activate first tab
 				const activeTabElement = document.querySelector('.js-first-tab');
