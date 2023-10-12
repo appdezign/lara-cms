@@ -1746,6 +1746,7 @@ trait LaraAdminHelpers
 					}
 				}
 
+				$video->title = $request->input('_title_' . $videoID);
 				$video->youtubecode = $request->input('_youtubecode_' . $videoID);
 
 				$video->save();
