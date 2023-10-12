@@ -9,5 +9,5 @@ Lara CMS is a powerful and extremely flexible Content Management System, that is
 
 Find the complete Developer Guide at:
 
-    [https://docs.laracms.nl/](https://docs.laracms.nl/)
+[https://docs.laracms.nl/](https://docs.laracms.nl/)
     
