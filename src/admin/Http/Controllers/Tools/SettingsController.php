@@ -4,22 +4,34 @@ namespace Lara\Admin\Http\Controllers\Tools;
 
 use Lara\Admin\Http\Controllers\Base\BaseController;
 
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
-
+use Lara\Admin\Http\Traits\AdminTrait;
+use Lara\Admin\Http\Traits\AdminAuthTrait;
+use Lara\Admin\Http\Traits\AdminEntityTrait;
+use Lara\Admin\Http\Traits\AdminListTrait;
+use Lara\Admin\Http\Traits\AdminObjectTrait;
+use Lara\Admin\Http\Traits\AdminViewTrait;
 
 use Illuminate\Http\Request;
 
 use Lara\Common\Models\Setting;
 
-class SettingsController extends BaseController {
+class SettingsController extends BaseController
+{
 
-	use LaraAdminHelpers;
+	use AdminTrait;
+	use AdminAuthTrait;
+	use AdminEntityTrait;
+	use AdminListTrait;
+	use AdminObjectTrait;
+	use AdminViewTrait;
 
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 	}
 
-	protected function make(): Setting {
+	protected function make(): Setting
+	{
 		return Setting::create();
 	}
 
@@ -52,6 +64,5 @@ class SettingsController extends BaseController {
 		]);
 
 	}
-
 
 }

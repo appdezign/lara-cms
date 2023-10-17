@@ -13,8 +13,15 @@ use Lara\Common\Models\Menu;
 use Lara\Common\Models\Page;
 
 use App\Http\Controllers\Controller;
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
-use Lara\Admin\Http\Traits\LaraMenu;
+
+use Lara\Admin\Http\Traits\AdminTrait;
+use Lara\Admin\Http\Traits\AdminAuthTrait;
+use Lara\Admin\Http\Traits\AdminEntityTrait;
+use Lara\Admin\Http\Traits\AdminListTrait;
+use Lara\Admin\Http\Traits\AdminObjectTrait;
+use Lara\Admin\Http\Traits\AdminViewTrait;
+
+use Lara\Admin\Http\Traits\AdminMenuTrait;
 
 use Illuminate\Http\Request;
 
@@ -32,8 +39,14 @@ use Log;
 class MenuitemsController extends Controller
 {
 
-	use LaraAdminHelpers;
-	use LaraMenu;
+	use AdminTrait;
+	use AdminAuthTrait;
+	use AdminEntityTrait;
+	use AdminListTrait;
+	use AdminObjectTrait;
+	use AdminViewTrait;
+
+	use AdminMenuTrait;
 
 	/**
 	 * @var string

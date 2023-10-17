@@ -10,14 +10,18 @@ use Illuminate\View\View;
 use Lara\Common\Models\Menu;
 use Lara\Common\Models\Menuitem;
 
-use Lara\Front\Http\Traits\LaraFrontHelpers;
+use Lara\Front\Http\Traits\FrontTrait;
+use Lara\Front\Http\Traits\FrontMenuTrait;
+use Lara\Front\Http\Traits\FrontRoutesTrait;
 
 use LaravelLocalization;
 
 class MenuWidget extends AbstractWidget
 {
 
-	use LaraFrontHelpers;
+	use FrontTrait;
+	use FrontMenuTrait;
+	use FrontRoutesTrait;
 
 	protected $config = [
 		'mnu'      => 'main',

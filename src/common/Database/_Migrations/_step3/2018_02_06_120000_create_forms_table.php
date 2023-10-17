@@ -4,16 +4,14 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-use Lara\Admin\Http\Traits\LaraBuilder;
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
+use Lara\Admin\Http\Traits\AdminBuilderTrait;
 
 use Lara\Common\Models\Entity;
 
 class CreateFormsTable extends Migration
 {
 
-	use LaraBuilder;
-	use LaraAdminHelpers;
+	use AdminBuilderTrait;
 
 	/**
 	 * Run the migrations.

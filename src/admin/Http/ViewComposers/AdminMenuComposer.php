@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 use Lara\Common\Models\Entity;
 
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
+use Lara\Admin\Http\Traits\AdminAuthTrait;
 
 use LaravelLocalization;
 
@@ -20,7 +20,7 @@ use Cache;
 
 class AdminMenuComposer {
 
-	use LaraAdminHelpers;
+	use AdminAuthTrait;
 
 	/**
 	 * @var string
@@ -166,11 +166,11 @@ class AdminMenuComposer {
 
 
 			if (Auth::user()->isAn('administrator')) {
-				$this->sidebarMenu['users']['chld'][] = [
+				$this->sidebarMenu['users']['chld']['role'] = [
 					'name' => 'Roles',
 					'slug' => 'role',
 				];
-				$this->sidebarMenu['users']['chld'][] = [
+				$this->sidebarMenu['users']['chld']['ability'] = [
 					'name' => 'Abilities',
 					'slug' => 'ability',
 				];

@@ -5,7 +5,7 @@
 <div class="row form-group">
 	<div class="col-12 col-md-2">
 		{{ html()->label(_lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.column.redirectfrom').':', 'redirectfrom') }}
-		@if(!$data->object->has_error)
+		@if($data->object->has_error == 1)
 			<i class="fas fa-exclamation-circle color-danger"></i>
 		@endif
 	</div>

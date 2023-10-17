@@ -23,7 +23,7 @@ use Barryvdh\HttpCache\Middleware\SetTtl;
 use Lara\Common\Models\Entity;
 use Lara\Common\Models\User;
 
-use Lara\Common\Http\Traits\LaraCommonHelpers;
+use Lara\Common\Http\Traits\LaraCommonTrait;
 
 use LaravelLocalization;
 
@@ -38,7 +38,7 @@ use Carbon\Carbon;
 class LaraCommonServiceProvider extends ServiceProvider
 {
 
-	use LaraCommonHelpers;
+	use LaraCommonTrait;
 
 	/**
 	 * Bootstrap the module services.

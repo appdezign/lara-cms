@@ -11,14 +11,18 @@ use Arrilot\Widgets\AbstractWidget;
 
 use LaravelLocalization;
 
-use Lara\Front\Http\Traits\LaraFrontHelpers;
+use Lara\Front\Http\Traits\FrontEntityTrait;
+use Lara\Front\Http\Traits\FrontRoutesTrait;
+use Lara\Front\Http\Traits\FrontTagTrait;
 
 use Carbon\Carbon;
 
 class EntityCacheWidget extends AbstractWidget
 {
 
-	use LaraFrontHelpers;
+	use FrontEntityTrait;
+	use FrontRoutesTrait;
+	use FrontTagTrait;
 
 	protected $config = [
 		'entity_key'  => null,

@@ -11,7 +11,10 @@ use Illuminate\View\View;
 use Lara\Common\Models\MediaImage;
 
 use App\Http\Controllers\Controller;
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
+
+use Lara\Admin\Http\Traits\AdminTrait;
+use Lara\Admin\Http\Traits\AdminEntityTrait;
+use Lara\Admin\Http\Traits\AdminViewTrait;
 
 use Illuminate\Http\Request;
 
@@ -29,7 +32,9 @@ use Config;
 class ImageController extends Controller
 {
 
-	use LaraAdminHelpers;
+	use AdminTrait;
+	use AdminEntityTrait;
+	use AdminViewTrait;
 
 	/**
 	 * @var string

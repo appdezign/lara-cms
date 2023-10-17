@@ -32,7 +32,7 @@
 				<x-slot name="label">
 					{{ html()->label(_lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.column.middlename').':', 'middlename') }}
 				</x-slot>
-				{{ html()->text('middlename', null, ['class' => 'form-control']) }}
+				{{ html()->text('middlename', null)->class('form-control') }}
 			</x-formrow>
 
 			<x-formrow>

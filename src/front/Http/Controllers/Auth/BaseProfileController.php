@@ -10,7 +10,14 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 use Lara\Common\Models\User;
-use Lara\Front\Http\Traits\LaraFrontHelpers;
+
+use Lara\Front\Http\Traits\FrontTrait;
+use Lara\Front\Http\Traits\FrontEntityTrait;
+use Lara\Front\Http\Traits\FrontListTrait;
+use Lara\Front\Http\Traits\FrontMenuTrait;
+use Lara\Front\Http\Traits\FrontObjectTrait;
+use Lara\Front\Http\Traits\FrontThemeTrait;
+use Lara\Front\Http\Traits\FrontViewTrait;
 
 use Jenssegers\Agent\Agent;
 
@@ -19,7 +26,13 @@ use LaravelLocalization;
 class BaseProfileController extends Controller
 {
 
-	use LaraFrontHelpers;
+	use FrontTrait;
+	use FrontEntityTrait;
+	use FrontListTrait;
+	use FrontMenuTrait;
+	use FrontObjectTrait;
+	use FrontThemeTrait;
+	use FrontViewTrait;
 
 	/**
 	 * @var string
@@ -129,6 +142,10 @@ class BaseProfileController extends Controller
 		// override default layout with custom module page layout
 		$this->data->layout = $this->getObjectThemeLayout($this->data->modulepage);
 		$this->data->grid = $this->getGrid($this->data->layout);
+
+		// template vars & override
+		$this->data->gridvars = $this->getGridVars($this->entity);
+		$this->data->override = $this->getGridOverride($this->entity);
 
 		$viewfile = '_user.profile.form';
 

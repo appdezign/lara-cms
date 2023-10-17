@@ -5,10 +5,8 @@ namespace Lara\Front\Http\Controllers\Api\Base;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\JsonResponse;
-use Lara\Front\Http\Traits\LaraFrontHelpers;
 
-// use Lara\Admin\Http\Traits\LaraAdminHelpers;
-// use Lara\Api\Http\Traits\LaraApiHelpers;
+use Lara\Front\Http\Traits\FrontEntityTrait;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +20,7 @@ use ReflectionException;
 class BaseApiController extends Controller
 {
 
-	use LaraFrontHelpers;
+	use FrontEntityTrait;
 
 	/**
 	 * @var string

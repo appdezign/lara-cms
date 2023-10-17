@@ -7,7 +7,10 @@ use Lara\Common\Models\Entity;
 use Lara\Common\Models\User;
 
 use App\Http\Controllers\Controller;
-use Lara\Front\Http\Traits\LaraFrontHelpers;
+
+use Lara\Front\Http\Traits\FrontTrait;
+use Lara\Front\Http\Traits\FrontEntityTrait;
+
 
 use Illuminate\Http\Request;
 
@@ -19,7 +22,8 @@ use LaravelLocalization;
 class Upload2Controller extends Controller
 {
 
-	use LaraFrontHelpers;
+	use FrontTrait;
+	use FrontEntityTrait;
 
 	public function __construct()
 	{

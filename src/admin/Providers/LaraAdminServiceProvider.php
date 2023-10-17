@@ -16,7 +16,8 @@ use Lara\Admin\View\Components\FormRowReqComponent;
 use Lara\Admin\View\Components\FormRowBadgeComponent;
 use Lara\Admin\View\Components\ShowRowComponent;
 
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
+use Lara\Admin\Http\Traits\AdminTrait;
+use Lara\Admin\Http\Traits\AdminThemeTrait;
 
 use Lara\Common\Models\Setting;
 
@@ -30,7 +31,8 @@ use Lang;
 class LaraAdminServiceProvider extends ServiceProvider
 {
 
-	use LaraAdminHelpers;
+	use AdminTrait;
+	use AdminThemeTrait;
 
 	/**
 	 * Bootstrap the module services.

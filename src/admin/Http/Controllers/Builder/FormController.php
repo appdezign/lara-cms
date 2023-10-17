@@ -7,8 +7,16 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 
 use Illuminate\View\View;
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
-use Lara\Admin\Http\Traits\LaraBuilder;
+
+use Lara\Admin\Http\Traits\AdminTrait;
+use Lara\Admin\Http\Traits\AdminAuthTrait;
+use Lara\Admin\Http\Traits\AdminDbTrait;
+use Lara\Admin\Http\Traits\AdminEntityTrait;
+use Lara\Admin\Http\Traits\AdminFilesTrait;
+use Lara\Admin\Http\Traits\AdminListTrait;
+use Lara\Admin\Http\Traits\AdminViewTrait;
+
+use Lara\Admin\Http\Traits\AdminBuilderTrait;
 
 use Lara\Common\Models\Entity;
 use Lara\Common\Models\Entitygroup;
@@ -17,8 +25,15 @@ use Lara\Common\Models\Form;
 class FormController extends EntityController
 {
 
-	use LaraAdminHelpers;
-	use LaraBuilder;
+	use AdminTrait;
+	use AdminAuthTrait;
+	use AdminDbTrait;
+	use AdminEntityTrait;
+	use AdminFilesTrait;
+	use AdminListTrait;
+	use AdminViewTrait;
+
+	use AdminBuilderTrait;
 
 	/**
 	 * @var string

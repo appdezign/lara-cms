@@ -12,15 +12,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 use Illuminate\View\View;
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
 
 use Illuminate\Http\Request;
 
 use Lara\Common\Models\Entity;
 
 class SetupController extends Controller {
-
-	use LaraAdminHelpers;
 
 	/**
 	 * @var string
