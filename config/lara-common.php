@@ -1,6 +1,12 @@
 <?php
 
 return [
+
+	'auto_login' => [
+		'77.164.138.35',
+		'46.44.173.133',
+	],
+
 	'database' => [
 
 		'db_connection' => env('DB_CONNECTION', null),
