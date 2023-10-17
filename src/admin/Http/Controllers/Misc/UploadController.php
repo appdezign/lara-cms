@@ -3,11 +3,11 @@
 namespace Lara\Admin\Http\Controllers\Misc;
 
 use Lara\Common\Models\Upload;
-use Lara\Common\Models\Entity;
-use Lara\Common\Models\User;
 
 use App\Http\Controllers\Controller;
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
+
+use Lara\Admin\Http\Traits\AdminTrait;
+use Lara\Admin\Http\Traits\AdminEntityTrait;
 
 use Illuminate\Http\Request;
 
@@ -19,7 +19,8 @@ use LaravelLocalization;
 class UploadController extends Controller
 {
 
-	use LaraAdminHelpers;
+	use AdminTrait;
+	use AdminEntityTrait;
 
 	public function __construct()
 	{

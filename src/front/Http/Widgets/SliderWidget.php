@@ -12,12 +12,15 @@ use Lara\Common\Models\Tag;
 
 use LaravelLocalization;
 
-use Lara\Front\Http\Traits\LaraFrontHelpers;
+use Lara\Front\Http\Traits\FrontEntityTrait;
+use Lara\Front\Http\Traits\FrontTagTrait;
+
 
 class SliderWidget extends AbstractWidget
 {
 
-	use LaraFrontHelpers;
+	use FrontEntityTrait;
+	use FrontTagTrait;
 
 	protected $config = [
 		'term'        => 'home',

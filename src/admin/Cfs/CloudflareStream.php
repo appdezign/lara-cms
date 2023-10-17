@@ -10,12 +10,12 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
+use Lara\Admin\Http\Traits\AdminEntityTrait;
 
 class CloudflareStream
 {
 
-	use LaraAdminHelpers;
+	use AdminEntityTrait;
 
 	private $accountId;
 	private $authKey;

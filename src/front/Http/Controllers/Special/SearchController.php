@@ -12,7 +12,15 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\View\View;
-use Lara\Front\Http\Traits\LaraFrontHelpers;
+
+use Lara\Front\Http\Traits\FrontTrait;
+use Lara\Front\Http\Traits\FrontEntityTrait;
+use Lara\Front\Http\Traits\FrontListTrait;
+use Lara\Front\Http\Traits\FrontMenuTrait;
+use Lara\Front\Http\Traits\FrontObjectTrait;
+use Lara\Front\Http\Traits\FrontRoutesTrait;
+use Lara\Front\Http\Traits\FrontThemeTrait;
+use Lara\Front\Http\Traits\FrontViewTrait;
 
 use Jenssegers\Agent\Agent;
 
@@ -25,7 +33,14 @@ use LaravelLocalization;
 class SearchController extends Controller
 {
 
-	use LaraFrontHelpers;
+	use FrontTrait;
+	use FrontEntityTrait;
+	use FrontListTrait;
+	use FrontMenuTrait;
+	use FrontObjectTrait;
+	use FrontRoutesTrait;
+	use FrontThemeTrait;
+	use FrontViewTrait;
 
 	/**
 	 * @var string|null

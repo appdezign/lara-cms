@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-use Lara\Front\Http\Traits\LaraFrontHelpers;
+use Lara\Front\Http\Traits\FrontThemeTrait;
 
 // use Theme;
 use Qirolab\Theme\Theme;
@@ -15,7 +15,8 @@ use Qirolab\Theme\Theme;
 class MailConfirmation extends Mailable {
 
 	use Queueable, SerializesModels;
-	use LaraFrontHelpers;
+
+	use LaraFrontTrait;
 
 	/**
 	 * @var object

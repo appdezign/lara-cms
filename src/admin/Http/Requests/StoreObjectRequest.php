@@ -3,7 +3,9 @@
 namespace Lara\Admin\Http\Requests;
 
 
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
+use Lara\Admin\Http\Traits\AdminTrait;
+use Lara\Admin\Http\Traits\AdminDbTrait;
+use Lara\Admin\Http\Traits\AdminEntityTrait;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,7 +14,9 @@ use Carbon\Carbon;
 class StoreObjectRequest extends FormRequest
 {
 
-	use LaraAdminHelpers;
+	use AdminTrait;
+	use AdminDbTrait;
+	use AdminEntityTrait;
 
 	/**
 	 * Determine if the user is authorized to make this request.

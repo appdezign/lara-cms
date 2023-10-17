@@ -12,12 +12,16 @@ use Lara\Common\Models\Tag;
 
 use LaravelLocalization;
 
-use Lara\Front\Http\Traits\LaraFrontHelpers;
+use Lara\Front\Http\Traits\FrontEntityTrait;
+use Lara\Front\Http\Traits\FrontRoutesTrait;
+use Lara\Front\Http\Traits\FrontTagTrait;
 
 class VideoWidget extends AbstractWidget
 {
 
-	use LaraFrontHelpers;
+	use FrontEntityTrait;
+	use FrontRoutesTrait;
+	use FrontTagTrait;
 
 	protected $config = [
 		'term' => 'home',

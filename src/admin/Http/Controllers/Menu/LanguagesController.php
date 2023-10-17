@@ -10,9 +10,16 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
-use Lara\Admin\Http\Traits\LaraLanguage;
-use Lara\Admin\Http\Traits\LaraMenu;
+
+use Lara\Admin\Http\Traits\AdminTrait;
+use Lara\Admin\Http\Traits\AdminAuthTrait;
+use Lara\Admin\Http\Traits\AdminEntityTrait;
+use Lara\Admin\Http\Traits\AdminListTrait;
+use Lara\Admin\Http\Traits\AdminObjectTrait;
+use Lara\Admin\Http\Traits\AdminViewTrait;
+
+use Lara\Admin\Http\Traits\AdminLanguageTrait;
+use Lara\Admin\Http\Traits\AdminMenuTrait;
 
 use Lara\Common\Models\Entity;
 use Lara\Common\Models\Language;
@@ -39,9 +46,14 @@ use Lang;
 class LanguagesController extends Controller
 {
 
-	use LaraAdminHelpers;
-	use LaraLanguage;
-	use LaraMenu;
+	use AdminTrait;
+	use AdminAuthTrait;
+	use AdminEntityTrait;
+	use AdminListTrait;
+	use AdminObjectTrait;
+	use AdminViewTrait;
+	use AdminLanguageTrait;
+	use AdminMenuTrait;
 
 	/**
 	 * @var string

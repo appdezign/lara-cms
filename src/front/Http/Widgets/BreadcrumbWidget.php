@@ -9,14 +9,16 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
 use Lara\Common\Models\Menuitem;
 
-use Lara\Front\Http\Traits\LaraFrontHelpers;
+use Lara\Front\Http\Traits\FrontMenuTrait;
+use Lara\Front\Http\Traits\FrontRoutesTrait;
 
 use LaravelLocalization;
 
 class BreadcrumbWidget extends AbstractWidget
 {
 
-	use LaraFrontHelpers;
+	use FrontMenuTrait;
+	use FrontRoutesTrait;
 
 	protected $config = [
 		'lang' => 'nl',

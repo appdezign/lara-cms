@@ -21,6 +21,13 @@ return [
 		'easing' => 'ease-out-quad',
 	],
 
+	'entity_search_fields' => [
+		'product' => [
+			'title',
+			'sku',
+		],
+	],
+
 	'nav_history_max' => 10,
 
 	'front_menu' => [

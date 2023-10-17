@@ -10,7 +10,10 @@ use Illuminate\Support\Facades\View;
 use Lara\Front\View\Components\FrontFormRowComponent;
 use Lara\Front\View\Components\FrontShowRowComponent;
 
-use Lara\Front\Http\Traits\LaraFrontHelpers;
+use Lara\Front\Http\Traits\FrontTrait;
+use Lara\Front\Http\Traits\FrontThemeTrait;
+
+
 use Lara\Common\Models\Setting;
 
 use LaravelLocalization;
@@ -21,7 +24,8 @@ use Qirolab\Theme\Theme;
 class LaraFrontServiceProvider extends ServiceProvider
 {
 
-	use LaraFrontHelpers;
+	use FrontTrait;
+	use FrontThemeTrait;
 
 	/**
 	 * Bootstrap the module services.

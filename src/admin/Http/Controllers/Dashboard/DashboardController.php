@@ -8,12 +8,18 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
-use Lara\Admin\Http\Traits\LaraAnalytics;
-use Lara\Admin\Http\Traits\LaraTranslation;
-use Lara\Admin\Http\Traits\LaraDbUpdate;
-use Lara\Admin\Http\Traits\LaraMenu;
-use Eve\Http\Traits\EveUpdate;
+
+use Lara\Admin\Http\Traits\AdminTrait;
+use Lara\Admin\Http\Traits\AdminAuthTrait;
+use Lara\Admin\Http\Traits\AdminEntityTrait;
+use Lara\Admin\Http\Traits\AdminListTrait;
+use Lara\Admin\Http\Traits\AdminViewTrait;
+
+use Lara\Admin\Http\Traits\AdminAnalyticsTrait;
+use Lara\Admin\Http\Traits\AdminTranslationTrait;
+use Lara\Admin\Http\Traits\AdminDbUpdateTrait;
+use Lara\Admin\Http\Traits\AdminMenuTrait;
+use Eve\Http\Traits\EveUpdateTrait;
 
 use Illuminate\Http\Request;
 
@@ -33,12 +39,17 @@ use Analytics;
 class DashboardController extends Controller
 {
 
-	use LaraAdminHelpers;
-	use LaraTranslation;
-	use LaraAnalytics;
-	use LaraDbUpdate;
-	use LaraMenu;
-	use EveUpdate;
+	use AdminTrait;
+	use AdminAuthTrait;
+	use AdminEntityTrait;
+	use AdminListTrait;
+	use AdminViewTrait;
+
+	use AdminTranslationTrait;
+	use AdminAnalyticsTrait;
+	use AdminDbUpdateTrait;
+	use AdminMenuTrait;
+	use EveUpdateTrait;
 
 	/**
 	 * @var string|null

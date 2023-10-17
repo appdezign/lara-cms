@@ -7,8 +7,16 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
-use Lara\Admin\Http\Traits\LaraBuilder;
+
+use Lara\Admin\Http\Traits\AdminTrait;
+use Lara\Admin\Http\Traits\AdminAuthTrait;
+use Lara\Admin\Http\Traits\AdminDbTrait;
+use Lara\Admin\Http\Traits\AdminEntityTrait;
+use Lara\Admin\Http\Traits\AdminFilesTrait;
+use Lara\Admin\Http\Traits\AdminListTrait;
+use Lara\Admin\Http\Traits\AdminViewTrait;
+
+use Lara\Admin\Http\Traits\AdminBuilderTrait;
 
 use Illuminate\Http\Request;
 
@@ -29,8 +37,15 @@ use Bouncer;
 class EntityController extends Controller
 {
 
-	use LaraAdminHelpers;
-	use LaraBuilder;
+	use AdminTrait;
+	use AdminAuthTrait;
+	use AdminDbTrait;
+	use AdminEntityTrait;
+	use AdminFilesTrait;
+	use AdminListTrait;
+	use AdminViewTrait;
+
+	use AdminBuilderTrait;
 
 	/**
 	 * @var string

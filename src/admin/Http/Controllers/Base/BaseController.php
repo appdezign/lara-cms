@@ -9,9 +9,21 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
-use Lara\Admin\Http\Traits\LaraBuilder;
-use Lara\Admin\Http\Traits\LaraSync;
+use Lara\Admin\Http\Traits\AdminTrait;
+use Lara\Admin\Http\Traits\AdminAuthTrait;
+use Lara\Admin\Http\Traits\AdminDbTrait;
+use Lara\Admin\Http\Traits\AdminEntityTrait;
+use Lara\Admin\Http\Traits\AdminFilesTrait;
+use Lara\Admin\Http\Traits\AdminListTrait;
+use Lara\Admin\Http\Traits\AdminMediaTrait;
+use Lara\Admin\Http\Traits\AdminObjectTrait;
+use Lara\Admin\Http\Traits\AdminRelatedTrait;
+use Lara\Admin\Http\Traits\AdminTagTrait;
+use Lara\Admin\Http\Traits\AdminThemeTrait;
+use Lara\Admin\Http\Traits\AdminViewTrait;
+
+use Lara\Admin\Http\Traits\AdminBuilderTrait;
+use Lara\Admin\Http\Traits\AdminSyncTrait;
 
 use Illuminate\Http\Request;
 use Lara\Admin\Http\Requests\UpdateObjectRequest;
@@ -40,9 +52,21 @@ use Illuminate\Support\Facades\File;
 class BaseController extends Controller
 {
 
-	use LaraAdminHelpers;
-	use LaraBuilder;
-	use LaraSync;
+	use AdminTrait;
+	use AdminAuthTrait;
+	use AdminDbTrait;
+	use AdminEntityTrait;
+	use AdminFilesTrait;
+	use AdminListTrait;
+	use AdminMediaTrait;
+	use AdminObjectTrait;
+	use AdminRelatedTrait;
+	use AdminTagTrait;
+	use AdminThemeTrait;
+	use AdminViewTrait;
+
+	use AdminBuilderTrait;
+	use AdminSyncTrait;
 
 	/**
 	 * @var string

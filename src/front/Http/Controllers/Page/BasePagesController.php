@@ -14,7 +14,14 @@ use Illuminate\View\View;
 use Lara\Common\Models\Page;
 
 use Lara\Common\Models\Taxonomy;
-use Lara\Front\Http\Traits\LaraFrontHelpers;
+
+use Lara\Front\Http\Traits\FrontTrait;
+use Lara\Front\Http\Traits\FrontEntityTrait;
+use Lara\Front\Http\Traits\FrontListTrait;
+use Lara\Front\Http\Traits\FrontMenuTrait;
+use Lara\Front\Http\Traits\FrontObjectTrait;
+use Lara\Front\Http\Traits\FrontRoutesTrait;
+use Lara\Front\Http\Traits\FrontViewTrait;
 
 use Jenssegers\Agent\Agent;
 
@@ -23,7 +30,13 @@ use LaravelLocalization;
 class BasePagesController extends Controller
 {
 
-	use LaraFrontHelpers;
+	use FrontTrait;
+	use FrontEntityTrait;
+	use FrontListTrait;
+	use FrontMenuTrait;
+	use FrontObjectTrait;
+	use FrontRoutesTrait;
+	use FrontViewTrait;
 
 	/**
 	 * @var string|null

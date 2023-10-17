@@ -12,14 +12,18 @@ use Illuminate\View\View;
 use Lara\Common\Models\Slider;
 use Lara\Common\Models\Tag;
 
-use Lara\Front\Http\Traits\LaraFrontHelpers;
+use Lara\Front\Http\Traits\FrontMenuTrait;
+use Lara\Front\Http\Traits\FrontRoutesTrait;
+use Lara\Front\Http\Traits\FrontTagTrait;
 
 use LaravelLocalization;
 
 class PagetitleWidget extends AbstractWidget
 {
 
-	use LaraFrontHelpers;
+	use FrontMenuTrait;
+	use FrontRoutesTrait;
+	use FrontTagTrait;
 
 	protected $config = [
 		'term' => 'pagetitle',

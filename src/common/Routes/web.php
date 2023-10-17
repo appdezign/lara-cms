@@ -27,9 +27,6 @@ if (!App::runningInConsole()) {
 
 			Route::post('setup/{step}', '\Lara\Common\Http\Controllers\Setup\SetupController@stepprocess')->name('setup.stepprocess');
 
-			// update v5 > v6
-			Route::get('update', '\Lara\Common\Http\Controllers\Setup\UpdateController@process')->name('update.process');
-
 		} else {
 
 			// Auth

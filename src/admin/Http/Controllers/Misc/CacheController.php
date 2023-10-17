@@ -7,8 +7,15 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
-use Lara\Admin\Http\Traits\LaraAnalytics;
+
+use Lara\Admin\Http\Traits\AdminTrait;
+use Lara\Admin\Http\Traits\AdminAuthTrait;
+use Lara\Admin\Http\Traits\AdminEntityTrait;
+use Lara\Admin\Http\Traits\AdminListTrait;
+use Lara\Admin\Http\Traits\AdminObjectTrait;
+use Lara\Admin\Http\Traits\AdminViewTrait;
+
+use Lara\Admin\Http\Traits\AdminAnalyticsTrait;
 
 use Illuminate\Http\Request;
 
@@ -24,10 +31,17 @@ use Bouncer;
 
 use Cache;
 
-class CacheController extends Controller {
+class CacheController extends Controller
+{
 
-	use LaraAdminHelpers;
-	use LaraAnalytics;
+	use AdminTrait;
+	use AdminAuthTrait;
+	use AdminEntityTrait;
+	use AdminListTrait;
+	use AdminObjectTrait;
+	use AdminViewTrait;
+
+	use AdminAnalyticsTrait;
 
 	/**
 	 * @var string|null
@@ -54,7 +68,8 @@ class CacheController extends Controller {
 	 */
 	protected $isbuilder = false;
 
-	public function __construct() {
+	public function __construct()
+	{
 
 		// create an empty Laravel object to hold all the data
 		$this->data = $this->makeNewObject();
@@ -87,7 +102,8 @@ class CacheController extends Controller {
 	/**
 	 * @return Application|Factory|View
 	 */
-	public function index() {
+	public function index()
+	{
 
 		// get view file and partials
 		$this->data->partials = $this->getPartials($this->entity);
@@ -104,7 +120,8 @@ class CacheController extends Controller {
 	 * @param Request $request
 	 * @return RedirectResponse
 	 */
-	public function clear(Request $request) {
+	public function clear(Request $request)
+	{
 
 		$objectIDs = $request->input('objcts');
 
@@ -117,7 +134,7 @@ class CacheController extends Controller {
 				Artisan::call('config:clear');
 			}
 			if (in_array('viewcache', $objectIDs)) {
-				if(config('lara.can_clear_views')) {
+				if (config('lara.can_clear_views')) {
 					Artisan::call('view:clear');
 				}
 			}
@@ -133,7 +150,6 @@ class CacheController extends Controller {
 
 			// flash message
 			flash('All selected caches were successfully cleared')->success();
-
 
 		} else {
 

@@ -15,22 +15,46 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 use Illuminate\View\View;
-use Lara\Front\Http\Traits\LaraFrontHelpers;
 
-use Lara\Front\Mail\MailConfirmation;
+use Lara\Front\Http\Traits\FrontTrait;
+use Lara\Front\Http\Traits\FrontAuthTrait;
+use Lara\Front\Http\Traits\FrontEntityTrait;
+use Lara\Front\Http\Traits\FrontListTrait;
+use Lara\Front\Http\Traits\FrontMenuTrait;
+use Lara\Front\Http\Traits\FrontObjectTrait;
+use Lara\Front\Http\Traits\FrontRoutesTrait;
+use Lara\Front\Http\Traits\FrontSecurityTrait;
+use Lara\Front\Http\Traits\FrontTagTrait;
+use Lara\Front\Http\Traits\FrontThemeTrait;
+use Lara\Front\Http\Traits\FrontViewTrait;
 
 use Jenssegers\Agent\Agent;
 
+use Lara\Front\Mail\MailConfirmation;
 use Lara\Front\Rules\ReCaptcha;
+
 use LaravelLocalization;
 
 use ReflectionClass;
 use ReflectionException;
 
+// use Theme;
+use Qirolab\Theme\Theme;
+
 class FormController extends Controller
 {
 
-	use LaraFrontHelpers;
+	use FrontTrait;
+	use FrontAuthTrait;
+	use FrontEntityTrait;
+	use FrontListTrait;
+	use FrontMenuTrait;
+	use FrontObjectTrait;
+	use FrontRoutesTrait;
+	use FrontSecurityTrait;
+	use FrontTagTrait;
+	use FrontThemeTrait;
+	use FrontViewTrait;
 
 	/**
 	 * @var string

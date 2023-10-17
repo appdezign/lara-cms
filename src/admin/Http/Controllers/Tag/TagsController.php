@@ -12,7 +12,15 @@ use Lara\Common\Models\EntityView;
 use Lara\Common\Models\Tag;
 
 use App\Http\Controllers\Controller;
-use Lara\Admin\Http\Traits\LaraAdminHelpers;
+
+use Lara\Admin\Http\Traits\AdminTrait;
+use Lara\Admin\Http\Traits\AdminAuthTrait;
+use Lara\Admin\Http\Traits\AdminEntityTrait;
+use Lara\Admin\Http\Traits\AdminListTrait;
+use Lara\Admin\Http\Traits\AdminMediaTrait;
+use Lara\Admin\Http\Traits\AdminObjectTrait;
+use Lara\Admin\Http\Traits\AdminTagTrait;
+use Lara\Admin\Http\Traits\AdminViewTrait;
 
 use Illuminate\Http\Request;
 use Lara\Admin\Http\Requests\UpdateObjectRequest;
@@ -35,7 +43,14 @@ use Config;
 class TagsController extends Controller
 {
 
-	use LaraAdminHelpers;
+	use AdminTrait;
+	use AdminAuthTrait;
+	use AdminEntityTrait;
+	use AdminListTrait;
+	use AdminMediaTrait;
+	use AdminObjectTrait;
+	use AdminTagTrait;
+	use AdminViewTrait;
 
 	/**
 	 * @var string

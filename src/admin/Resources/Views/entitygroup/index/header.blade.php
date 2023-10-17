@@ -2,7 +2,13 @@
 	<div class="col-3">
 		<div class="filters">
 			<div class="text-muted p-2">
-				{{ $data->objects->total() }} {{ _lanq('lara-admin::'.$entity->getEntityKey().'.entity.entity_plural') }}
+
+				@if($data->objects instanceof \Illuminate\Pagination\LengthAwarePaginator )
+					{{ $data->objects->total() }} {{ _lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.entity.entity_plural') }}
+				@else
+					{{ $data->objects->count() }} {{ _lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.entity.entity_plural') }}
+				@endif
+
 			</div>
 		</div>
 	</div>
