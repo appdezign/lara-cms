@@ -17,7 +17,6 @@
 		"appdezign/lara-base-theme": "^8.0",
 		"appdezign/lara-demo-theme": "^8.0",
 		"arrilot/laravel-widgets": "^3.13",
-		"barryvdh/laravel-async-queue": "dev-patch-1 as 0.7.x-dev",
 		"barryvdh/laravel-httpcache": "^0.3.8",
 		"composer/installers": "~1.0",
 		"cviebrock/eloquent-sluggable": "^10.0",
