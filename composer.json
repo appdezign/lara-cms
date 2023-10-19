@@ -4,7 +4,7 @@
 	"version": "8.1.1",
     "keywords": ["Lara", "CMS"],
     "license": "proprietary",
-    "homepage": "http://firmaq.nl",
+    "homepage": "https://firmaq.nl",
     "type": "laravel-library",
     "authors": [
         {
