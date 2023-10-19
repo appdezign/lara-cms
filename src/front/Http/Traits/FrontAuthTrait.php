@@ -7,37 +7,6 @@ use Lara\Common\Models\User;
 trait FrontAuthTrait
 {
 
-	private function getGuestUser()
-	{
-		$userId = Cache::remember('guest_user_id', 86400, function () {
-
-			$user = User::where('username', 'guest')->first();
-
-			if ($user) {
-				return $user;
-			} else {
-				$newuser = User::create([
-					'type'          => 'web',
-					'is_admin'      => 0,
-					'name'          => 'guest',
-					'firstname'     => 'guest',
-					'middlename'    => null,
-					'lastname'      => 'guest',
-					'username'      => 'guest',
-					'email'         => 'guest@laracms.nl',
-					'password'      => 'jyKTvaZAGXme!',
-					'user_language' => 'nl',
-				]);
-				$newuser->assign('member');
-
-				return $newuser;
-			}
-
-		});
-
-		return $userId;
-	}
-
 	private function saveFrontUserProfile($request, $object)
 	{
 
@@ -76,6 +45,5 @@ trait FrontAuthTrait
 
 		return $profileFields;
 	}
-
 
 }
