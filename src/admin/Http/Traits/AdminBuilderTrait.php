@@ -1034,7 +1034,7 @@ trait AdminBuilderTrait
 	{
 
 		// determine real column type
-		$realcoltype = $this->getRealColumnType($coltype);
+		$realcoltype = $this->getRealBuilderColumnType($coltype);
 
 		Schema::table($tablename, function ($table) use ($colname, $coltype, $realcoltype) {
 
@@ -2642,5 +2642,30 @@ trait AdminBuilderTrait
 		}
 
 	}
+
+	/**
+	 * Get the real DB column type for custom field types
+	 *
+	 * Examples:
+	 * - mcefull = text
+	 * - email = string
+	 * - selectone = text
+	 *
+	 * @param string $coltype
+	 * @return string
+	 */
+	private function getRealBuilderColumnType(string $coltype)
+	{
+
+		// get supported field types from config
+		$fieldTypes = json_decode(json_encode(config('lara-admin.fieldTypes')), false);
+
+		// get real column type for this type
+		$realcoltype = $fieldTypes->$coltype->type;
+
+		return $realcoltype;
+
+	}
+
 
 }
