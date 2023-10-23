@@ -16,7 +16,7 @@ class MailConfirmation extends Mailable {
 
 	use Queueable, SerializesModels;
 
-	use LaraFrontTrait;
+	use FrontThemeTrait;
 
 	/**
 	 * @var object
