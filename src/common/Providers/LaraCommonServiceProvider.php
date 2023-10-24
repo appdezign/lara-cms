@@ -65,7 +65,9 @@ class LaraCommonServiceProvider extends ServiceProvider
 
 		// Publish Config
 		$this->publishes([
+			__DIR__ . '/../../../config/lara.php' => config_path('lara.php'),
 			__DIR__ . '/../../../config/lara-common.php' => config_path('lara-common.php'),
+			__DIR__ . '/../../../config/lara-eve.php' => config_path('lara-eve.php'),
 		], 'lara');
 
 		// Publish Translations
