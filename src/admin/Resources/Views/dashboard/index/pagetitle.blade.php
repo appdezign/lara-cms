@@ -20,6 +20,12 @@
 				This application has been updated to {{ $data->eveversion }}
 			</div>
 		@endif
+
+		@if(isset($data->translationversion))
+			<div class="alert alert-success alert-important text-center" role="alert">
+				Translations have been updated to {{ $data->translationversion }}
+			</div>
+		@endif
 	</div>
 	<!--end:Message-->
 

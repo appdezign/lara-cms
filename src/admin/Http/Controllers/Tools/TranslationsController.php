@@ -11,7 +11,6 @@ use Illuminate\View\View;
 use Lara\Admin\Http\Traits\AdminTrait;
 use Lara\Admin\Http\Traits\AdminAuthTrait;
 use Lara\Admin\Http\Traits\AdminEntityTrait;
-use Lara\Admin\Http\Traits\AdminFilesTrait;
 use Lara\Admin\Http\Traits\AdminListTrait;
 use Lara\Admin\Http\Traits\AdminObjectTrait;
 use Lara\Admin\Http\Traits\AdminViewTrait;
@@ -43,7 +42,6 @@ class TranslationsController extends Controller
 	use AdminTrait;
 	use AdminAuthTrait;
 	use AdminEntityTrait;
-	use AdminFilesTrait;
 	use AdminListTrait;
 	use AdminObjectTrait;
 	use AdminViewTrait;

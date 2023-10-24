@@ -13,7 +13,6 @@ use Lara\Admin\Http\Traits\AdminTrait;
 use Lara\Admin\Http\Traits\AdminAuthTrait;
 use Lara\Admin\Http\Traits\AdminDbTrait;
 use Lara\Admin\Http\Traits\AdminEntityTrait;
-use Lara\Admin\Http\Traits\AdminFilesTrait;
 use Lara\Admin\Http\Traits\AdminListTrait;
 use Lara\Admin\Http\Traits\AdminMediaTrait;
 use Lara\Admin\Http\Traits\AdminObjectTrait;
@@ -56,7 +55,6 @@ class BaseController extends Controller
 	use AdminAuthTrait;
 	use AdminDbTrait;
 	use AdminEntityTrait;
-	use AdminFilesTrait;
 	use AdminListTrait;
 	use AdminMediaTrait;
 	use AdminObjectTrait;

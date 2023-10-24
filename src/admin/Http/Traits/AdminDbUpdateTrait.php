@@ -35,8 +35,6 @@ trait AdminDbUpdateTrait
 	private function checkForLaraUpdates($process = false)
 	{
 
-		$this->fixFormSortOrder();
-
 		// current DB version
 		$databaseVersion = $this->getVersionFromSettings();
 
@@ -204,12 +202,6 @@ trait AdminDbUpdateTrait
 
 					$this->setSetting('system', 'lara_db_version', '7.5.46');
 
-				}
-
-				/* ~~~~~~~~~~~~ Translations ~~~~~~~~~~~~ */
-
-				foreach ($updates as $buildversion) {
-					$this->importTranslations($buildversion);
 				}
 
 				// Post-update actions
@@ -925,123 +917,6 @@ trait AdminDbUpdateTrait
 
 	}
 
-	/**
-	 * @param string $version
-	 * @return bool
-	 */
-	private function importTranslations(string $version)
-	{
-
-		$versionSlug = str_replace('.', '-', $version);
-		$file = 'translations-' . $versionSlug . '.xml';
-
-		$this->copyImportFileToStorage($file);
-
-		$path = storage_path('app/lara/translations/' . $file);
-
-		if (File::exists($path)) {
-
-			$translations = simplexml_load_file($path);
-
-			$import = array();
-
-			foreach ($translations as $translation) {
-				foreach ($translation->languages->language as $lang) {
-
-					$langcode = (string)$lang->langcode;
-
-					foreach ($lang->items->item as $item) {
-
-						$item = [
-							'module' => (string)$item->module,
-							'cgroup' => (string)$item->cgroup,
-							'tag'    => (string)$item->tag,
-							'key'    => (string)$item->key,
-							'value'  => (string)$item->value,
-						];
-
-						$import[$version][$langcode][] = $item;
-
-					}
-				}
-			}
-
-			if (is_array($import) && array_key_exists($version, $import)) {
-
-				$languages = $import[$version];
-
-				foreach ($languages as $language => $items) {
-
-					foreach ($items as $item) {
-
-						$item = json_decode(json_encode($item), false);
-
-						$this->checkTranslation($language, $item->module, $item->cgroup, $item->tag, $item->key, $item->value, false);
-					}
-				}
-
-				$this->exportTranslationsToFile();
-
-			}
-
-			// move file
-			$this->moveImportFile($file);
-
-		}
-
-	}
-
-	private function moveImportFile($file)
-	{
-		$src = storage_path('app/lara/translations/' . $file);
-		$dest = storage_path('app/lara/translations/_processed/' . $file);
-
-		if (File::exists($src)) {
-			File::move($src, $dest);
-		}
-
-	}
-
-	/**
-	 * @param string $file
-	 * @return void
-	 */
-	private function copyImportFileToStorage(string $file)
-	{
-
-		// Create Storage Directories if necessary
-		$this->checkStorageDir('app/lara/');
-		$this->checkStorageDir('app/lara/translations/');
-		$this->checkStorageDir('app/lara/translations/_processed');
-
-		$source = base_path('laracms/core/src/admin/Resources/Import/' . $file);
-		$dest = storage_path('app/lara/translations/' . $file);
-		$processed = storage_path('app/lara/translations/_processed/' . $file);
-
-		// check if translation file is already processed
-		if (!File::exists($processed)) {
-			// check if destination file already exists
-			if (!File::exists($dest)) {
-				// check if source file exists
-				if (File::exists($source)) {
-					// copy translation file
-					File::copy($source, $dest);
-				}
-			}
-		}
-
-	}
-
-	/**
-	 * @param string $path
-	 * @return void
-	 */
-	private function checkStorageDir(string $path)
-	{
-		if (!File::isDirectory(storage_path($path))) {
-			File::makeDirectory(storage_path($path));
-		}
-	}
 
 	/**
 	 * @param string $language

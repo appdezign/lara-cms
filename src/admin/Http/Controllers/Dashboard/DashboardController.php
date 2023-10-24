@@ -118,13 +118,16 @@ class DashboardController extends Controller
 		/* ~~~~~~~~~~~~~~~~ check for updates (start) ~~~~~~~~~~~~~~~~ */
 		$processLara = $request->get('update-lara') == 'true';
 		$processEve = $request->get('update-eve') == 'true';
+		$processTranslation = $request->get('update-translation') == 'true';
 
 		$laraUpdates = $this->checkForLaraUpdates($processLara);
 		$eveUpdates = $this->checkForEveUpdates($processEve);
+		$translationUpdates = $this->checkForTranslationUpdates($processTranslation);
 
 		$this->data->updates = $this->makeNewObject();
 		$this->data->updates->lara = $laraUpdates;
 		$this->data->updates->eve = $eveUpdates;
+		$this->data->updates->translation = $translationUpdates;
 
 		// get new versions
 		if ($request->has('newversion')) {
@@ -132,6 +135,9 @@ class DashboardController extends Controller
 		}
 		if ($request->has('eveversion')) {
 			$this->data->eveversion = $request->get('eveversion');
+		}
+		if ($request->has('newtranslation')) {
+			$this->data->translationversion = $request->get('newtranslation');
 		}
 		/* ~~~~~~~~~~~~~~~~ check for updates (end) ~~~~~~~~~~~~~~~~ */
 
