@@ -8,7 +8,7 @@ return [
 	'column' => [
 		'body' => 'text',
 		'customtags' => 'customtags',
-		'filtertaxonomy' => 'filtertaxonomy',
+		'filtertag' => 'filtertag',
 		'hook' => 'hook',
 		'iconalign' => 'icon align',
 		'iconclass' => 'icon class',
@@ -20,6 +20,7 @@ return [
 		'relentkey' => 'relentkey',
 		'sortorder' => 'sortorder',
 		'template' => 'template',
+		'term' => '_term',
 		'title' => 'title',
 		'type' => 'type',
 		'usecache' => 'usecache',

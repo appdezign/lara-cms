@@ -2,6 +2,7 @@
 
 return [
 	'column' => [
+		'locked_by_admin' => 'gelocked door admin',
 		'redirectfrom' => 'redirect van',
 		'redirectto' => 'redirect naar',
 		'redirecttype' => 'redirect type',

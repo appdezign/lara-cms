@@ -22,6 +22,8 @@ return [
 	],
 	'message' => [
 		'exported_to_file' => 'translations exported to file',
+		'new_groupname_empty' => '_new_groupname_empty',
+		'new_tagname_empty' => '_new_tagname_empty',
 		'overwrite_database' => 'all database entries will be overwritten!',
 		'overwrite_files' => 'all language files will be overwritten!',
 	],

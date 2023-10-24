@@ -6,11 +6,11 @@ return [
 		'browser_stats' => 'browser statistics',
 		'content_items' => 'content items',
 		'page_stats' => 'page statistics',
-		'refresh_cache' => 'refresh cache',
 		'ref_stats' => 'referral statistics',
+		'refresh_cache' => 'refresh cache',
 		'site_stats' => 'site statistics',
-		'users' => 'users',
 		'user_stats' => 'user statistics',
+		'users' => 'users',
 	],
 	'button' => [
 		'cache_clear' => 'clear cache',
@@ -23,6 +23,7 @@ return [
 	],
 	'message' => [
 		'last_sync' => 'last update',
+		'never_logged_in' => '_never_logged_in',
 		'nodata' => 'no data available',
 	],
 ];
