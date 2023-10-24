@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Lara\Common\Models\Entity;
 use Lara\Common\Models\Entitygroup;
 use Lara\Common\Models\Language;
+use Lara\Common\Models\Setting;
 use Lara\Common\Models\Translation;
 
 use File;
@@ -130,13 +131,13 @@ trait AdminTranslationTrait
 		$filtergroup = $this->getRequestParam($request, 'cgroup', $defaultGroup, $entity->getEntityKey(), true);
 
 		$params = (object)array(
-			'search'        => false,
-			'filterbytaxonomy'   => false,
-			'filtertaxonomy'     => '',
-			'filterbygroup' => false,
-			'filtergroup'   => '',
-			'missing'       => false,
-			'module'        => $module,
+			'search'           => false,
+			'filterbytaxonomy' => false,
+			'filtertaxonomy'   => '',
+			'filterbygroup'    => false,
+			'filtergroup'      => '',
+			'missing'          => false,
+			'module'           => $module,
 		);
 
 		if ($missing === true) {
@@ -365,7 +366,7 @@ trait AdminTranslationTrait
 				$resourcepath = resource_path('lang/vendor/' . $module . '/');
 				$localepath = $resourcepath . $locale . '/';
 
-				$this->unlockFilesInDir($localepath);
+				$this->unlockFilesInTranslationDir($localepath);
 
 				File::cleanDirectory($localepath);
 
@@ -419,7 +420,7 @@ trait AdminTranslationTrait
 
 				}
 
-				$this->lockFilesInDir($localepath);
+				$this->lockFilesInTranslationDir($localepath);
 
 			}
 
@@ -569,7 +570,7 @@ trait AdminTranslationTrait
 	 * @param array $modules
 	 * @return void
 	 */
-	private function mergeTranslations($modules = null)
+	private function mergeTranslations($modules = null): void
 	{
 
 		if (empty($modules)) {
@@ -662,7 +663,40 @@ trait AdminTranslationTrait
 
 	}
 
-	private function checkAllTranslations() {
+	/**
+	 * @param string $module
+	 * @param string $locale
+	 * @return mixed
+	 */
+	private function getAllTranslationsFromCore(string $module, string $locale)
+	{
+
+		$translations = array();
+
+		$moduleDir = substr($module, 5);
+		$resourcepath = config('lara.lara_path') . '/src/' . $moduleDir . '/Resources/Lang/';
+		$langpath = $resourcepath . $locale . '/';
+
+		$files = File::allFiles($langpath);
+
+		foreach ($files as $file) {
+
+			$cgroup = basename($file, ".php");
+
+			$contents = File::getRequire($file);
+			foreach ($contents as $tag => $values) {
+				$translations[$cgroup][$tag] = $values;
+			}
+		}
+
+		$translations = json_decode(json_encode($translations), false);
+
+		return $translations;
+
+	}
+
+	private function checkAllTranslations()
+	{
 
 		// get all published languages
 		$this->data->clanguages = Language::isPublished()->orderBy('position')->get();
@@ -674,17 +708,17 @@ trait AdminTranslationTrait
 		// check all transaltion
 		$translations = Translation::langIs($defaultLangCode)->get();
 
-		foreach($translations as $translation) {
+		foreach ($translations as $translation) {
 
 			$module = $translation->module;
 			$cgroup = $translation->cgroup;
 			$tag = $translation->tag;
 			$key = $translation->key;
 
-			foreach($this->data->clanguages as $clang) {
+			foreach ($this->data->clanguages as $clang) {
 				$langcode = $clang->code;
 
-				if($langcode != $defaultLangCode) {
+				if ($langcode != $defaultLangCode) {
 					// check if translation exists in database
 					$trans = Translation::langIs($langcode)
 						->where('module', $module)
@@ -693,18 +727,225 @@ trait AdminTranslationTrait
 						->where('key', $key)
 						->first();
 
-					if(empty($trans)) {
+					if (empty($trans)) {
 						Translation::create([
 							'language' => $langcode,
-							'module' => $module,
-							'cgroup' => $cgroup,
-							'tag' => $tag,
-							'key' => $key,
-							'value' => '_' . $key,
+							'module'   => $module,
+							'cgroup'   => $cgroup,
+							'tag'      => $tag,
+							'key'      => $key,
+							'value'    => '_' . $key,
 						]);
 					}
 				}
 			}
 		}
 	}
+
+	/**
+	 * Lock files (chmod 0444) in directories that the Builder writes to.
+	 * This way we prevent local-to-remote sync overwrite updated configs, language files, etc.
+	 *
+	 * @param string $dirpath
+	 * @param string|null $pattern
+	 * @return void
+	 */
+	private function lockFilesInTranslationDir(string $dirpath, $pattern = null)
+	{
+
+		$files = File::allFiles($dirpath);
+
+		foreach ($files as $file) {
+
+			if (!empty($pattern)) {
+
+				$filename = $file->getFilename();
+
+				if (substr($filename, 0, strlen($pattern)) == $pattern) {
+
+					chmod($file->getPathname(), 0444);
+
+				}
+
+			} else {
+
+				chmod($file->getPathname(), 0444);
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Unlock files in a directory temporarily,
+	 * so the Builder can write to it
+	 *
+	 * @param string $dirpath
+	 * @param string|null $pattern
+	 * @return void
+	 */
+	private function unlockFilesInTranslationDir(string $dirpath, $pattern = null)
+	{
+
+		$files = File::allFiles($dirpath);
+
+		foreach ($files as $file) {
+
+			if (!empty($pattern)) {
+
+				$filename = $file->getFilename();
+
+				if (substr($filename, 0, strlen($pattern)) == $pattern) {
+
+					chmod($file->getPathname(), 0644);
+
+				}
+
+			} else {
+
+				chmod($file->getPathname(), 0644);
+
+			}
+
+		}
+
+		sleep(1);
+
+	}
+
+	private function checkForTranslationUpdates($process = false)
+	{
+
+		$laraCoreVer  = $this->getLaraCoreVersion();
+		$laraCoreVersion  = $laraCoreVer->version;
+		$languageVersion = $this->getTranslationVersion();
+
+		$updates = array();
+
+		if(version_compare($laraCoreVersion, $languageVersion, '>')) {
+			$updates[] = $laraCoreVersion;
+		}
+
+		if($process) {
+			$allmodules = config('lara-common.translations.modules');
+			unset($allmodules['lara-eve']);
+			$modules = array_keys($allmodules);
+
+			foreach ($modules as $module) {
+				$locales = array_keys(config('laravellocalization.supportedLocales'));
+				foreach ($locales as $locale) {
+					$moduleFromFile = $this->getAllTranslationsFromCore($module, $locale);
+					foreach ($moduleFromFile as $cgroup => $tags) {
+						foreach ($tags as $tag => $entries) {
+							foreach ($entries as $key => $val) {
+								$check = Translation::where('language', $locale)
+									->where('module', $module)
+									->where('cgroup', $cgroup)
+									->where('tag', $tag)
+									->where('key', $key)
+									->first();
+								if ($check) {
+									if (str_starts_with($check->value, '_')) {
+										if (!str_starts_with($val, '_')) {
+											// update DB value
+											$check->value = $val;
+											$check->save();
+										}
+									}
+								} else {
+									Translation::create([
+										'language' => $locale,
+										'module'   => $module,
+										'cgroup'   => $cgroup,
+										'tag'      => $tag,
+										'key'      => $key,
+										'value'    => $val,
+									]);
+								}
+							}
+						}
+					}
+				}
+			}
+
+			$this->exportTranslationsToFile($modules);
+
+			$this->setTranslationVersion($laraCoreVersion);
+
+			return redirect()->route('admin.dashboard.index', ['newtranslation' => end($updates)])->send();
+
+		} else {
+
+			return $updates;
+
+		}
+
+	}
+
+	private function getLaraCoreVersion()
+	{
+
+		$laracomposer = file_get_contents(base_path('/laracms/core/composer.json'));
+		$laracomposer = json_decode($laracomposer, true);
+		$laraVersionStr = $laracomposer['version'];
+
+		$app = app();
+		$laraversion = $app->make('stdClass');
+
+		$laraversion->version = $laraVersionStr;
+		list($laraversion->major, $laraversion->minor, $laraversion->patch) = explode('.', $laraVersionStr);
+
+		return $laraversion;
+
+	}
+
+	private function getTranslationVersion()
+	{
+
+		// current version
+		$currentVersion = Setting::where('cgroup', 'system')->where('key', 'lara_translation_version')->first();
+
+		if (empty($currentVersion)) {
+
+			$currentVersion = Setting::create([
+				'title'  => 'Lara Translation Version',
+				'cgroup' => 'system',
+				'key'    => 'lara_translation_version',
+				'value'  => '1.0.0',
+			]);
+		}
+
+		return $currentVersion->value;
+
+	}
+
+	private function setTranslationVersion(string $value)
+	{
+
+		$modelClass = \Lara\Common\Models\Setting::class;
+
+		// get record
+		$object = $modelClass::where('cgroup', 'system')
+			->where('key', 'lara_translation_version')
+			->first();
+
+		if ($object) {
+
+			$object->value = $value;
+			$object->save();
+
+		} else {
+
+			$modelClass::create([
+				'title'  => 'Lara Translation Version',
+				'cgroup' => 'system',
+				'key'    => 'lara_translation_version',
+				'value'  => $value,
+			]);
+
+		}
+
+	}
+
 }
