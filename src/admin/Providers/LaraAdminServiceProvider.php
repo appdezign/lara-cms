@@ -45,7 +45,6 @@ class LaraAdminServiceProvider extends ServiceProvider
 		// Publish Config
 		$this->publishes([
 			__DIR__ . '/../../../config/lara-admin.php' => config_path('lara-admin.php'),
-			__DIR__ . '/../../../config/lara-eve.php' => config_path('lara-eve.php'),
 		], 'lara');
 
 		// Publish Translations
