@@ -9,8 +9,10 @@ return [
 		'title' => 'title',
 	],
 	'entity' => [
+		'category' => '_category',
 		'entity_plural' => 'tags',
 		'entity_single' => 'tag',
 		'entity_title' => 'tags',
+		'tag' => '_tag',
 	],
 ];

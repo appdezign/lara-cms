@@ -9,8 +9,10 @@ return [
 		'title' => 'titel',
 	],
 	'entity' => [
-		'entity_plural' => 'categorieën',
+		'category' => 'categorie',
+		'entity_plural' => 'tags',
 		'entity_single' => 'categorie',
-		'entity_title' => 'categorieën',
+		'entity_title' => 'tags',
+		'tag' => 'tag',
 	],
 ];

@@ -2,6 +2,7 @@
 
 return [
 	'column' => [
+		'locked_by_admin' => '_locked_by_admin',
 		'redirectfrom' => 'redirect from',
 		'redirectto' => 'redirect to',
 		'redirecttype' => 'redirect type',

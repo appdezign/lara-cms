@@ -4,9 +4,13 @@ return [
 	'button' => [
 		'submit' => 'versturen',
 	],
+	'email' => [
+		'subject' => 'onderwerp',
+	],
 	'formfield' => [
-		'comment' => 'opmerking',
+		'comment' => 'Opmerking',
 		'email' => 'Email',
 		'name' => 'Naam',
+		'telephone' => 'Telefoon',
 	],
 ];

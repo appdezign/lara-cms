@@ -7,6 +7,7 @@ return [
 		'lead' => 'excerpt',
 		'menuroute' => 'menuroute',
 		'quote' => 'quote',
+		'template' => '_template',
 		'title' => 'title',
 	],
 	'entity' => [

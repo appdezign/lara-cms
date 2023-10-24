@@ -2,6 +2,8 @@
 
 return [
 	'column' => [
+		'key' => 'key',
+		'path' => 'module',
 		'position' => 'positie',
 		'slug' => 'slug',
 		'title' => 'titel',

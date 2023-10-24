@@ -10,6 +10,7 @@ return [
 		'overlaysize' => 'overlay formaat',
 		'overlaytransp' => 'overlay transparantie',
 		'payoff' => 'payoff',
+		'subtitle' => 'subtitel',
 		'textposition' => 'tekst positie',
 		'title' => 'titel',
 		'type' => 'type',

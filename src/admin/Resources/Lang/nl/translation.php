@@ -22,6 +22,8 @@ return [
 	],
 	'message' => [
 		'exported_to_file' => 'vertalingen geëxporteerd naar bestand',
+		'new_groupname_empty' => 'de nieuwe groep naam is leeg',
+		'new_tagname_empty' => 'de nieuwe tag naam is leeg',
 		'overwrite_database' => 'alle vertalingen in de database worden overschreven!',
 		'overwrite_files' => 'alle taalbestanden worden overschreven!',
 	],

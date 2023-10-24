@@ -8,7 +8,7 @@ return [
 	'column' => [
 		'body' => 'tekst',
 		'customtags' => 'custom tags',
-		'filtertaxonomy' => 'categorie',
+		'filtertag' => 'categorie',
 		'hook' => 'hook',
 		'iconalign' => 'icoon uitlijnen',
 		'iconclass' => 'icoon class',
@@ -20,6 +20,7 @@ return [
 		'relentkey' => 'module',
 		'sortorder' => 'volgorde',
 		'template' => 'template',
+		'term' => 'term',
 		'title' => 'titel',
 		'type' => 'type',
 		'usecache' => 'gebruik cache',
