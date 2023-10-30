@@ -35,14 +35,20 @@ if (!function_exists('_imgdim')) {
 
 		$result['w'] = $width;
 
-		if($preventCropping && !$forceCropping) {
+		if($height == 0) {
 			// no cropping
 			$result['h'] = 0;
 			$result['f'] = 2;
 		} else {
-			// cropping
-			$result['h'] = $height;
-			$result['f'] = 1;
+			if($preventCropping && !$forceCropping) {
+				// no cropping
+				$result['h'] = 0;
+				$result['f'] = 2;
+			} else {
+				// cropping
+				$result['h'] = $height;
+				$result['f'] = 1;
+			}
 		}
 
 		return $result;
