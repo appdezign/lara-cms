@@ -26,8 +26,8 @@
 					<input type="hidden" name="_login_type" value="backend">
 
 					<div class="d-flex justify-content-center align-items-center mb-12">
-						<img src="{{ asset('assets/admin/img/lara75-logo.svg') }}" width="48" alt="Lara" class="me-4"/>
-						<h1 class="m-0" class="lara-admin-logo-title">Lara 7</h1>
+						<img src="{{ asset('assets/admin/img/lara8-logo.svg') }}" width="48" alt="Lara" class="me-4"/>
+						<h1 class="m-0" class="lara-admin-logo-title">Lara 8</h1>
 					</div>
 
 					<div class="fv-row mb-8">

@@ -19,6 +19,7 @@ use Lara\Admin\Http\Traits\AdminAuthTrait;
 use Lara\Admin\Http\Traits\AdminEntityTrait;
 use Lara\Admin\Http\Traits\AdminListTrait;
 use Lara\Admin\Http\Traits\AdminObjectTrait;
+use Lara\Admin\Http\Traits\AdminTagTrait;
 use Lara\Admin\Http\Traits\AdminViewTrait;
 
 use Lara\Admin\Http\Traits\AdminMenuTrait;
@@ -44,6 +45,7 @@ class MenuitemsController extends Controller
 	use AdminEntityTrait;
 	use AdminListTrait;
 	use AdminObjectTrait;
+	use AdminTagTrait;
 	use AdminViewTrait;
 
 	use AdminMenuTrait;
