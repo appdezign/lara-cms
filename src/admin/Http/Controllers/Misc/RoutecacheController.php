@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 
 class RoutecacheController extends Controller {
 
@@ -22,7 +22,17 @@ class RoutecacheController extends Controller {
 	 */
 	public function clear(Request $request) {
 
-		$exitcode = Artisan::call('route:trans:cache');
+		$files = [
+			base_path('bootstrap/cache/routes-v7.php')
+		];
+
+		$supportedLocales = array_keys(config('laravellocalization.supportedLocales'));
+		foreach ($supportedLocales as $locale) {
+			$files[] = base_path('bootstrap/cache/routes-v7_'.$locale.'.php');
+		}
+
+		// delete cached route files
+		$exitcode = File::delete($files);
 
 		$request->session()->put('routecacheclear', false);
 
