@@ -36,6 +36,7 @@ class EntityWidget extends AbstractWidget
 		'sortorder'   => null,
 		'exclude'     => null,
 		'since'       => null,
+		'ignore_hide' => false,
 	];
 
 	public $cacheTime = false; // do not cache entities like events
@@ -105,7 +106,9 @@ class EntityWidget extends AbstractWidget
 			}
 
 			if ($entity->hasHideinlist()) {
-				$collection = $collection->where('publish_hide', 0);
+				if (!$this->config['ignore_hide']) {
+					$collection = $collection->where('publish_hide', 0);
+				}
 			}
 
 			if ($entity->hasExpiration()) {
@@ -183,7 +186,7 @@ class EntityWidget extends AbstractWidget
 
 		$widgetview = '_widgets.entity.' . $this->config['parent'] . '_' . $this->config['entity_key'];
 
-		if(view()->exists($widgetview)) {
+		if (view()->exists($widgetview)) {
 
 			return view($widgetview, [
 				'config'            => $this->config,
@@ -197,11 +200,11 @@ class EntityWidget extends AbstractWidget
 
 		} else {
 			$errorView = (config('app.env') == 'production') ? 'not_found_prod' : 'not_found';
+
 			return view('_widgets._error.' . $errorView, [
 				'widgetview' => $widgetview,
 			]);
 		}
-
 
 	}
 
