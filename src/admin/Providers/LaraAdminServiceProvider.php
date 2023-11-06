@@ -58,6 +58,11 @@ class LaraAdminServiceProvider extends ServiceProvider
 			__DIR__.'/../Resources/Assets/_public' => public_path('assets/admin'),
 		], 'lara');
 
+		// Publish Laravel Filemanager views
+		$this->publishes([
+			__DIR__.'/../Resources/Views/vendor' => resource_path('views/vendor'),
+		], 'lara');
+
 		// Publish Views (optional)
 		$this->publishes([
 			__DIR__.'/../Resources/Views' => resource_path('views/vendor/lara-admin'),

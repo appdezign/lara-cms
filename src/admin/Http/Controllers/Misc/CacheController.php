@@ -20,7 +20,7 @@ use Lara\Admin\Http\Traits\AdminAnalyticsTrait;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
 use Jenssegers\Agent\Agent;
@@ -128,18 +128,16 @@ class CacheController extends Controller
 		if (!empty($objectIDs)) {
 
 			if (in_array('appcache', $objectIDs)) {
-				Artisan::call('cache:clear');
+				File::cleanDirectory(storage_path('framework/cache/data'));
 			}
 			if (in_array('configcache', $objectIDs)) {
-				Artisan::call('config:clear');
+				File::delete(base_path('bootstrap/cache/config.php'));
 			}
 			if (in_array('viewcache', $objectIDs)) {
-				if (config('lara.can_clear_views')) {
-					Artisan::call('view:clear');
-				}
+				File::cleanDirectory(storage_path('framework/views'));
 			}
 			if (in_array('httpcache', $objectIDs)) {
-				Artisan::call('httpcache:clear');
+				File::cleanDirectory(storage_path('httpcache'));
 			}
 			if (in_array('routecache', $objectIDs)) {
 				$request->session()->put('routecacheclear', true);
@@ -147,6 +145,8 @@ class CacheController extends Controller
 			if (in_array('anacache', $objectIDs)) {
 				$this->refreshAnalytics();
 			}
+
+			sleep(1);
 
 			// flash message
 			flash('All selected caches were successfully cleared')->success();
