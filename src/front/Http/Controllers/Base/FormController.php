@@ -269,10 +269,14 @@ class FormController extends Controller
 		$maildata->company = $company;
 
 		// visitor
-		$user = $app->make('stdClass');
-		$user->email = $request->input('email');
-		if ($request->has('name')) {
-			$user->name = $request->input('name');
+		if($request->has('email')) {
+			$user = $app->make('stdClass');
+			$user->email = $request->input('email');
+			if ($request->has('name')) {
+				$user->name = $request->input('name');
+			}
+		} else {
+			$user = null;
 		}
 
 		// webmaster
@@ -291,7 +295,7 @@ class FormController extends Controller
 		$maildata->from->name = $company->company_name;
 
 		// subject
-		$maildata->subject = _lanq('lara-front::' . $this->entity->getEntityKey() . '.email.subject');
+		$maildata->subject = _lanq('lara-eve::' . $this->entity->getEntityKey() . '.email.subject');
 
 		// style
 		$maildata->style = json_decode(json_encode(config('lara-front.mail')), false);
@@ -309,14 +313,16 @@ class FormController extends Controller
 			$fieldname = $field->fieldname;
 			$fieldvalue = $request->input($fieldname);
 			$maildata->content->data->$fieldname = [
-				'colname' => _lanq('lara-front::' . $this->entity->getEntityKey() . '.formfield.' . $fieldname),
+				'colname' => _lanq('lara-eve::' . $this->entity->getEntityKey() . '.formfield.' . $fieldname),
 				'colval'  => $fieldvalue,
 			];
 		}
 
 		// mail to visitor
-		$maildata->view = 'email.' . $this->entity->getEntityKey() . '.confirm';
-		Mail::to($user)->queue(new MailConfirmation($maildata));
+		if($user) {
+			$maildata->view = 'email.' . $this->entity->getEntityKey() . '.confirm';
+			Mail::to($user)->queue(new MailConfirmation($maildata));
+		}
 
 		// mail to webmaster
 		$maildata->view = 'email.' . $this->entity->getEntityKey() . '.webmaster';

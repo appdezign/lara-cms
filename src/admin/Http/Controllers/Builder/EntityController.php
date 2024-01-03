@@ -279,11 +279,12 @@ class EntityController extends Controller
 		$before = array();
 		$between = array();
 		$after = array();
+		$default = array();
 		foreach($this->data->customcolumns as $custcol) {
 			$varname = $custcol->fieldhook;
 			$$varname[] = $custcol;
 		}
-		$this->data->customcolumns = collect(array_merge($before, $between, $after));
+		$this->data->customcolumns = collect(array_merge($before, $between, $after, $default));
 
 		// relations
 		$this->data->relationTypes = config('lara-admin.relationTypes');
