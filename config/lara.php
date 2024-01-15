@@ -2,8 +2,8 @@
 
 return [
 
-	'lara_maj_ver'    => '7',
-	'lara_db_version' => '7.5.46',
+	'lara_maj_ver'    => '8',
+	'lara_db_version' => '8.1.11',
 
 	'lara_db_builds' => [
 		'6.0.1',
@@ -24,6 +24,7 @@ return [
 		'7.5.11',
 		'7.5.36',
 		'7.5.46',
+		'8.1.11',
 	],
 
 	'auth' => [
@@ -42,8 +43,6 @@ return [
 	'debug'     => false,
 
 	'needs_setup' => env('LARA_NEEDS_SETUP', false),
-
-	'can_clear_views' => env('LARA_CAN_CLEAR_VIEWS', false),
 
 	'scheduler_id' => env('LARA_SCHEDULER_ID', 0),
 
