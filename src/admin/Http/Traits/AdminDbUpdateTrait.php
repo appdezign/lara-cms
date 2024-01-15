@@ -204,6 +204,14 @@ trait AdminDbUpdateTrait
 
 				}
 
+				if (in_array('8.1.11', $updates)) {
+
+					$this->updateFormTranslations();
+
+					$this->setSetting('system', 'lara_db_version', '8.1.11');
+
+				}
+
 				// Post-update actions
 				$this->clearCache();
 
@@ -215,6 +223,37 @@ trait AdminDbUpdateTrait
 			return $updates;
 
 		}
+
+	}
+
+	private function updateFormTranslations() {
+
+		$formEntities = Entity::EntityGroupIs('form')->get();
+
+		foreach($formEntities as $formEntity) {
+
+			$entityKey = $formEntity->entity_key;
+
+			// email subject
+			$subjectSource = Translation::langIs('nl')->where('module', 'lara-front')->where('cgroup', $entityKey)->where('tag', 'email')->where('key','subject')->first();
+			if($subjectSource) {
+				$subjectTranslation = $subjectSource->value;
+				$this->checkTranslation('nl', 'lara-eve', $entityKey, 'email', 'subject', $subjectTranslation, true);
+			}
+
+			// custom form fields
+			$formFields = $formEntity->customcolumns()->get();
+			foreach($formFields as $formField) {
+				$fieldname = $formField->fieldname;
+				$fieldSource = Translation::langIs('nl')->where('module', 'lara-front')->where('cgroup', $entityKey)->where('tag', 'formfield')->where('key', $fieldname)->first();
+				if($fieldSource) {
+					$fieldTranslation = $fieldSource->value;
+					$this->checkTranslation('nl', 'lara-eve', $entityKey, 'formfield', $fieldname, $fieldTranslation, true);
+				}
+			}
+		}
+
+		$this->exportTranslationsToFile(['lara-eve']);
 
 	}
 
