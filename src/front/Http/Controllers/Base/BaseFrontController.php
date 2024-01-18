@@ -175,7 +175,7 @@ class BaseFrontController extends Controller
 			$objectCount = 0;
 			foreach ($this->data->objects as $taxonomy => $terms) {
 				foreach ($terms as $node) {
-					if (property_exists($node, 'objects')) {
+					if (array_key_exists('objects', $node->toArray())) {
 						$objectCount = $objectCount + $node->objects->count();
 					}
 				}

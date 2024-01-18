@@ -56,6 +56,8 @@
 				{{ html()->password('password')->class('form-control')->attributes(['autocomplete' => 'new-password']) }}
 			</x-formrow>
 
+			{{ html()->hidden('email_verified_at', Date::parse(\Carbon\Carbon::now())->format('Y-m-d H:i:s')) }}
+
 		</div>
 	</div>
 
