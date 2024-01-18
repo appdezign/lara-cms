@@ -11,7 +11,7 @@
 
 		@if(isset($data->newversion))
 			<div class="alert alert-success alert-important text-center" role="alert">
-				Lara has been updated to {{ $data->newversion }}
+				Lara DB has been updated to {{ $data->newversion }}
 			</div>
 		@endif
 
