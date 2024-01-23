@@ -248,6 +248,7 @@ class BaseApiController extends Controller
 				foreach ($object->files as $file) {
 					$filePath = url('assets/media/' . $this->entity->getEntityKey() . '/' . $file->filename);
 					$files[] = $filePath;
+					$file->file_url = $filePath;
 				}
 				$object->attachments = $files;
 			} else {
