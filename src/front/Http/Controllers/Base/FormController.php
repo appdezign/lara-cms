@@ -313,7 +313,7 @@ class FormController extends Controller
 			$fieldname = $field->fieldname;
 			$fieldvalue = $request->input($fieldname);
 			$maildata->content->data->$fieldname = [
-				'colname' => _lanq('lara-eve::' . $this->entity->getEntityKey() . '.formfield.' . $fieldname),
+				'colname' => _lanq('lara-eve::' . $this->entity->getEntityKey() . '.column.' . $fieldname),
 				'colval'  => $fieldvalue,
 			];
 		}
