@@ -1170,7 +1170,7 @@ trait FrontListTrait
 					// get subtree
 					$tags->$key = Tag::scoped(['entity_key' => $entity->getEntityKey(), 'language' => $language, 'taxonomy_id' => $taxonomy->id])
 						->defaultOrder()
-						->descendantsOf($activetag->id)
+						->descendantsAndSelf($activetag->id)
 						->toTree();
 
 				} else {
