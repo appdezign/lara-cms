@@ -65,6 +65,8 @@ return [
 			'uploads'      => 'lara_sys_uploads',
 			'translations' => 'lara_sys_translations',
 			'blacklist'    => 'lara_sys_blacklist',
+			'headertags'    => 'lara_sys_headertags',
+			'entitywidgets' => 'lara_sys_entitywidgets',
 		],
 
 		'ent' => [

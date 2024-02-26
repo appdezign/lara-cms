@@ -2,7 +2,7 @@
 
 return [
 
-	'lara_eve_version' => '1.0.5',
+	'lara_eve_version' => '2.1.2',
 
 	'lara_eve_builds' => [
 		'1.0.1',
@@ -10,6 +10,7 @@ return [
 		'1.0.3',
 		'1.0.4',
 		'1.0.5',
+		'2.1.2',
 	],
 
 	'use_tags_for_sorting' => [

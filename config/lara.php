@@ -3,7 +3,7 @@
 return [
 
 	'lara_maj_ver'    => '8',
-	'lara_db_version' => '8.1.11',
+	'lara_db_version' => '8.2.01',
 
 	'lara_db_builds' => [
 		'6.0.1',
@@ -25,7 +25,11 @@ return [
 		'7.5.36',
 		'7.5.46',
 		'8.1.11',
+		'8.2.01',
 	],
+
+	'is_multi_language' => true,
+	'multi_language_slugs_in_menu' => false,
 
 	'auth' => [
 		'has_front_auth'     => env('LARA_AUTH_HAS_FRONT_AUTH', false),
@@ -79,7 +83,6 @@ return [
 	'builderprefix'     => 'builder',
 	'dbprefix'          => 'lara',
 	'default_perpage'   => 10,
-	'clanguage_default' => 'nl',
 	'dynamic_routes'    => true,
 
 	'image_max_width' => 1920,
