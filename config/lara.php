@@ -29,7 +29,7 @@ return [
 	],
 
 	'clanguage_default' => 'nl',
-	'is_multi_language' => true,
+	'is_multi_language' => false,
 	'multi_language_slugs_in_menu' => false,
 
 	'auth' => [
