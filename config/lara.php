@@ -28,6 +28,7 @@ return [
 		'8.2.01',
 	],
 
+	'clanguage_default' => 'nl',
 	'is_multi_language' => true,
 	'multi_language_slugs_in_menu' => false,
 
