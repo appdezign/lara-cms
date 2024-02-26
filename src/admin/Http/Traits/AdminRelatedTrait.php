@@ -238,7 +238,7 @@ trait AdminRelatedTrait
 
 		$key = 'clanguage';
 
-		$default = config('lara.clanguage_default');
+		$default = config('app.locale');
 
 		if (!empty($entity) && $entity->hasLanguage()) {
 

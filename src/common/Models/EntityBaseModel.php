@@ -182,6 +182,23 @@ class EntityBaseModel extends Model
 	/**
 	 * @return bool
 	 */
+	public function hasIcon()
+	{
+		$count = $this->media->where('isicon', 1)->count();
+		return boolval($count);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getIconAttribute()
+	{
+		return $this->media->where('isicon', 1)->first();
+	}
+
+	/**
+	 * @return bool
+	 */
 	public function hasGallery()
 	{
 		$count = $this->media->where('featured', 0)->where('ishero', 0)->count();

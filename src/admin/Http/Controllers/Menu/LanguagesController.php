@@ -342,10 +342,13 @@ class LanguagesController extends Controller
 
 			$source = $request->input('langfrom');
 			$dest = $request->input('langto');
+			$prefix = $request->input('prefix');
+
+			$usePrefix = $prefix == 1;
 
 			if (in_array($source, $langs) && in_array($dest, $langs) && $source != $dest) {
 
-				$this->copyLanguageContent($source, $dest);
+				$this->copyLanguageContent($source, $dest, $usePrefix);
 
 				Artisan::call('cache:clear');
 				Artisan::call('config:clear');

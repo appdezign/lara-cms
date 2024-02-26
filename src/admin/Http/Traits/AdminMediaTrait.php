@@ -95,6 +95,15 @@ trait AdminMediaTrait
 					$img->hide_in_gallery = $request->input('_hide_in_gallery_' . $imageID);
 				}
 
+				// icon
+				if ($request->input('_image_isicon_' . $imageID) == 1) {
+					$img->isicon = 1;
+					$img->hide_in_gallery = 1;
+				} else {
+					$img->isicon = 0;
+					$img->hide_in_gallery = $request->input('_hide_in_gallery_' . $imageID);;
+				}
+
 				$img->herosize = $request->input('_herosize_' . $imageID);
 				$img->caption = $request->input('_caption_' . $imageID);
 				$img->image_alt = $request->input('_image_alt_' . $imageID);

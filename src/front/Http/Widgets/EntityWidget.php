@@ -5,7 +5,10 @@ namespace Lara\Front\Http\Widgets;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
+
 use Lara\Common\Models\Tag;
+use Lara\Common\Models\Headertag;
+use Lara\Common\Models\Templatewidget;
 
 use Arrilot\Widgets\AbstractWidget;
 
@@ -28,6 +31,8 @@ class EntityWidget extends AbstractWidget
 		'entity_key'  => null,
 		'parent'      => null,
 		'term'        => null,
+		'filterfield' => null,
+		'filterval'   => null,
 		'needs_image' => true,
 		'count'       => 0,
 		'title'       => null,
@@ -44,7 +49,9 @@ class EntityWidget extends AbstractWidget
 	public function cacheKey(array $params = [])
 	{
 
-		$cachekey = 'lara.widgets.entity.' . $this->config['parent'] . '.' . $this->config['entity_key'];
+		$language = LaravelLocalization::getCurrentLocale();
+
+		$cachekey = 'lara.widgets.entity.' . $this->config['parent'] . '.' . $this->config['entity_key']  . '.' . $language;
 
 		if ($this->config['term']) {
 			$cachekey = $cachekey . '.' . $this->config['term'];
@@ -66,19 +73,31 @@ class EntityWidget extends AbstractWidget
 
 		$language = LaravelLocalization::getCurrentLocale();
 
+		$isMultiLanguage = config('lara.is_multi_language');
+
 		$entity = $this->getFrontEntityByKey($this->config['entity_key']);
 
 		if ($entity) {
 
 			$term = $this->config['term'];
+			$filterfield = $this->config['filterfield'];
+			$filtervalue = $this->config['filterval'];
 
 			if ($term) {
+
+				if($isMultiLanguage) {
+					$activeTerm = $term . '-' . $language;
+				} else {
+					$activeTerm = $term;
+				}
+
 				// get the full Tag object
 				$widgetTaxonomy = Tag::langIs($language)
 					->entityIs($entity->getEntityKey())
-					->where('slug', $term)->first();
+					->where('slug', $activeTerm)->first();
 				if (empty($widgetTaxonomy)) {
 					$term = null;
+					$activeTerm = null;
 				}
 			} else {
 				$widgetTaxonomy = null;
@@ -128,11 +147,16 @@ class EntityWidget extends AbstractWidget
 			}
 
 			if ($term) {
-				$collection = $collection->whereHas('tags', function ($query) use ($term) {
-					$query->where(config('lara-common.database.object.tags') . '.slug', $term);
+				$collection = $collection->whereHas('tags', function ($query) use ($activeTerm) {
+					$query->where(config('lara-common.database.object.tags') . '.slug', $activeTerm);
 				});
 
 			} else {
+
+				if ($filterfield && $filtervalue) {
+					$collection = $collection->where($filterfield, $filtervalue);
+				}
+
 				$collection = $collection->with([
 					'tags' => function ($query) use ($entity) {
 						$query->where(config('lara-common.database.object.tags') . '.entity_key', $entity->getEntityKey());
@@ -184,7 +208,27 @@ class EntityWidget extends AbstractWidget
 
 		}
 
-		$widgetview = '_widgets.entity.' . $this->config['parent'] . '_' . $this->config['entity_key'];
+		// identifier
+		$templateFileName = $this->config['parent'] . '_' . $this->config['entity_key'];
+
+		// get or create template identifier
+		$twidget = Templatewidget::where('templatewidget', $templateFileName)->first();
+		if($twidget) {
+			$twidgetId = $twidget->id;
+		} else {
+			$newTwidget = Templatewidget::create([
+				'templatewidget' => $templateFileName,
+			]);
+			$twidgetId = $newTwidget->id;
+		}
+
+		$headerTag = Headertag::where('cgroup', 'templatewidget')->where('templatewidget_id', $twidgetId)->first();
+		$headerTagId = ($headerTag) ? $headerTag->id : null;
+		$titleTag = ($headerTag) ? $headerTag->title_tag : 'h2';
+		$listTag = ($headerTag) ? $headerTag->list_tag : 'h3';
+
+		// Template
+		$widgetview = '_widgets.entity.' . $templateFileName;
 
 		if (view()->exists($widgetview)) {
 
@@ -192,10 +236,14 @@ class EntityWidget extends AbstractWidget
 				'config'            => $this->config,
 				'grid'              => $this->config['grid'],
 				'widgetObjects'     => $widgetObjects,
+				'widgetTerm'        => $term,
 				'widgetTaxonomy'    => $widgetTaxonomy,
 				'widgetTaxonomies'  => $widgetTaxonomies,
 				'widgetEntityRoute' => $widgetEntityRoute,
 				'widgetTitle'       => $this->config['title'],
+				'headerTagId'       => $headerTagId,
+				'titleTag'          => $titleTag,
+				'listTag'           => $listTag,
 			]);
 
 		} else {

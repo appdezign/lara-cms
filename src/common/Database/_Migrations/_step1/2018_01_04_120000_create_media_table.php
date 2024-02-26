@@ -27,7 +27,7 @@ class CreateMediaTable extends Migration {
 			$table->string('mimetype')->nullable();
 
 			$table->boolean('featured')->default(0);
-
+			$table->boolean('isicon')->default(0);
 			$table->boolean('ishero')->default(0);
 			$table->integer('herosize')->unsigned()->default(0);
 

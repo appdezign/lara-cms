@@ -46,6 +46,9 @@ if ($node->type == 'entity') {
 					<i class="fas fa-home"></i>
 				@endif
 				{{ $node->title }}
+				@if($node->slug_lock == 1)
+					<i class="las la-lock"></i>
+				@endif
 			</a>
 
 			@if($node->depth == 0 || $node->type == 'parent')
@@ -90,7 +93,8 @@ if ($node->type == 'entity') {
 			@elseif ($node->type == 'form')
 				{{ $node->entity->entity_key }}
 			@elseif ($node->type == 'page')
-				{{ \Lara\Common\Models\Page::where('id', $node->object_id)->value('title') }}
+				<?php $pg = \Lara\Common\Models\Page::where('id', $node->object_id)->first(); ?>
+				{{ str_limit($pg->title, 25, ' ...') }}
 			@elseif ($node->type == 'parent')
 				&nbsp;
 			@endif
@@ -107,6 +111,7 @@ if ($node->type == 'entity') {
 				   data-title="{{ $node->title }}"
 				   data-type="{{ $node->type }}"
 				   data-locked="{{ $node->locked_by_admin }}"
+				   data-sluglock="{{ $node->slug_lock }}"
 				   data-auth="{{ $node->route_has_auth }}"
 				   data-slug="{{ $node->slug }}"
 				   data-route="{{ $node->route }}"

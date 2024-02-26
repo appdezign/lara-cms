@@ -226,6 +226,9 @@ class BaseController extends Controller
 		// save model
 		$object = $this->modelClass::create($request->all());
 
+		// add language to slug
+		$this->updateLanguageSlug($this->entity, $object);
+
 		// clear the cache (depending on entity)
 		$this->clearCacheOnSave($this->entity);
 
@@ -406,6 +409,9 @@ class BaseController extends Controller
 
 		// save object to database
 		$object->update($request->all());
+
+		// add language to slug
+		$this->updateLanguageSlug($this->entity, $object);
 
 		// save tags
 		$this->saveObjectTags($request, $this->entity, $object);
@@ -591,7 +597,7 @@ class BaseController extends Controller
 			$objectCount = $this->batchPublishObjects($this->entity, $request->input('objcts'));
 
 			// flash message
-			$this->flashMessage($this->entity->getEntityKey(),  'publish_success', 'success', $objectCount);
+			$this->flashMessage($this->entity->getEntityKey(), 'publish_success', 'success', $objectCount);
 
 		}
 

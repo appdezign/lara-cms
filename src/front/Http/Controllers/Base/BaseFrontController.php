@@ -233,6 +233,9 @@ class BaseFrontController extends Controller
 		// get language versions
 		$this->data->langversions = $this->getFrontLanguageVersions($this->language, $this->entity);
 
+		// header tags
+		$this->data->htag = $this->getHeaderTag($this->entity);
+
 		// override default layout with custom module page layout
 		$this->data->layout = $this->getObjectThemeLayout($this->data->modulepage, $this->data->params);
 		$this->data->grid = $this->getGrid($this->data->layout);

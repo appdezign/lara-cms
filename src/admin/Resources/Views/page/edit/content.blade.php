@@ -23,13 +23,17 @@
 @endif
 
 {{-- LEAD --}}
-@if($entity->hasLead() && in_array($data->object->cgroup, config('lara-admin.page.cgroups_with_lead')))
+@if($entity->hasLead() && (in_array($data->object->cgroup, config('lara-admin.page.cgroups_with_lead')) || in_array($data->object->template, config('lara-admin.page.templates_with_lead'))))
 	<x-formrow>
 		<x-slot name="label">
 			{{ html()->label(_lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.column.lead').':', 'lead') }}
 		</x-slot>
 		@if($entity->hasTinyLead())
-			{{ html()->textarea('lead', null)->class('form-control tinymin')->rows(4) }}
+			@if(in_array($data->object->template, config('lara-admin.page.templates_with_lead')))
+				{{ html()->textarea('lead', null)->class('form-control tiny') }}
+			@else
+				{{ html()->textarea('lead', null)->class('form-control tinymin')->rows(4) }}
+			@endif
 		@else
 			{{ html()->textarea('lead', null)->class('form-control')->rows(4) }}
 		@endif

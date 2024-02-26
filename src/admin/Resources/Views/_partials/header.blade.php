@@ -66,7 +66,7 @@
 
 							@foreach($clanguages as $clang)
 								<div class="menu-item px-3 my-0">
-									<a href="{!! route('admin.'.$entity->getEntityRouteKey().'.index', ['clanguage' => $clang->code]) !!}"
+									<a href="{!! route('admin.'.$entity->getEntityRouteKey().'.index', ['clanguage' => $clang->code, 'resetfilters' => 'true']) !!}"
 									   class="menu-link px-3 py-2">
 										<span class="menu-title">{{ strtoupper($clang->code) }}</span>
 									</a>
