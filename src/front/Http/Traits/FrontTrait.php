@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Auth;
 use Lara\Common\Models\Entity;
+use Lara\Common\Models\Headertag;
 use Lara\Common\Models\Language;
 use Lara\Common\Models\Larawidget;
 use Lara\Common\Models\Menu;
@@ -318,6 +319,26 @@ trait FrontTrait
 			return true;
 		}
 
+	}
+
+	private function getHeaderTag($entity) {
+
+		$htag = $this->makeNewObj();
+
+		$headerTag = Headertag::where('cgroup', 'module')->where('entity_id', $entity->id)->first();
+
+		if($headerTag) {
+			$htag->id = $headerTag->id;
+			$htag->titleTag = $headerTag->title_tag;
+			$htag->listTag = $headerTag->list_tag;
+
+		} else {
+			$htag->id = null;
+			$htag->titleTag = 'h1';
+			$htag->listTag = 'h3';
+		}
+
+		return $htag;
 	}
 
 }

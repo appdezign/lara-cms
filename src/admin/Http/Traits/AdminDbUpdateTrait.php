@@ -212,6 +212,16 @@ trait AdminDbUpdateTrait
 
 				}
 
+				if (in_array('8.2.01', $updates)) {
+
+					$this->updateImageTable();
+					$this->updateMenuItemTable();
+					$this->addHeaderTagsTables();
+
+					$this->setSetting('system', 'lara_db_version', '8.2.01');
+
+				}
+
 				// Post-update actions
 				$this->clearCache();
 
@@ -222,6 +232,79 @@ trait AdminDbUpdateTrait
 
 			return $updates;
 
+		}
+
+	}
+
+	private function addHeaderTagsTables() {
+
+		$tablenames = config('lara-common.database');
+
+		Schema::create($tablenames['sys']['entitywidgets'], function (Blueprint $table) {
+
+			$table->bigIncrements('id');
+			$table->string('templatewidget')->nullable();
+			$table->timestamps();
+
+		});
+
+		Schema::create($tablenames['sys']['headertags'], function (Blueprint $table) {
+
+			$table->bigIncrements('id');
+
+			$table->string('title')->nullable();
+			$table->string('cgroup')->nullable();
+
+			$table->foreign('entity_id')
+				->references('id')
+				->on($tablenames['ent']['entities'])
+				->onDelete('cascade');
+
+			$table->foreign('larawidget_id')
+				->references('id')
+				->on('lara_blocks_larawidgets')
+				->onDelete('cascade');
+
+			$table->foreign('templatewidget_id')
+				->references('id')
+				->on($tablenames['sys']['entitywidgets'])
+				->onDelete('cascade');
+
+			$table->string('title_tag')->nullable();
+			$table->string('list_tag')->nullable();
+
+			$table->timestamps();
+
+			$table->timestamp('locked_at')->nullable();
+			$table->bigInteger('locked_by')->nullable()->unsigned();
+
+			$table->foreign('locked_by')
+				->references('id')
+				->on($tablenames['auth']['users'])
+				->onDelete('cascade');
+
+		});
+
+	}
+
+	private function updateMenuItemTable() {
+		$tablenames = config('lara-common.database');
+		$tablename = $tablenames['menu']['menuitems'];
+		if (!Schema::hasColumn($tablename, 'slug_lock')) {
+			Schema::table($tablename, function ($table) {
+				$table->boolean('slug_lock')->default(0)->after('slug');
+			});
+		}
+	}
+
+	private function updateImageTable() {
+
+		$tablenames = config('lara-common.database');
+		$tablename = $tablenames['object']['images'];
+		if (!Schema::hasColumn($tablename, 'isicon')) {
+			Schema::table($tablename, function ($table) {
+				$table->boolean('isicon')->default(0)->after('featured');
+			});
 		}
 
 	}

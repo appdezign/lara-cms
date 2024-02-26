@@ -49,13 +49,21 @@ class SliderWidget extends AbstractWidget
 
 		$language = LaravelLocalization::getCurrentLocale();
 
+		$isMultiLanguage = config('lara.is_multi_language');
+
 		$term = $this->config['term'];
+
+		if($isMultiLanguage) {
+			$activeTerm = $term . '-' . $language;
+		} else {
+			$activeTerm = $term;
+		}
 
 		$taxonomy = $this->getFrontDefaultTaxonomy();
 		$tag = Tag::langIs($language)
 			->entityIs('slider')
 			->taxonomyIs($taxonomy->id)
-			->where('slug', $term)->first();
+			->where('slug', $activeTerm)->first();
 
 		if ($tag) {
 
@@ -66,8 +74,8 @@ class SliderWidget extends AbstractWidget
 			$widgetsliders = $modelClass::langIs($language)
 				->isPublished()
 				->has('media')
-				->whereHas('tags', function ($query) use ($term) {
-					$query->where(config('lara-common.database.object.tags') . '.slug', $term);
+				->whereHas('tags', function ($query) use ($activeTerm) {
+					$query->where(config('lara-common.database.object.tags') . '.slug', $activeTerm);
 				})
 				->orderBy($entity->getSortField(), $entity->getSortOrder())
 				->get();

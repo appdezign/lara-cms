@@ -58,6 +58,7 @@
 
 	<?php
 	$isFeatured = false;
+	$isIcon = false;
 	$isHero = false;
 	$isGallery = false;
 	$galleryIsFirstRow = false;
@@ -76,6 +77,9 @@
 			} elseif ($image->ishero == 1) {
 				$isHero = true;
 				$rowHeader = 'Hero';
+			} elseif ($image->isicon == 1) {
+				$isIcon = true;
+				$rowHeader = 'Icon';
 			} else {
 				$isGallery = true;
 				if (!$galleryFirstRowFound) {
@@ -178,6 +182,11 @@
 								hero {{ $heroSizes[$image->herosize] }}
 							</div>
 						@endif
+						@if($image->isicon == 1)
+							<div class="image-tag" style="background-color: #d81b60;">
+								icon
+							</div>
+						@endif
 						@if($data->object->opengraph && $image->filename == $data->object->opengraph->og_image)
 							<div class="image-tag">opengraph</div>
 						@endif
@@ -276,6 +285,23 @@
 					@else
 						{{ html()->hidden('_herosize_' . $image->id, $image->herosize) }}
 					@endif
+
+					<div class="row form-group">
+						<div class="col-12 col-md-3">
+							{{ html()->label('icon:', '_image_isicon') }}
+						</div>
+						<div class="col-12 col-md-9">
+
+							<div class="form-check">
+								{{ html()->hidden('_image_isicon_' . $image->id, 0) }}
+								@if($image->ishero == 1 || $image->featured == 1)
+									{{ html()->checkbox('_image_isicon_' . $image->id, old('_image_isicon_' . $image->id, $image->isicon), 1)->class('form-check-input')->disabled() }}
+								@else
+									{{ html()->checkbox('_image_isicon_' . $image->id, old('_image_isicon_' . $image->id, $image->isicon), 1)->class('form-check-input') }}
+								@endif
+							</div>
+						</div>
+					</div>
 
 					@if($data->object->hasGallery())
 						@if($image->featured == 1 || $image->ishero)

@@ -98,10 +98,54 @@ class CreateSysTable extends Migration
 
 		Schema::create($tablenames['sys']['blacklist'], function (Blueprint $table) use ($tablenames) {
 
-			// ID's
 			$table->bigIncrements('id');
 			$table->string('ipaddress')->nullable();
 			$table->timestamps();
+
+		});
+
+		Schema::create($tablenames['sys']['entitywidgets'], function (Blueprint $table) {
+
+			$table->bigIncrements('id');
+			$table->string('templatewidget')->nullable();
+			$table->timestamps();
+
+		});
+
+		Schema::create($tablenames['sys']['headertags'], function (Blueprint $table) {
+
+			$table->bigIncrements('id');
+
+			$table->string('title')->nullable();
+			$table->string('cgroup')->nullable();
+
+			$table->foreign('entity_id')
+				->references('id')
+				->on($tablenames['ent']['entities'])
+				->onDelete('cascade');
+
+			$table->foreign('larawidget_id')
+				->references('id')
+				->on('lara_blocks_larawidgets')
+				->onDelete('cascade');
+
+			$table->foreign('templatewidget_id')
+				->references('id')
+				->on($tablenames['sys']['entitywidgets'])
+				->onDelete('cascade');
+
+			$table->string('title_tag')->nullable();
+			$table->string('list_tag')->nullable();
+
+			$table->timestamps();
+
+			$table->timestamp('locked_at')->nullable();
+			$table->bigInteger('locked_by')->nullable()->unsigned();
+
+			$table->foreign('locked_by')
+				->references('id')
+				->on($tablenames['auth']['users'])
+				->onDelete('cascade');
 
 		});
 

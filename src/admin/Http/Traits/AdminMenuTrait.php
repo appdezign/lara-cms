@@ -316,6 +316,9 @@ trait AdminMenuTrait
 			$object->depth = $parent->depth + 1;
 			$object->appendToNode($parent)->save();
 
+			// add language to slug
+			$this->updateMenuLanguageSlug($object);
+
 			return $object->id;
 
 		} else {
@@ -347,6 +350,12 @@ trait AdminMenuTrait
 
 		if ($request->has('reset_slug')) {
 			$object->slug = null;
+		}
+
+		if ($request->has('slug_lock')) {
+			$object->slug_lock = 1;
+		} else {
+			$object->slug_lock = 0;
 		}
 
 		if ($request->has('locked_by_admin')) {
@@ -493,6 +502,10 @@ trait AdminMenuTrait
 		if ($error === false) {
 
 			$object->save();
+
+			if(config('lara.multi_language_slugs_in_menu')) {
+				$this->updateLanguageSlug($menuItemEntity, $object);
+			}
 
 			$this->rebuildMenuRoutes($menuItemId);
 

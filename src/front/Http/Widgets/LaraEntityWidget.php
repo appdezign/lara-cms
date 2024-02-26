@@ -5,7 +5,9 @@ namespace Lara\Front\Http\Widgets;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
+
 use Lara\Common\Models\Tag;
+use Lara\Common\Models\Headertag;
 use Lara\Common\Models\Larawidget;
 
 use Arrilot\Widgets\AbstractWidget;
@@ -148,6 +150,12 @@ class LaraEntityWidget extends AbstractWidget
 
 		}
 
+		$headerTag = Headertag::where('cgroup', 'larawidget')->where('larawidget_id', $larawidget->id)->first();
+		$headerTagId = ($headerTag) ? $headerTag->id : null;
+		$titleTag = ($headerTag) ? $headerTag->title_tag : 'h2';
+		$listTag = ($headerTag) ? $headerTag->list_tag : 'h3';
+
+
 		if ($larawidget->template) {
 			$widgetview = '_widgets.lara.entity.' . $larawidget->template . '_' . $relentkey;
 		} else {
@@ -164,6 +172,9 @@ class LaraEntityWidget extends AbstractWidget
 				'widgetTaxonomies'  => $widgetTaxonomies,
 				'widgetEntityRoute' => $widgetEntityRoute,
 				'larawidget'        => $larawidget,
+				'headerTagId'       => $headerTagId,
+				'titleTag'          => $titleTag,
+				'listTag'           => $listTag,
 			]);
 
 		} else {

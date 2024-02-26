@@ -157,7 +157,7 @@ trait AdminTrait
 
 		$key = 'clanguage';
 
-		$default = config('lara.clanguage_default');
+		$default = config('app.locale');
 
 		if (!empty($entity) && $entity->hasLanguage()) {
 
@@ -736,6 +736,68 @@ trait AdminTrait
 				$tag->delete();
 			}
 		}
+
+	}
+
+	/**
+	 * @param $object
+	 * @return bool
+	 */
+	private function updateLanguageSlug($entity, $object): bool
+	{
+		if(config('lara.is_multi_language')) {
+			if($entity->hasSlug()) {
+				$suffix = '-' . $object->language;
+				if(substr($object->slug, -3) != $suffix) {
+					$newSlug = $this->getUniqueSlug($entity,$object, $object->language);
+					$object->slug = $newSlug . $suffix;
+					$object->save();
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	private function getUniqueSlug($entity, $object, $language) {
+
+		$modelClass = $entity->getEntityModelClass();
+
+		// check if slug exists
+		$slugs = $modelClass::where('id', '!=', $object->id)->pluck('slug')->toArray();
+		$newSlug = $this->getUniqueRecursive($language, $object->slug, $slugs);
+
+		return $newSlug;
+
+	}
+
+	private function getUniqueRecursive($language, $mySlug, $slugs, $counter = 0) {
+
+		$newSlug = $mySlug;
+
+		foreach($slugs as $slug) {
+			if(substr($slug, -3) == '-' . $language) {
+				$baseSlug = substr($slug, 0, strlen($slug) - 3);
+				if($counter > 0) {
+					$newSlug = $mySlug . '-' . $counter;
+				}
+				if($newSlug == $baseSlug) {
+					$counter++;
+					$this->getUniqueRecursive($language, $mySlug, $slugs, $counter);
+				}
+			}
+		}
+
+		if($counter > 0) {
+			$mySlug = $mySlug . '-' . $counter;
+		}
+
+		return $mySlug;
 
 	}
 
