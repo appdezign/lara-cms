@@ -1,7 +1,6 @@
 <?php
 $entityList = \Lara\Common\Models\Entity::EntityGroupIs('entity')->pluck('entity_key', 'id')->toArray();
-$laraWidgetList = \Lara\Common\Models\Larawidget::where('type', 'module')->pluck('title', 'id')->toArray();
-$templateWidgetList = \Lara\Common\Models\Templatewidget::pluck('templatewidget', 'id')->toArray();
+$templateWidgetList = \Lara\Common\Models\Templatewidget::where('type', $data->object->cgroup)->pluck('widgetfile', 'id')->toArray();
 
 $titleTags = [
 	'h1' => 'h1',
@@ -50,20 +49,8 @@ $listTags = [
 	{{ html()->hidden('entity_id', null) }}
 @endif
 
-{{-- LARAWIDGET_ID --}}
-@if($data->object->cgroup == 'larawidget')
-	<x-formrow>
-		<x-slot name="label">
-			{{ html()->label(_lanq('lara-admin::headertag.column.larawidget_id').':', 'larawidget_id') }}
-		</x-slot>
-		{{ html()->select('larawidget_id', [null=>'- Select widget -'] + $laraWidgetList, null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
-	</x-formrow>
-@else
-	{{ html()->hidden('larawidget_id', null) }}
-@endif
-
 {{-- TEMPLATEWIDGET_ID --}}
-@if($data->object->cgroup == 'templatewidget')
+@if(str_contains($data->object->cgroup, 'widget'))
 	<x-formrow>
 		<x-slot name="label">
 			{{ html()->label(_lanq('lara-admin::headertag.column.templatewidget_id').':', 'templatewidget_id') }}

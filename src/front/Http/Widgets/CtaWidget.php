@@ -9,6 +9,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
 use Lara\Common\Models\Cta;
 
+use Lara\Common\Models\Headertag;
+use Lara\Common\Models\Templatewidget;
 use LaravelLocalization;
 
 class CtaWidget extends AbstractWidget
@@ -42,7 +44,25 @@ class CtaWidget extends AbstractWidget
 
 		$widgetcta = Cta::langIs($language)->where('hook', $this->config['hook'])->first();
 
-		$widgetview = '_widgets.cta.' . $this->config['template'];
+		// identifier
+		$templateFileName = $this->config['template'];
+
+		// get or create template identifier
+		$twidget = Templatewidget::where('type', 'ctawidget')->where('widgetfile', $templateFileName)->first();
+		if ($twidget) {
+			$twidgetId = $twidget->id;
+		} else {
+			$newTwidget = Templatewidget::create([
+				'type'       => 'ctawidget',
+				'widgetfile' => $templateFileName,
+			]);
+			$twidgetId = $newTwidget->id;
+		}
+
+		$headerTag = Headertag::select('id', 'title_tag', 'list_tag')->where('cgroup', 'ctawidget')->where('templatewidget_id', $twidgetId)->first();
+
+
+		$widgetview = '_widgets.cta.' . $templateFileName;
 
 		if(view()->exists($widgetview)) {
 
@@ -50,6 +70,7 @@ class CtaWidget extends AbstractWidget
 				'config'    => $this->config,
 				'grid'      => $this->config['grid'],
 				'widgetcta' => $widgetcta,
+				'headerTag'     => $headerTag,
 			]);
 
 		} else {

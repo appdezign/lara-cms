@@ -51,7 +51,7 @@ class EntityWidget extends AbstractWidget
 
 		$language = LaravelLocalization::getCurrentLocale();
 
-		$cachekey = 'lara.widgets.entity.' . $this->config['parent'] . '.' . $this->config['entity_key']  . '.' . $language;
+		$cachekey = 'lara.widgets.entity.' . $this->config['parent'] . '.' . $this->config['entity_key'] . '.' . $language;
 
 		if ($this->config['term']) {
 			$cachekey = $cachekey . '.' . $this->config['term'];
@@ -85,7 +85,7 @@ class EntityWidget extends AbstractWidget
 
 			if ($term) {
 
-				if($isMultiLanguage) {
+				if ($isMultiLanguage) {
 					$activeTerm = $term . '-' . $language;
 				} else {
 					$activeTerm = $term;
@@ -212,20 +212,18 @@ class EntityWidget extends AbstractWidget
 		$templateFileName = $this->config['parent'] . '_' . $this->config['entity_key'];
 
 		// get or create template identifier
-		$twidget = Templatewidget::where('templatewidget', $templateFileName)->first();
-		if($twidget) {
+		$twidget = Templatewidget::where('type', 'templatewidget')->where('widgetfile', $templateFileName)->first();
+		if ($twidget) {
 			$twidgetId = $twidget->id;
 		} else {
 			$newTwidget = Templatewidget::create([
-				'templatewidget' => $templateFileName,
+				'type'       => 'templatewidget',
+				'widgetfile' => $templateFileName,
 			]);
 			$twidgetId = $newTwidget->id;
 		}
 
-		$headerTag = Headertag::where('cgroup', 'templatewidget')->where('templatewidget_id', $twidgetId)->first();
-		$headerTagId = ($headerTag) ? $headerTag->id : null;
-		$titleTag = ($headerTag) ? $headerTag->title_tag : 'h2';
-		$listTag = ($headerTag) ? $headerTag->list_tag : 'h3';
+		$headerTag = Headertag::select('id','title_tag', 'list_tag')->where('cgroup', 'templatewidget')->where('templatewidget_id', $twidgetId)->first();
 
 		// Template
 		$widgetview = '_widgets.entity.' . $templateFileName;
@@ -241,9 +239,7 @@ class EntityWidget extends AbstractWidget
 				'widgetTaxonomies'  => $widgetTaxonomies,
 				'widgetEntityRoute' => $widgetEntityRoute,
 				'widgetTitle'       => $this->config['title'],
-				'headerTagId'       => $headerTagId,
-				'titleTag'          => $titleTag,
-				'listTag'           => $listTag,
+				'headerTag'         => $headerTag,
 			]);
 
 		} else {

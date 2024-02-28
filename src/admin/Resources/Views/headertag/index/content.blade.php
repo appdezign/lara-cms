@@ -18,6 +18,9 @@
 				<th class="w-20 d-none d-lg-table-cell">
 					{{ _lanq('lara-admin::default.column.group') }}
 				</th>
+				<th class="w-20 d-none d-lg-table-cell">
+					Template
+				</th>
 
 				<th class="w-5 text-center">
 					{{ _lanq('lara-admin::default.button.edit') }}
@@ -48,14 +51,21 @@
 
 					<td class="d-none d-lg-table-cell">
 						{{ $obj->cgroup }}
-						@if($obj->cgroup == 'module' && !empty($obj->entity_id))
-							- {{ $obj->entity->entity_key }}
-						@elseif($obj->cgroup == 'larawidget' && !empty($obj->larawidget_id))
-							- {{ $obj->larawidget->title }}
+					</td>
+
+					<td class="d-none d-lg-table-cell">
+						@if($obj->cgroup == 'module')
+							@if(!empty($obj->entity))
+								{{ $obj->entity->entity_key }}
+							@endif
+						@else
+							@if(!empty($obj->templatewidget))
+								{{ $obj->templatewidget->widgetfile }}
+							@endif
 						@endif
 					</td>
 
-					@if(empty($obj->locked_by))
+				@if(empty($obj->locked_by))
 
 						<td class="text-center action-icons">
 							@can('update', $obj)

@@ -15,7 +15,6 @@
 </x-formrow>
 
 {{ html()->hidden('entity_id', null) }}
-{{ html()->hidden('larawidget_id', null) }}
 {{ html()->hidden('templatewidget', null) }}
 
 {{ html()->hidden('title_tag', 'h2') }}

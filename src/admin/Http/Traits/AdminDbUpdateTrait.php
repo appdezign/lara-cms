@@ -260,11 +260,6 @@ trait AdminDbUpdateTrait
 				->on($tablenames['ent']['entities'])
 				->onDelete('cascade');
 
-			$table->foreign('larawidget_id')
-				->references('id')
-				->on('lara_blocks_larawidgets')
-				->onDelete('cascade');
-
 			$table->foreign('templatewidget_id')
 				->references('id')
 				->on($tablenames['sys']['entitywidgets'])

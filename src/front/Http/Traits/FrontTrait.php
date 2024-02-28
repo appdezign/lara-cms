@@ -97,6 +97,7 @@ trait FrontTrait
 				$version->active = true;
 
 				if ($entity) {
+
 					if ($entity->entity_key == 'page') {
 
 						// The Page entity has no index method,
@@ -137,7 +138,11 @@ trait FrontTrait
 							$version->entity = $entity->entity_key;
 							if (!empty($object)) {
 								$version->object = $object->id;
-								$version->route = url($lang->code . '/' . $languageRoute . '/' . $object->slug);
+								if($entity->hasTags()) {
+									$version->route = url($lang->code . '/' . $languageRoute . '/' . $object->slug . '.html');
+								} else {
+									$version->route = url($lang->code . '/' . $languageRoute . '/' . $object->slug);
+								}
 							} else {
 								$version->object = null;
 								$version->route = url($lang->code . '/' . $languageRoute);
@@ -207,7 +212,11 @@ trait FrontTrait
 							$version->entity = $entity->entity_key;
 							if ($sibling) {
 								$version->object = $sibling->id;
-								$version->route = url($lang->code . '/' . $languageRoute . '/' . $sibling->slug);
+								if($entity->hasTags()) {
+									$version->route = url($lang->code . '/' . $languageRoute . '/' . $sibling->slug) . '.html';
+								} else {
+									$version->route = url($lang->code . '/' . $languageRoute . '/' . $sibling->slug);
+								}
 							} else {
 								$version->object = null;
 								$version->route = url($lang->code . '/' . $languageRoute);

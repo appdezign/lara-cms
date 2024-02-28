@@ -9,9 +9,11 @@ use Illuminate\Http\Request;
 use Arrilot\Widgets\AbstractWidget;
 
 use Illuminate\View\View;
+use Lara\Common\Models\Headertag;
 use Lara\Common\Models\Slider;
 use Lara\Common\Models\Tag;
 
+use Lara\Common\Models\Templatewidget;
 use Lara\Front\Http\Traits\FrontMenuTrait;
 use Lara\Front\Http\Traits\FrontRoutesTrait;
 use Lara\Front\Http\Traits\FrontTagTrait;
@@ -45,6 +47,8 @@ class PagetitleWidget extends AbstractWidget
 
 		$language = LaravelLocalization::getCurrentLocale();
 
+		$isMultiLanguage = config('lara.is_multi_language');
+
 		// Pass the active menu (current and level ) array to the widget view
 		$activemenu = $this->getActiveMenuArray(false);
 
@@ -64,19 +68,25 @@ class PagetitleWidget extends AbstractWidget
 
 		$term = $this->config['term'];
 
+		if ($isMultiLanguage) {
+			$activeTerm = $term . '-' . $language;
+		} else {
+			$activeTerm = $term;
+		}
+
 		$taxonomy = $this->getFrontDefaultTaxonomy();
 		$tag = Tag::langIs($language)
 			->entityIs('slider')
 			->taxonomyIs($taxonomy->id)
-			->where('slug', $term)->first();
+			->where('slug', $activeTerm)->first();
 
 		if ($tag) {
 
 			$widgetpagetitle = Slider::langIs($language)
 				->isPublished()
 				->has('media')
-				->whereHas('tags', function ($query) use ($term) {
-					$query->where(config('lara-common.database.object.tags') . '.slug', $term);
+				->whereHas('tags', function ($query) use ($activeTerm) {
+					$query->where(config('lara-common.database.object.tags') . '.slug', $activeTerm);
 				})
 				->inRandomOrder()->first();
 
@@ -86,7 +96,24 @@ class PagetitleWidget extends AbstractWidget
 
 		}
 
-		$widgetview = '_widgets.pagetitle.' . $this->config['term'];
+		// identifier
+		$templateFileName = $this->config['term'];
+
+		// get or create template identifier
+		$twidget = Templatewidget::where('type', 'pagetitlewidget')->where('widgetfile', $templateFileName)->first();
+		if ($twidget) {
+			$twidgetId = $twidget->id;
+		} else {
+			$newTwidget = Templatewidget::create([
+				'type'       => 'pagetitlewidget',
+				'widgetfile' => $templateFileName,
+			]);
+			$twidgetId = $newTwidget->id;
+		}
+
+		$headerTag = Headertag::select('id', 'title_tag', 'list_tag')->where('cgroup', 'pagetitlewidget')->where('templatewidget_id', $twidgetId)->first();
+
+		$widgetview = '_widgets.pagetitle.' . $templateFileName;
 
 		if(view()->exists($widgetview)) {
 
@@ -96,6 +123,7 @@ class PagetitleWidget extends AbstractWidget
 				'widgetpagetitle' => $widgetpagetitle,
 				'menulevelone'    => $menulevelone,
 				'menucurrent'     => $menucurrent,
+				'headerTag'     => $headerTag,
 			]);
 
 		} else {

@@ -294,7 +294,7 @@
 
 							<div class="form-check">
 								{{ html()->hidden('_image_isicon_' . $image->id, 0) }}
-								@if($image->ishero == 1 || $image->featured == 1)
+								@if($image->ishero == 1)
 									{{ html()->checkbox('_image_isicon_' . $image->id, old('_image_isicon_' . $image->id, $image->isicon), 1)->class('form-check-input')->disabled() }}
 								@else
 									{{ html()->checkbox('_image_isicon_' . $image->id, old('_image_isicon_' . $image->id, $image->isicon), 1)->class('form-check-input') }}

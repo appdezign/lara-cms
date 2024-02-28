@@ -12,6 +12,7 @@ use Lara\Common\Models\Larawidget;
 
 use Arrilot\Widgets\AbstractWidget;
 
+use Lara\Common\Models\Templatewidget;
 use LaravelLocalization;
 
 use Lara\Front\Http\Traits\FrontEntityTrait;
@@ -150,19 +151,30 @@ class LaraEntityWidget extends AbstractWidget
 
 		}
 
-		$headerTag = Headertag::where('cgroup', 'larawidget')->where('larawidget_id', $larawidget->id)->first();
-		$headerTagId = ($headerTag) ? $headerTag->id : null;
-		$titleTag = ($headerTag) ? $headerTag->title_tag : 'h2';
-		$listTag = ($headerTag) ? $headerTag->list_tag : 'h3';
-
-
+		// identifier
 		if ($larawidget->template) {
-			$widgetview = '_widgets.lara.entity.' . $larawidget->template . '_' . $relentkey;
+			$templateFileName = $larawidget->template . '_' . $relentkey;
 		} else {
-			$widgetview = '_widgets.lara.entity.default_' . $relentkey;
+			$templateFileName = 'default_' . $relentkey;
 		}
 
-		if(view()->exists($widgetview)) {
+		// get or create template identifier
+		$twidget = Templatewidget::where('type', 'larawidget')->where('widgetfile', $templateFileName)->first();
+		if ($twidget) {
+			$twidgetId = $twidget->id;
+		} else {
+			$newTwidget = Templatewidget::create([
+				'type'       => 'larawidget',
+				'widgetfile' => $templateFileName,
+			]);
+			$twidgetId = $newTwidget->id;
+		}
+
+		$headerTag = Headertag::select('id', 'title_tag', 'list_tag')->where('cgroup', 'larawidget')->where('templatewidget_id', $twidgetId)->first();
+
+		$widgetview = '_widgets.lara.entity.' . $templateFileName;
+
+		if (view()->exists($widgetview)) {
 
 			return view($widgetview, [
 				'config'            => $this->config,
@@ -172,13 +184,12 @@ class LaraEntityWidget extends AbstractWidget
 				'widgetTaxonomies'  => $widgetTaxonomies,
 				'widgetEntityRoute' => $widgetEntityRoute,
 				'larawidget'        => $larawidget,
-				'headerTagId'       => $headerTagId,
-				'titleTag'          => $titleTag,
-				'listTag'           => $listTag,
+				'headerTag'         => $headerTag,
 			]);
 
 		} else {
 			$errorView = (config('app.env') == 'production') ? 'not_found_prod' : 'not_found';
+
 			return view('_widgets._error.' . $errorView, [
 				'widgetview' => $widgetview,
 			]);
