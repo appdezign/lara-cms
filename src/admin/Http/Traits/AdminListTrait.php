@@ -4,6 +4,9 @@ namespace Lara\Admin\Http\Traits;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Session;
+
 use Lara\Common\Models\Tag;
 use Lara\Common\Models\Taxonomy;
 
@@ -129,6 +132,21 @@ trait AdminListTrait
 	private function getIndexFilters(object $entity, Request $request, $autocols = null)
 	{
 
+		// Reset all entity filters
+		// This is usefull for switching language
+		if ($request->has('resetfilters') && $request->get('resetfilters') == 'true') {
+			$sessionVars = session()->all();
+			foreach ($sessionVars as $sessionKey => $sessionVar) {
+				if (str_starts_with($sessionKey, '_lara_')) {
+					if ($sessionKey != '_lara_global') {
+						Session::forget($sessionKey);
+					}
+				}
+			}
+			return redirect()->route($entity->getPrefix() . '.' . $entity->getEntityRouteKey() . '.' . $entity->getMethod())->send();
+		}
+
+
 		// First check if the session has filters that are NOT in the request
 		// if so, redirect, and add the sessions filters to the request
 		$entitySession = session('_lara_' . $entity->getEntityKey());
@@ -141,8 +159,7 @@ trait AdminListTrait
 					if (!array_key_exists($filterkey, $requestFilters)) {
 						$passFilters = array_merge($sessionFilters, $requestFilters);
 
-						return redirect()->route($entity->getPrefix() . '.' . $entity->getEntityRouteKey() . '.' . $entity->getMethod(),
-							$passFilters)->send();
+						return redirect()->route($entity->getPrefix() . '.' . $entity->getEntityRouteKey() . '.' . $entity->getMethod(), $passFilters)->send();
 					}
 				}
 			}

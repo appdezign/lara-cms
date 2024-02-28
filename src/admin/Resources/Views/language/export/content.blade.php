@@ -16,6 +16,15 @@
 	</div>
 </x-formrow>
 
+<x-formrow>
+	<x-slot name="label">
+		{{ html()->label('Add Prefix to content:', 'prefix') }}
+	</x-slot>
+	<div class="select-two-lg">
+		{{ html()->checkbox('prefix', null, 1)->class('form-check-input') }}
+	</div>
+</x-formrow>
+
 <div class="row">
 	<div class="col-12 col-md-2">
 	</div>

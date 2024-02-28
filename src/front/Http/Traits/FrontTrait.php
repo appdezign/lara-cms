@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Auth;
 use Lara\Common\Models\Entity;
+use Lara\Common\Models\Headertag;
 use Lara\Common\Models\Language;
 use Lara\Common\Models\Larawidget;
 use Lara\Common\Models\Menu;
@@ -96,6 +97,7 @@ trait FrontTrait
 				$version->active = true;
 
 				if ($entity) {
+
 					if ($entity->entity_key == 'page') {
 
 						// The Page entity has no index method,
@@ -136,7 +138,11 @@ trait FrontTrait
 							$version->entity = $entity->entity_key;
 							if (!empty($object)) {
 								$version->object = $object->id;
-								$version->route = url($lang->code . '/' . $languageRoute . '/' . $object->slug);
+								if($entity->hasTags()) {
+									$version->route = url($lang->code . '/' . $languageRoute . '/' . $object->slug . '.html');
+								} else {
+									$version->route = url($lang->code . '/' . $languageRoute . '/' . $object->slug);
+								}
 							} else {
 								$version->object = null;
 								$version->route = url($lang->code . '/' . $languageRoute);
@@ -206,7 +212,11 @@ trait FrontTrait
 							$version->entity = $entity->entity_key;
 							if ($sibling) {
 								$version->object = $sibling->id;
-								$version->route = url($lang->code . '/' . $languageRoute . '/' . $sibling->slug);
+								if($entity->hasTags()) {
+									$version->route = url($lang->code . '/' . $languageRoute . '/' . $sibling->slug) . '.html';
+								} else {
+									$version->route = url($lang->code . '/' . $languageRoute . '/' . $sibling->slug);
+								}
 							} else {
 								$version->object = null;
 								$version->route = url($lang->code . '/' . $languageRoute);
@@ -318,6 +328,26 @@ trait FrontTrait
 			return true;
 		}
 
+	}
+
+	private function getHeaderTag($entity) {
+
+		$htag = $this->makeNewObj();
+
+		$headerTag = Headertag::where('cgroup', 'module')->where('entity_id', $entity->id)->first();
+
+		if($headerTag) {
+			$htag->id = $headerTag->id;
+			$htag->titleTag = $headerTag->title_tag;
+			$htag->listTag = $headerTag->list_tag;
+
+		} else {
+			$htag->id = null;
+			$htag->titleTag = 'h1';
+			$htag->listTag = 'h3';
+		}
+
+		return $htag;
 	}
 
 }

@@ -222,6 +222,9 @@ class TagsController extends Controller
 			$object->depth = $parent->depth + 1;
 			$object->appendToNode($parent)->save();
 
+			// add language to slug
+			$this->updateLanguageSlug($this->entity, $object);
+
 			// rebuild the tag routes
 			$this->rebuildTagRoutes($object->id);
 
@@ -319,6 +322,9 @@ class TagsController extends Controller
 
 		// save object to database
 		$object->update($request->all());
+
+		// add language to slug
+		$this->updateLanguageSlug($this->entity, $object);
 
 		// save images
 		$this->saveMedia($request, $this->entity, $object);

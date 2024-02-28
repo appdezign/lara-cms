@@ -207,6 +207,20 @@ class SeosController extends Controller
 		// get record
 		$this->data->object = Page::with('seo')->findOrFail($id);
 
+		// check SEO
+		if(empty($this->data->object->seo)) {
+			$this->data->object->seo()->create([
+				'seo_focus'       => null,
+				'seo_title'       => null,
+				'seo_description' => null,
+				'seo_keywords'    => null,
+			]);
+
+			// reload Page object
+			$this->data->object = Page::with('seo')->findOrFail($id);
+		}
+
+
 		// lock record
 		$this->data->object->lockRecord();
 

@@ -11,6 +11,7 @@ use Lara\Common\Models\Language;
 use Lara\Common\Models\Menu;
 use Lara\Common\Models\Menuitem;
 use Lara\Common\Models\Tag;
+use Lara\Common\Models\Taxonomy;
 
 trait AdminLanguageTrait
 {
@@ -20,7 +21,7 @@ trait AdminLanguageTrait
 	 * @param string $dest
 	 * @return null
 	 */
-	private function copyLanguageContent(string $source, string $dest)
+	private function copyLanguageContent(string $source, string $dest, $prefix = false)
 	{
 
 		// check the source language
@@ -66,7 +67,7 @@ trait AdminLanguageTrait
 			/*
 			 * Create New Entity Tags
 			 */
-			$tree = $this->getEntityTags($source, $laraEntity);
+			$tree = $this->getlangEntityTags($source, $laraEntity);
 
 			if ($laraEntity->hasTags()) {
 				if ($tree) {
@@ -89,23 +90,23 @@ trait AdminLanguageTrait
 				$newObject->language_parent = $object->id;
 
 				// title
-				$newObject->title = '[' . strtoupper($dest) . '] ' . $object->title;
+				$newObject->title = $object->title . $this->addLang($dest, $prefix);
 
 				// lead
 				if ($laraEntity->hasLead()) {
 					if ($laraEntity->hasTinyLead()) {
-						$newObject->lead = '<p>[' . strtoupper($dest) . ']</p> ' . $object->lead;
+						$newObject->lead = $this->addLang($dest, $prefix, true) . $object->lead;
 					} else {
-						$newObject->lead = '[' . strtoupper($dest) . '] ' . $object->lead;
+						$newObject->lead = $this->addLang($dest, $prefix) . $object->lead;
 					}
 				}
 
 				// body
 				if ($laraEntity->hasBody()) {
 					if ($laraEntity->hasTinyBody()) {
-						$newObject->body = '<p>[' . strtoupper($dest) . ']</p> ' . $object->body;
+						$newObject->body = $this->addLang($dest, $prefix, true) . $object->body;
 					} else {
-						$newObject->body = '[' . strtoupper($dest) . '] ' . $object->body;
+						$newObject->body = $this->addLang($dest, $prefix) . $object->body;
 					}
 				}
 
@@ -131,7 +132,8 @@ trait AdminLanguageTrait
 					}
 					$newObject->slug = $ent . '-' . $view . '-' . $mpage . '-' . $dest;
 				} else {
-					$newObject->slug = $dest . '-' . $object->slug;
+					$realSlug = $this->getSlugBase($object->slug, $source);
+					$newObject->slug = $realSlug . '-' . $dest;
 				}
 
 				$newObject->save();
@@ -142,7 +144,7 @@ trait AdminLanguageTrait
 				$newTags = array();
 				foreach ($object->tags as $objectTag) {
 					$destTag = $this->getLanguageSibling($objectTag, $dest);
-					if($destTag) {
+					if ($destTag) {
 						$newTags[] = $destTag->id;
 					}
 				}
@@ -192,6 +194,45 @@ trait AdminLanguageTrait
 
 		}
 
+		// fix relations
+		$entities = Entity::entityGroupIs('entity')->get();
+		foreach ($entities as $entity) {
+
+			foreach ($entity->relations as $rel) {
+				if ($rel->type == 'belongsTo') {
+
+					// find related Entity
+					$relEntity = Entity::find($rel->related_entity_id);
+
+					if ($relEntity) {
+						// define Model Classes
+						$modelClass = $entity->entity_model_class;
+						$parentClass = $relEntity->entity_model_class;
+						$relationKey = $rel->foreign_key;
+
+						$objects = $modelClass::get();
+
+						foreach ($objects as $objct) {
+							$objectLanguage = $objct->language;
+							$parentId = $objct->$relationKey;
+							$parent = $parentClass::find($parentId);
+							if ($parent) {
+								$parentLanguage = $parent->language;
+								if ($objectLanguage != $parentLanguage) {
+									$newParent = $parentClass::where('language_parent', $parentId)->first();
+									if ($newParent) {
+										$objct->$relationKey = $newParent->id;
+										$objct->save();
+									}
+								}
+							}
+
+						}
+					}
+				}
+			}
+		}
+
 		/*
 		 * Create New Menu
 		 */
@@ -233,6 +274,39 @@ trait AdminLanguageTrait
 
 	}
 
+	private function getSlugBase(string $slug, string $source): string
+	{
+
+		if (substr($slug, -3) == '-' . $source) {
+			$str = substr($slug, 0, (strlen($slug) - 3));
+		} else {
+			$str = $slug;
+		}
+
+		return $str;
+	}
+
+	/**
+	 * @param $dest
+	 * @return string
+	 */
+	private function addLang($dest, $prefix = false, $paragraph = false): string
+	{
+
+		if ($prefix) {
+			if ($paragraph) {
+				$str = '[' . strtoupper($dest) . ']';
+			} else {
+				$str = '<p>[' . strtoupper($dest) . ']</p>';
+			}
+		} else {
+			$str = '';
+		}
+
+		return $str;
+
+	}
+
 	/**
 	 * @param object $node
 	 * @param string $source
@@ -249,8 +323,10 @@ trait AdminLanguageTrait
 		$newTag->language = $dest;
 		$newTag->language_parent = $node->id;
 
-		$newTag->title = '[' . strtoupper($dest) . '] ' . $node->title;
-		$newTag->slug = $dest . '-' . $node->slug;
+		$newTag->title = $node->title . $this->addLang($dest);
+
+		$realSlug = $this->getSlugBase($node->slug, $source);
+		$newTag->slug = $realSlug . '-' . $dest;
 
 		if ($parent) {
 			$newTag->parent_id = $parent->id;
@@ -258,7 +334,7 @@ trait AdminLanguageTrait
 
 		$newTag->save();
 
-		$this->rebuildTagRoutes($newTag->id);
+		$this->rebuildLangTagRoutes($newTag->id);
 
 		// pass new tag as parent
 		$newParent = $newTag;
@@ -345,8 +421,10 @@ trait AdminLanguageTrait
 
 		$newMenuItem->language = $dest;
 
-		$newMenuItem->title = '[' . strtoupper($dest) . '] ' . $node->title;
-		$newMenuItem->slug = $dest . '-' . $node->slug;
+		$newMenuItem->title = $node->title . $this->addLang($dest);
+
+		$realSlug = $this->getSlugBase($node->slug, $source);
+		$newMenuItem->slug = $realSlug . '-' . $dest;
 
 		if ($parent) {
 			$newMenuItem->parent_id = $parent->id;
@@ -391,6 +469,192 @@ trait AdminLanguageTrait
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get the entity tag tree
+	 * Check if the entity already has a tag root
+	 * If not, create a root item
+	 *
+	 * @param string $language
+	 * @param object $entity
+	 * @param string|null $taxonomy
+	 * @return object|null
+	 */
+	private function getLangEntityTags(string $language, object $entity, string $taxonomy = null)
+	{
+
+		$tags = null;
+
+		// get Taxonomy ID
+		$taxonomyId = $this->getLangTaxonomyIdbySlug($taxonomy);
+
+		if ($taxonomyId) {
+
+			if ($entity->hasTags()) {
+
+				$root = Tag::langIs($language)
+					->entityIs($entity->getEntityKey())
+					->taxonomyIs($taxonomyId)
+					->whereNull('parent_id')
+					->first();
+
+				if (empty($root)) {
+
+					$root = Tag::create([
+						'language'    => $language,
+						'entity_key'  => $entity->getEntityKey(),
+						'taxonomy_id' => $taxonomyId,
+						'title'       => 'root',
+						'slug'        => null,
+						'body'        => '',
+						'lead'        => '',
+					]);
+				}
+
+				// kalnoy/nestedset
+				$tags = Tag::scoped(['entity_key' => $entity->getEntityKey(), 'language' => $language, 'taxonomy_id' => $taxonomyId])
+					->defaultOrder()
+					->get()
+					->toTree();
+
+			}
+
+		}
+
+		return $tags;
+
+	}
+
+	/**
+	 * @param string|null $slug
+	 * @return int|null
+	 */
+	private function getLangTaxonomyIdbySlug(string $slug = null)
+	{
+
+		if ($slug) {
+			$taxonomy = Taxonomy::where('slug', $slug)->first();
+			if ($taxonomy) {
+				return $taxonomy->id;
+			} else {
+				$defaultTaxonomy = $this->getLangDefaultTaxonomy();
+
+				return $defaultTaxonomy->id;
+			}
+		} else {
+			$defaultTaxonomy = $this->getLangDefaultTaxonomy();
+
+			return $defaultTaxonomy->id;
+		}
+
+	}
+
+	/**
+	 * @return object|null
+	 */
+	private function getLangDefaultTaxonomy()
+	{
+
+		$taxonomy = Taxonomy::where('is_default', 1)->first();
+		if ($taxonomy) {
+			return $taxonomy;
+		} else {
+			return null;
+		}
+
+	}
+
+	/**
+	 * Rebuild the tag routes
+	 *
+	 * Because we use nested sets and seo urls with tags
+	 * we need to rebuild the tag routes everytime we update a tag
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	private function rebuildLangTagRoutes(int $id)
+	{
+
+		// get root
+		$object = Tag::find($id);
+
+		// kalnoy/nestedset
+		$root = $this->getLangNestedSetTagRoot($object);
+
+		$tree = Tag::scoped(['entity_key' => $object->entity_key, 'language' => $root->language, 'taxonomy_id' => $root->taxonomy_id])
+			->defaultOrder()
+			->get()
+			->toTree();
+
+		foreach ($tree as $node) {
+			$this->processLangTagNode($node);
+		}
+
+		$this->clearLangRouteCache();
+
+	}
+
+	/**
+	 * @param object $object
+	 * @return mixed
+	 */
+	private function getLangNestedSetTagRoot(object $node)
+	{
+
+		if ($node->isRoot()) {
+			return $node;
+		} else {
+			// get parent
+			$parent = Tag::find($node->parent_id);
+
+			return $this->getLangNestedSetTagRoot($parent);
+		}
+
+	}
+
+	/**
+	 * Build and save tag route recursively
+	 *
+	 * @param object $node
+	 * @param string|null $parentRoute
+	 * @return void
+	 */
+	private function processLangTagNode(object $node, $parentRoute = null)
+	{
+
+		if ($node->depth == 1) {
+			$node->route = $node->slug;
+			$node->save();
+		}
+
+		if ($node->depth > 1) {
+			$node->route = $parentRoute . '.' . $node->slug;
+			$node->save();
+		}
+
+		foreach ($node->children as $child) {
+			// pass parent route to children
+			$this->processLangTagNode($child, $node->route);
+		}
+	}
+
+	/**
+	 * Set the session key to clear the route cache
+	 *
+	 * The artisan command will be called with an AJAX call
+	 * If we call it directly here, the redirects will not work properly
+	 *
+	 * @return bool
+	 */
+	private function clearLangRouteCache()
+	{
+
+		session(['routecacheclear' => true]);
+
+		return true;
+
 	}
 
 }

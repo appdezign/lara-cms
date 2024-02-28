@@ -31,6 +31,17 @@
 				</div>
 			</x-formrow>
 
+			{{-- FILTERS --}}
+			<x-formrow>
+				<x-slot name="label">
+					{{ html()->label('has filters:', '_has_filters') }}
+				</x-slot>
+				<div class="form-check">
+					{{ html()->hidden('_has_filters', 0) }}
+					{{ html()->checkbox('_has_filters', $data->object->panels->has_filters, 1)->class('form-check-input') }}
+				</div>
+			</x-formrow>
+
 			{{-- SHOW AUTHOR --}}
 			<x-formrow>
 				<x-slot name="label">

@@ -21,11 +21,31 @@
 					<div class="col-12 col-md-1">
 						{{ html()->label(_lanq('lara-' . $entity->getModule().'::'.$entity->entity_key.'.column.slug').':', 'slug') }}
 					</div>
-					<div class="col-12 col-md-1 p-1">
-						<div class="form-check">
-							{{ html()->checkbox('reset_slug', null, 1)->class('form-check-input') }}
+					<div class="col-12 col-md-1 px-1">
+
+						<div id="js-slug-unlocked" class="d-block">
+
+							<div class="d-inline-block">
+								<div class="form-check ps-0">
+									{{ html()->checkbox('reset_slug', null, 1)->class('form-check-input ms-0') }}
+								</div>
+								<span class="fs-9 text-muted">reset</span>
+							</div>
+							@if(Auth::user()->isAn('administrator'))
+								<div class="d-inline-block float-end">
+									<div class="form-check ps-0">
+										{{ html()->checkbox('slug_lock', null, 1)->class('form-check-input ms-0') }}
+									</div>
+									<span class="fs-9 text-muted">lock</span>
+								</div>
+							@endif
+
 						</div>
-						<span class="fs-9 text-muted">reset</span>
+
+						<div id="js-slug-locked" class="pt-2 d-none">
+							<i class="las la-lock slug-lock-icon float-end"></i>
+						</div>
+
 					</div>
 					<div class="col-12 col-md-10 col-lg-9">
 						{{ html()->text('slug', null)->class('form-control')->disabled() }}

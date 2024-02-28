@@ -10,8 +10,9 @@ return [
 
 	'page' => [
 		'cgroups_with_lead' => [
-			'email'
+			'email',
 		],
+		'templates_with_lead' => [],
 	],
 
 	'settings' => [
@@ -543,6 +544,7 @@ return [
 	'languages_content' => [
 		'can_purge' => false,
 		'can_export' => false,
+		'add_lang_to_content' => false,
 	],
 
 	'builder_custom_columns_max' => 50,

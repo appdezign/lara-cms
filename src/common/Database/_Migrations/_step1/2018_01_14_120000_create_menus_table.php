@@ -54,6 +54,8 @@ class CreateMenusTable extends Migration {
 			// content
 			$table->string('title')->nullable();
 			$table->string('slug')->nullable();
+			$table->boolean('slug_lock')->default(0);
+
 			$table->string('type')->nullable();
 			$table->bigInteger('tag_id')->unsigned()->nullable();
 			$table->string('route')->nullable();

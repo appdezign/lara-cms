@@ -62,6 +62,7 @@
 			var menuTitle = $(this).data('title');
 			var menuType = $(this).data('type');
 			var menuLocked = $(this).data('locked');
+			var slugLock = $(this).data('sluglock');
 			var menuAuth = $(this).data('auth');
 			var menuRoute = $(this).data('route');
 			var menuSlug = $(this).data('slug');
@@ -144,8 +145,23 @@
 			$('#entity_form_view_id').val(menuView).trigger('change');
 			$('#object_id').val(menuObjectID).trigger('change');
 
+
+			console.log(slugLock);
+
+			if(slugLock == 1) {
+				$('#slug_lock').prop('checked', true);
+				$('#js-slug-unlocked').addClass('d-none');
+				$('#js-slug-locked').removeClass('d-none');
+			} else {
+				$('#js-slug-unlocked').removeClass('d-none');
+				$('#js-slug-locked').addClass('d-none');
+			}
+
 			if (menuLocked == 1) {
 				$('#locked_by_admin').prop('checked', true);
+				$('input[name="reset_slug"]').prop("disabled", true);
+				$('input[name="slug_lock"]').prop("disabled", true);
+
 			} else {
 				$('#locked_by_admin').prop('checked', false);
 			}

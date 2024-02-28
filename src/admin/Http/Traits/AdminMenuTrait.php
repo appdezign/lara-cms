@@ -218,22 +218,22 @@ trait AdminMenuTrait
 
 			}
 
-			$entity = Entity::where('entity_key', 'page')->first();
+			$pageEntity = Entity::where('entity_key', 'page')->first();
 
 			// get default entity view for Page entity
-			$entityView = $entity->views()->where('method', 'show')->first();
+			$pageEntityView = $pageEntity->views()->where('method', 'show')->first();
 
-			if ($entity) {
+			if ($pageEntity) {
 
-				$object->entity_id = $entity->id;
+				$object->entity_id = $pageEntity->id;
 
-				$object->entity_view_id = $entityView->id;
+				$object->entity_view_id = $pageEntityView->id;
 				$object->object_id = $new_object_id;
 				$object->url = null;
 
 				// build routename
 				$prefix = 'entity';
-				$object->routename = $prefix . '.' . $entity->getEntityKey() . '.' . $entityView->method . '.' . $new_object_id;
+				$object->routename = $prefix . '.' . $pageEntity->getEntityKey() . '.' . $pageEntityView->method . '.' . $new_object_id;
 
 			} else {
 				$error = true;
@@ -316,6 +316,9 @@ trait AdminMenuTrait
 			$object->depth = $parent->depth + 1;
 			$object->appendToNode($parent)->save();
 
+			// add language to slug
+			$this->updateLanguageSlug($entity, $object);
+
 			return $object->id;
 
 		} else {
@@ -347,6 +350,12 @@ trait AdminMenuTrait
 
 		if ($request->has('reset_slug')) {
 			$object->slug = null;
+		}
+
+		if ($request->has('slug_lock')) {
+			$object->slug_lock = 1;
+		} else {
+			$object->slug_lock = 0;
 		}
 
 		if ($request->has('locked_by_admin')) {
@@ -493,6 +502,10 @@ trait AdminMenuTrait
 		if ($error === false) {
 
 			$object->save();
+
+			if(config('lara.multi_language_slugs_in_menu')) {
+				$this->updateLanguageSlug($menuItemEntity, $object);
+			}
 
 			$this->rebuildMenuRoutes($menuItemId);
 

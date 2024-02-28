@@ -75,3 +75,52 @@ if (!function_exists('in_array_r')) {
 	}
 }
 
+if (!function_exists('_header')) {
+
+	/**
+	 * @param string $content
+	 * @param string|null $class
+	 * @param string|null $tag
+	 * @param int|null $id
+	 * @param string|null $link
+	 * @param string|null $linkClass
+	 * @return string
+	 */
+	function _header(string $content, string|null $class, string $tag = null, int $id = null, string $link = null, string $linkClass = null)
+	{
+
+		if(empty($tag)) {
+			$tag = 'h3';
+		}
+
+		$str = '<';
+		$str .= $tag;
+		$str .= ' class="';
+		if(!empty($id)) {
+			$str .= 'header-tag-id-'.$id.' ';
+		} else {
+			$str .= 'header-tag-id-none ';
+		}
+		if(!empty($class)) {
+			$str .= $class . ' ';
+		}
+		$str .= '"';
+		$str .= ' >';
+
+		if($link) {
+			$str .= '<a href="'.$link.'" class="'.$linkClass.'">';
+		}
+
+		$str .= $content;
+
+		if($link) {
+			$str .= '</a>';
+		}
+
+		$str .= '</';
+		$str .= $tag;
+		$str .= '>';
+
+		return $str;
+	}
+}
