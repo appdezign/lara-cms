@@ -240,41 +240,48 @@ trait AdminDbUpdateTrait
 
 		$tablenames = config('lara-common.database');
 
-		Schema::create($tablenames['sys']['templatefiles'], function (Blueprint $table) {
+		$tablename = $tablenames['sys']['templatefiles'];
+		if (!Schema::hasTable($tablename)) {
+			Schema::create($tablename, function (Blueprint $table) {
 
-			$table->bigIncrements('id');
-			$table->string('template_file')->nullable();
-			$table->string('type')->nullable();
-			$table->timestamps();
+				$table->bigIncrements('id');
+				$table->string('template_file')->nullable();
+				$table->string('type')->nullable();
+				$table->timestamps();
 
-		});
+			});
+		}
 
-		Schema::create($tablenames['sys']['headertags'], function (Blueprint $table) {
+		$tablename = $tablenames['sys']['headertags'];
+		if (!Schema::hasTable($tablename)) {
+			Schema::create($tablename, function (Blueprint $table) use ($tablenames) {
 
-			$table->bigIncrements('id');
+				$table->bigIncrements('id');
 
-			$table->string('title')->nullable();
-			$table->string('cgroup')->nullable();
+				$table->string('title')->nullable();
+				$table->string('cgroup')->nullable();
 
-			$table->foreign('template_id')
-				->references('id')
-				->on($tablenames['sys']['templatefiles'])
-				->onDelete('cascade');
+				$table->bigInteger('templatefile_id')->unsigned();
+				$table->foreign('templatefile_id')
+					->references('id')
+					->on($tablenames['sys']['templatefiles'])
+					->onDelete('cascade');
 
-			$table->string('title_tag')->nullable();
-			$table->string('list_tag')->nullable();
+				$table->string('title_tag')->nullable();
+				$table->string('list_tag')->nullable();
 
-			$table->timestamps();
+				$table->timestamps();
 
-			$table->timestamp('locked_at')->nullable();
-			$table->bigInteger('locked_by')->nullable()->unsigned();
+				$table->timestamp('locked_at')->nullable();
+				$table->bigInteger('locked_by')->nullable()->unsigned();
 
-			$table->foreign('locked_by')
-				->references('id')
-				->on($tablenames['auth']['users'])
-				->onDelete('cascade');
+				$table->foreign('locked_by')
+					->references('id')
+					->on($tablenames['auth']['users'])
+					->onDelete('cascade');
 
-		});
+			});
+		}
 
 	}
 
