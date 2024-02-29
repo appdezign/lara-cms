@@ -234,7 +234,7 @@ class BaseFrontController extends Controller
 		$this->data->langversions = $this->getFrontLanguageVersions($this->language, $this->entity);
 
 		// header tags
-		$this->data->htag = $this->getHeaderTag($this->entity);
+		$this->data->htag = $this->getEntityHeaderTag($this->entity);
 
 		// override default layout with custom module page layout
 		$this->data->layout = $this->getObjectThemeLayout($this->data->modulepage, $this->data->params);
@@ -314,8 +314,10 @@ class BaseFrontController extends Controller
 			$isPreview = $this->checkEntityRoute($this->language, $this->entity, $this->data->object);
 
 			// if the page is not a preview, make sure it is published
-			if (!$isPreview && ($this->entity->hasStatus() && $this->data->object->publish == 0)) {
-				return redirect()->route($this->entity->getPrefix() . '.' . $this->entity->getEntityKey() . '.index');
+			if (!$isPreview && ($this->entity->hasStatus())) {
+				if($this->data->object->publish == 0 || (!empty($this->data->object->publish_to) && $this->data->object->publish_to < Carbon::now()->toDateTimeString())) {
+					return redirect()->route($this->entity->getPrefix() . '.' . $this->entity->getEntityKey() . '.index');
+				}
 			}
 
 		}
@@ -367,6 +369,9 @@ class BaseFrontController extends Controller
 
 		// get language versions
 		$this->data->langversions = $this->getFrontLanguageVersions($this->language, $this->entity, $this->data->object);
+
+		// header tags
+		$this->data->htag = $this->getEntityHeaderTag($this->entity);
 
 		// override default layout with custom module page layout
 		$this->data->layout = $this->getObjectThemeLayout($this->data->modulepage);

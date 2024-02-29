@@ -95,9 +95,9 @@ class Headertag extends Model
 	/**
 	 * @return BelongsTo
 	 */
-	public function templatewidget()
+	public function templatefile()
 	{
-		return $this->belongsTo('Lara\Common\Models\Templatewidget');
+		return $this->belongsTo('Lara\Common\Models\Templatefile');
 	}
 
 }

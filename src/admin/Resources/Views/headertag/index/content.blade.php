@@ -59,8 +59,8 @@
 								{{ $obj->entity->entity_key }}
 							@endif
 						@else
-							@if(!empty($obj->templatewidget))
-								{{ $obj->templatewidget->widgetfile }}
+							@if(!empty($obj->templatefile))
+								{{ $obj->templatefile->template_file }}
 							@endif
 						@endif
 					</td>

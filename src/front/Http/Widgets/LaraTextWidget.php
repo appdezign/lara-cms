@@ -9,8 +9,12 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
 use Lara\Common\Models\Larawidget;
 
+use Lara\Front\Http\Traits\FrontTrait;
+
 class LaraTextWidget extends AbstractWidget
 {
+
+	use FrontTrait;
 
 	protected $config = [
 		'widget_id' => null,
@@ -39,21 +43,27 @@ class LaraTextWidget extends AbstractWidget
 		$larawidget = Larawidget::find($this->config['widget_id']);
 
 		if ($larawidget->template) {
-			$widgetview = '_widgets.lara.text.' . $larawidget->type . '_' . $larawidget->template;
+			$templateFileName = $larawidget->type . '_' . $larawidget->template;
 		} else {
-			$widgetview = '_widgets.lara.text.' . $larawidget->type . '_default';
+			$templateFileName = $larawidget->type . '_default';
 		}
 
-		if(view()->exists($widgetview)) {
+		$widgetview = '_widgets.lara.text.' . $templateFileName;
+
+		$headerTag = $this->getWidgetHeaderTag($templateFileName, 'textwidget');
+
+		if (view()->exists($widgetview)) {
 
 			return view($widgetview, [
 				'config'     => $this->config,
 				'grid'       => $this->config['grid'],
 				'larawidget' => $larawidget,
+				'headerTag'  => $headerTag,
 			]);
 
 		} else {
 			$errorView = (config('app.env') == 'production') ? 'not_found_prod' : 'not_found';
+
 			return view('_widgets._error.' . $errorView, [
 				'widgetview' => $widgetview,
 			]);

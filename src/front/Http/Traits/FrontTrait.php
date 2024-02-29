@@ -7,6 +7,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Auth;
 use Lara\Common\Models\Entity;
 use Lara\Common\Models\Headertag;
+use Lara\Common\Models\Templatefile;
 use Lara\Common\Models\Language;
 use Lara\Common\Models\Larawidget;
 use Lara\Common\Models\Menu;
@@ -62,8 +63,6 @@ trait FrontTrait
 		return $object;
 
 	}
-
-
 
 	/**
 	 * Get all the language versions of an object or an entity
@@ -138,7 +137,7 @@ trait FrontTrait
 							$version->entity = $entity->entity_key;
 							if (!empty($object)) {
 								$version->object = $object->id;
-								if($entity->hasTags()) {
+								if ($entity->hasTags()) {
 									$version->route = url($lang->code . '/' . $languageRoute . '/' . $object->slug . '.html');
 								} else {
 									$version->route = url($lang->code . '/' . $languageRoute . '/' . $object->slug);
@@ -212,7 +211,7 @@ trait FrontTrait
 							$version->entity = $entity->entity_key;
 							if ($sibling) {
 								$version->object = $sibling->id;
-								if($entity->hasTags()) {
+								if ($entity->hasTags()) {
 									$version->route = url($lang->code . '/' . $languageRoute . '/' . $sibling->slug) . '.html';
 								} else {
 									$version->route = url($lang->code . '/' . $languageRoute . '/' . $sibling->slug);
@@ -301,7 +300,6 @@ trait FrontTrait
 
 	}
 
-
 	private function getFrontLaraVersion()
 	{
 
@@ -330,24 +328,126 @@ trait FrontTrait
 
 	}
 
-	private function getHeaderTag($entity) {
+	private function getEntityHeaderTag($entity)
+	{
 
 		$htag = $this->makeNewObj();
 
-		$headerTag = Headertag::where('cgroup', 'module')->where('entity_id', $entity->id)->first();
+		$templateFile = $entity->getEntityKey() . '_' . $entity->getMethod();
 
-		if($headerTag) {
+		$headerTag = Headertag::where('cgroup', 'module')
+			->whereHas('templatefile', function ($q) use ($templateFile) {
+				$q->where('template_file', $templateFile);
+			})->first();
+
+		if ($headerTag) {
+
 			$htag->id = $headerTag->id;
 			$htag->titleTag = $headerTag->title_tag;
 			$htag->listTag = $headerTag->list_tag;
 
 		} else {
-			$htag->id = null;
-			$htag->titleTag = 'h1';
-			$htag->listTag = 'h3';
+
+			// get or create template file in DB
+			$templateFileId = $this->saveEntityTemplate($entity);
+
+			// create new HeaderTag
+			$title = str_replace('_', ' ', $templateFile);
+			$title = ucwords($title);
+			$newHeaderTag = Headertag::create([
+				'title'           => $title,
+				'cgroup'          => 'module',
+				'templatefile_id' => $templateFileId,
+				'title_tag'       => 'h1',
+				'list_tag'        => 'h2',
+			]);
+
+			$htag->id = $newHeaderTag->id;
+			$htag->titleTag = $newHeaderTag->title_tag;
+			$htag->listTag = $newHeaderTag->list_tag;
 		}
 
 		return $htag;
+	}
+
+	private function saveEntityTemplate($entity)
+	{
+
+		$template = $entity->getEntityKey() . '_' . $entity->getMethod();
+
+		$templateFile = Templatefile::where('type', 'module')->where('template_file', $template)->first();
+		if ($templateFile) {
+			$templateFileId = $templateFile->id;
+		} else {
+			$newTemplateFile = Templatefile::create([
+				'type'          => 'module',
+				'template_file' => $template,
+			]);
+			$templateFileId = $newTemplateFile->id;
+		}
+
+		return $templateFileId;
+	}
+
+	private function getWidgetHeaderTag($templateFile, $type)
+	{
+
+		$htag = $this->makeNewObj();
+
+		$headerTag = Headertag::where('cgroup', $type)
+			->whereHas('templatefile', function ($q) use ($templateFile) {
+				$q->where('template_file', $templateFile);
+			})->first();
+
+		if ($headerTag) {
+
+			$htag->id = $headerTag->id;
+			$htag->titleTag = $headerTag->title_tag;
+			$htag->listTag = $headerTag->list_tag;
+
+		} else {
+
+			// get or create template file in DB
+			$templateFileId = $this->saveWidgetTemplate($templateFile, $type);
+
+			// create new HeaderTag
+			$title = str_replace('_', ' ', $templateFile);
+			$widgetType = str_replace('widget', '', $type);
+			$title = ucwords($title) . ' (' . ucfirst($widgetType) . ' widget)';
+
+			$newHeaderTag = Headertag::create([
+				'title'           => $title,
+				'cgroup'          => $type,
+				'templatefile_id' => $templateFileId,
+				'title_tag'       => 'h2',
+				'list_tag'        => 'h3',
+			]);
+
+			$htag->id = $newHeaderTag->id;
+			$htag->titleTag = $newHeaderTag->title_tag;
+			$htag->listTag = $newHeaderTag->list_tag;
+		}
+
+		return $htag;
+
+	}
+
+	private function saveWidgetTemplate($templateFileName, $type)
+	{
+
+		$templateFile = Templatefile::where('type', $type)->where('template_file', $templateFileName)->first();
+		if ($templateFile) {
+			$templateFileId = $templateFile->id;
+		} else {
+			$newTemplateFile = Templatefile::create([
+				'type'          => $type,
+				'template_file' => $templateFileName,
+			]);
+			$templateFileId = $newTemplateFile->id;
+		}
+
+		return $templateFileId;
+
 	}
 
 }

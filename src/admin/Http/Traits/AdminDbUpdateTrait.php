@@ -240,10 +240,11 @@ trait AdminDbUpdateTrait
 
 		$tablenames = config('lara-common.database');
 
-		Schema::create($tablenames['sys']['entitywidgets'], function (Blueprint $table) {
+		Schema::create($tablenames['sys']['templatefile'], function (Blueprint $table) {
 
 			$table->bigIncrements('id');
-			$table->string('templatewidget')->nullable();
+			$table->string('template_file')->nullable();
+			$table->string('type')->nullable();
 			$table->timestamps();
 
 		});
@@ -255,14 +256,9 @@ trait AdminDbUpdateTrait
 			$table->string('title')->nullable();
 			$table->string('cgroup')->nullable();
 
-			$table->foreign('entity_id')
+			$table->foreign('template_id')
 				->references('id')
-				->on($tablenames['ent']['entities'])
-				->onDelete('cascade');
-
-			$table->foreign('templatewidget_id')
-				->references('id')
-				->on($tablenames['sys']['entitywidgets'])
+				->on($tablenames['sys']['templatefile'])
 				->onDelete('cascade');
 
 			$table->string('title_tag')->nullable();

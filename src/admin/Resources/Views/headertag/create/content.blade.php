@@ -14,8 +14,7 @@
 	{{ html()->select('cgroup', $entity->getGroups(), null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
 </x-formrow>
 
-{{ html()->hidden('entity_id', null) }}
-{{ html()->hidden('templatewidget', null) }}
+{{ html()->hidden('templatefile_id', null) }}
 
 {{ html()->hidden('title_tag', 'h2') }}
 {{ html()->hidden('list_tag', 'h3') }}

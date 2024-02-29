@@ -170,6 +170,9 @@ class FormController extends Controller
 		// get language versions
 		$this->data->langversions = $this->getFrontLanguageVersions($this->language, $this->entity);
 
+		// header tags
+		$this->data->htag = $this->getEntityHeaderTag($this->entity);
+
 		// override default layout with custom module page layout
 		$this->data->layout = $this->getObjectThemeLayout($this->data->modulepage);
 		$this->data->grid = $this->getGrid($this->data->layout);

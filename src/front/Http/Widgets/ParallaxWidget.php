@@ -17,7 +17,7 @@ class ParallaxWidget extends AbstractWidget
 
 	protected $config = [
 		'term' => 'home',
-		'grid'           => null,
+		'grid' => null,
 	];
 
 	public $cacheTime = false;
@@ -41,26 +41,33 @@ class ParallaxWidget extends AbstractWidget
 
 		$language = LaravelLocalization::getCurrentLocale();
 
+		$isMultiLanguage = config('lara.is_multi_language');
+
 		$term = $this->config['term'];
+
+		if ($isMultiLanguage) {
+			$activeTerm = $term . '-' . $language;
+		} else {
+			$activeTerm = $term;
+		}
 
 		$taxonomy = $this->getFrontDefaultTaxonomy();
 		$tag = Tag::langIs($language)
 			->entityIs('slider')
 			->taxonomyIs($taxonomy->id)
-			->where('slug', $term)->first();
+			->where('slug', $activeTerm)->first();
 
 		if ($tag) {
 
 			$entity = $this->getFrontEntityByKey('slider');
-
 			$modelClass = $entity->getEntityModelClass();
 
 			// get the first slider
 			$widgetparallax = $modelClass::langIs($language)
 				->isPublished()
 				->has('media')
-				->whereHas('tags', function ($query) use ($term) {
-					$query->where(config('lara-common.database.object.tags') . '.slug', $term);
+				->whereHas('tags', function ($query) use ($activeTerm) {
+					$query->where(config('lara-common.database.object.tags') . '.slug', $activeTerm);
 				})
 				->orderBy($entity->getSortField(), $entity->getSortOrder())
 				->first();
@@ -71,18 +78,25 @@ class ParallaxWidget extends AbstractWidget
 
 		}
 
-		$widgetview = '_widgets.parallax.' . $this->config['term'];
+		// identifier
+		$templateFileName = $this->config['term'];
 
-		if(view()->exists($widgetview)) {
+		$headerTag = $this->getWidgetHeaderTag($templateFileName, 'sliderwidget');
+
+		$widgetview = '_widgets.parallax.' . $templateFileName;
+
+		if (view()->exists($widgetview)) {
 
 			return view($widgetview, [
 				'config'         => $this->config,
 				'grid'           => $this->config['grid'],
 				'widgetparallax' => $widgetparallax,
+				'headerTag'      => $headerTag,
 			]);
 
 		} else {
 			$errorView = (config('app.env') == 'production') ? 'not_found_prod' : 'not_found';
+
 			return view('_widgets._error.' . $errorView, [
 				'widgetview' => $widgetview,
 			]);

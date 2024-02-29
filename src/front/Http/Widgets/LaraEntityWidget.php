@@ -7,14 +7,13 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
 
 use Lara\Common\Models\Tag;
-use Lara\Common\Models\Headertag;
 use Lara\Common\Models\Larawidget;
 
 use Arrilot\Widgets\AbstractWidget;
 
-use Lara\Common\Models\Templatewidget;
 use LaravelLocalization;
 
+use Lara\Front\Http\Traits\FrontTrait;
 use Lara\Front\Http\Traits\FrontEntityTrait;
 use Lara\Front\Http\Traits\FrontRoutesTrait;
 use Lara\Front\Http\Traits\FrontTagTrait;
@@ -22,6 +21,7 @@ use Lara\Front\Http\Traits\FrontTagTrait;
 class LaraEntityWidget extends AbstractWidget
 {
 
+	use FrontTrait;
 	use FrontEntityTrait;
 	use FrontRoutesTrait;
 	use FrontTagTrait;
@@ -158,19 +158,7 @@ class LaraEntityWidget extends AbstractWidget
 			$templateFileName = 'default_' . $relentkey;
 		}
 
-		// get or create template identifier
-		$twidget = Templatewidget::where('type', 'larawidget')->where('widgetfile', $templateFileName)->first();
-		if ($twidget) {
-			$twidgetId = $twidget->id;
-		} else {
-			$newTwidget = Templatewidget::create([
-				'type'       => 'larawidget',
-				'widgetfile' => $templateFileName,
-			]);
-			$twidgetId = $newTwidget->id;
-		}
-
-		$headerTag = Headertag::select('id', 'title_tag', 'list_tag')->where('cgroup', 'larawidget')->where('templatewidget_id', $twidgetId)->first();
+		$headerTag = $this->getWidgetHeaderTag($templateFileName, 'larawidget');
 
 		$widgetview = '_widgets.lara.entity.' . $templateFileName;
 

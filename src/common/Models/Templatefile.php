@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 use Carbon\Carbon;
 
-class Templatewidget extends Model
+class Templatefile extends Model
 {
 
 	/**
 	 * @var string
 	 */
-	protected $table = 'lara_sys_entitywidgets';
+	protected $table = 'lara_sys_templatefile';
 
 	/**
 	 * @var string[]
