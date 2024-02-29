@@ -12,13 +12,15 @@ use Lara\Common\Models\Tag;
 
 use LaravelLocalization;
 
+use Lara\Front\Http\Traits\FrontTagTrait;
 use Lara\Front\Http\Traits\FrontEntityTrait;
 use Lara\Front\Http\Traits\FrontRoutesTrait;
-use Lara\Front\Http\Traits\FrontTagTrait;
+use Lara\Front\Http\Traits\FrontTrait;
 
 class VideoWidget extends AbstractWidget
 {
 
+	use FrontTrait;
 	use FrontEntityTrait;
 	use FrontRoutesTrait;
 	use FrontTagTrait;
@@ -49,13 +51,21 @@ class VideoWidget extends AbstractWidget
 
 		$language = LaravelLocalization::getCurrentLocale();
 
+		$isMultiLanguage = config('lara.is_multi_language');
+
 		$term = $this->config['term'];
+
+		if ($isMultiLanguage) {
+			$activeTerm = $term . '-' . $language;
+		} else {
+			$activeTerm = $term;
+		}
 
 		$taxonomy = $this->getFrontDefaultTaxonomy();
 		$tag = Tag::langIs($language)
 			->entityIs('slider')
 			->taxonomyIs($taxonomy->id)
-			->where('slug', $term)->first();
+			->where('slug', $activeTerm)->first();
 
 		if ($tag) {
 
@@ -65,8 +75,8 @@ class VideoWidget extends AbstractWidget
 
 			$widgetvideo = $modelClass::langIs($language)
 				->isPublished()
-				->whereHas('tags', function ($query) use ($term) {
-					$query->where(config('lara-common.database.object.tags') . '.slug', $term);
+				->whereHas('tags', function ($query) use ($activeTerm) {
+					$query->where(config('lara-common.database.object.tags') . '.slug', $activeTerm);
 				})
 				->orderBy($entity->getSortField(), $entity->getSortOrder())
 				->first();
@@ -77,7 +87,12 @@ class VideoWidget extends AbstractWidget
 
 		}
 
-		$widgetview = '_widgets.video.' . $this->config['term'];
+		// identifier
+		$templateFileName = $this->config['term'];
+
+		$headerTag = $this->getWidgetHeaderTag($templateFileName, 'sliderwidget');
+
+		$widgetview = '_widgets.video.' . $templateFileName;
 
 		if(view()->exists($widgetview)) {
 
@@ -85,6 +100,7 @@ class VideoWidget extends AbstractWidget
 				'config'      => $this->config,
 				'grid'        => $this->config['grid'],
 				'widgetvideo' => $widgetvideo,
+				'headerTag'     => $headerTag,
 			]);
 
 		} else {

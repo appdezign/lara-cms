@@ -1,6 +1,7 @@
 <?php
-$entityList = \Lara\Common\Models\Entity::EntityGroupIs('entity')->pluck('entity_key', 'id')->toArray();
-$templateWidgetList = \Lara\Common\Models\Templatewidget::where('type', $data->object->cgroup)->pluck('widgetfile', 'id')->toArray();
+
+$templateFileList = \Lara\Common\Models\Templatefile::where('type', $data->object->cgroup)->pluck('template_file',
+	'id')->toArray();
 
 $titleTags = [
 	'h1' => 'h1',
@@ -37,29 +38,13 @@ $listTags = [
 	{{ html()->select('cgroup', $entity->getGroups(), null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
 </x-formrow>
 
-{{-- ENTITY_ID --}}
-@if($data->object->cgroup == 'module')
-	<x-formrow>
-		<x-slot name="label">
-			{{ html()->label(_lanq('lara-admin::headertag.column.entity_id').':', 'entity_id') }}
-		</x-slot>
-		{{ html()->select('entity_id', [null=>'- Select module -'] + $entityList, null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
-	</x-formrow>
-@else
-	{{ html()->hidden('entity_id', null) }}
-@endif
-
 {{-- TEMPLATEWIDGET_ID --}}
-@if(str_contains($data->object->cgroup, 'widget'))
-	<x-formrow>
-		<x-slot name="label">
-			{{ html()->label(_lanq('lara-admin::headertag.column.templatewidget_id').':', 'templatewidget_id') }}
-		</x-slot>
-		{{ html()->select('templatewidget_id', [null=>'- Select template widget -'] + $templateWidgetList, null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
-	</x-formrow>
-@else
-	{{ html()->hidden('templatewidget_id', null) }}
-@endif
+<x-formrow>
+	<x-slot name="label">
+		{{ html()->label(_lanq('lara-admin::headertag.column.templatefile_id').':', 'templatefile_id') }}
+	</x-slot>
+	{{ html()->select('templatefile_id', [null=>'- Select template widget -'] + $templateFileList, null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
+</x-formrow>
 
 {{-- TITLE TAG --}}
 <x-formrow>

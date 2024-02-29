@@ -66,7 +66,7 @@ return [
 			'translations' => 'lara_sys_translations',
 			'blacklist'    => 'lara_sys_blacklist',
 			'headertags'    => 'lara_sys_headertags',
-			'entitywidgets' => 'lara_sys_entitywidgets',
+			'templatefiles' => 'lara_sys_templatefiles',
 		],
 
 		'ent' => [

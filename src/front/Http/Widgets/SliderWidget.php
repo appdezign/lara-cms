@@ -7,19 +7,18 @@ use Arrilot\Widgets\AbstractWidget;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
-use Lara\Common\Models\Headertag;
-use Lara\Common\Models\Slider;
 use Lara\Common\Models\Tag;
 
-use Lara\Common\Models\Templatewidget;
 use LaravelLocalization;
 
-use Lara\Front\Http\Traits\FrontEntityTrait;
 use Lara\Front\Http\Traits\FrontTagTrait;
+use Lara\Front\Http\Traits\FrontEntityTrait;
+use Lara\Front\Http\Traits\FrontTrait;
 
 class SliderWidget extends AbstractWidget
 {
 
+	use FrontTrait;
 	use FrontEntityTrait;
 	use FrontTagTrait;
 
@@ -70,6 +69,8 @@ class SliderWidget extends AbstractWidget
 
 			$entity = $this->getFrontEntityByKey('slider');
 			$modelClass = $entity->getEntityModelClass();
+
+			// get sliders
 			$widgetsliders = $modelClass::langIs($language)
 				->isPublished()
 				->has('media')
@@ -88,19 +89,7 @@ class SliderWidget extends AbstractWidget
 		// identifier
 		$templateFileName = $this->config['term'];
 
-		// get or create template identifier
-		$twidget = Templatewidget::where('type', 'sliderwidget')->where('widgetfile', $templateFileName)->first();
-		if ($twidget) {
-			$twidgetId = $twidget->id;
-		} else {
-			$newTwidget = Templatewidget::create([
-				'type'       => 'sliderwidget',
-				'widgetfile' => $templateFileName,
-			]);
-			$twidgetId = $newTwidget->id;
-		}
-
-		$headerTag = Headertag::select('id', 'title_tag', 'list_tag')->where('cgroup', 'sliderwidget')->where('templatewidget_id', $twidgetId)->first();
+		$headerTag = $this->getWidgetHeaderTag($templateFileName, 'sliderwidget');
 
 		$widgetview = '_widgets.slider.' . $templateFileName;
 
@@ -116,7 +105,6 @@ class SliderWidget extends AbstractWidget
 
 		} else {
 			$errorView = (config('app.env') == 'production') ? 'not_found_prod' : 'not_found';
-
 			return view('_widgets._error.' . $errorView, [
 				'widgetview' => $widgetview,
 			]);

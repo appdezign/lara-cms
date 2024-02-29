@@ -86,7 +86,7 @@ if (!function_exists('_header')) {
 	 * @param string|null $linkClass
 	 * @return string
 	 */
-	function _header(string $content, string|null $class, string $tag = null, int $id = null, string $link = null, string $linkClass = null)
+	function _header(string $type, string $content, string|null $class, string $tag = null, int $id = null, string $link = null, string $linkClass = null, string $style = null)
 	{
 
 		if(empty($tag)) {
@@ -97,7 +97,7 @@ if (!function_exists('_header')) {
 		$str .= $tag;
 		$str .= ' class="';
 		if(!empty($id)) {
-			$str .= 'header-tag-id-'.$id.' ';
+			$str .= 'header-tag-id-'.$id.'-'.$type.' ';
 		} else {
 			$str .= 'header-tag-id-none ';
 		}
@@ -105,6 +105,11 @@ if (!function_exists('_header')) {
 			$str .= $class . ' ';
 		}
 		$str .= '"';
+
+		if(!empty($style)) {
+			$str .= ' style="' .$style .'" ';
+		}
+
 		$str .= ' >';
 
 		if($link) {

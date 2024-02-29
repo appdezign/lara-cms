@@ -9,11 +9,10 @@ use Illuminate\Http\Request;
 use Arrilot\Widgets\AbstractWidget;
 
 use Illuminate\View\View;
-use Lara\Common\Models\Headertag;
 use Lara\Common\Models\Slider;
 use Lara\Common\Models\Tag;
 
-use Lara\Common\Models\Templatewidget;
+use Lara\Front\Http\Traits\FrontTrait;
 use Lara\Front\Http\Traits\FrontMenuTrait;
 use Lara\Front\Http\Traits\FrontRoutesTrait;
 use Lara\Front\Http\Traits\FrontTagTrait;
@@ -23,13 +22,14 @@ use LaravelLocalization;
 class PagetitleWidget extends AbstractWidget
 {
 
+	use FrontTrait;
 	use FrontMenuTrait;
 	use FrontRoutesTrait;
 	use FrontTagTrait;
 
 	protected $config = [
 		'term' => 'pagetitle',
-		'grid'           => null,
+		'grid' => null,
 	];
 
 	public $cacheTime = false;  // DO NOT CACHE THE PAGE TITLE !!!
@@ -99,23 +99,11 @@ class PagetitleWidget extends AbstractWidget
 		// identifier
 		$templateFileName = $this->config['term'];
 
-		// get or create template identifier
-		$twidget = Templatewidget::where('type', 'pagetitlewidget')->where('widgetfile', $templateFileName)->first();
-		if ($twidget) {
-			$twidgetId = $twidget->id;
-		} else {
-			$newTwidget = Templatewidget::create([
-				'type'       => 'pagetitlewidget',
-				'widgetfile' => $templateFileName,
-			]);
-			$twidgetId = $newTwidget->id;
-		}
-
-		$headerTag = Headertag::select('id', 'title_tag', 'list_tag')->where('cgroup', 'pagetitlewidget')->where('templatewidget_id', $twidgetId)->first();
+		$headerTag = $this->getWidgetHeaderTag($templateFileName, 'pagetitlewidget');
 
 		$widgetview = '_widgets.pagetitle.' . $templateFileName;
 
-		if(view()->exists($widgetview)) {
+		if (view()->exists($widgetview)) {
 
 			return view($widgetview, [
 				'config'          => $this->config,
@@ -123,11 +111,12 @@ class PagetitleWidget extends AbstractWidget
 				'widgetpagetitle' => $widgetpagetitle,
 				'menulevelone'    => $menulevelone,
 				'menucurrent'     => $menucurrent,
-				'headerTag'     => $headerTag,
+				'headerTag'       => $headerTag,
 			]);
 
 		} else {
 			$errorView = (config('app.env') == 'production') ? 'not_found_prod' : 'not_found';
+
 			return view('_widgets._error.' . $errorView, [
 				'widgetview' => $widgetview,
 			]);
