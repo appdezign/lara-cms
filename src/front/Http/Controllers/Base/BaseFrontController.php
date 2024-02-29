@@ -314,8 +314,10 @@ class BaseFrontController extends Controller
 			$isPreview = $this->checkEntityRoute($this->language, $this->entity, $this->data->object);
 
 			// if the page is not a preview, make sure it is published
-			if (!$isPreview && ($this->entity->hasStatus() && $this->data->object->publish == 0)) {
-				return redirect()->route($this->entity->getPrefix() . '.' . $this->entity->getEntityKey() . '.index');
+			if (!$isPreview && ($this->entity->hasStatus())) {
+				if($this->data->object->publish == 0 || (!empty($this->data->object->publish_to) && $this->data->object->publish_to < Carbon::now()->toDateTimeString())) {
+					return redirect()->route($this->entity->getPrefix() . '.' . $this->entity->getEntityKey() . '.index');
+				}
 			}
 
 		}
