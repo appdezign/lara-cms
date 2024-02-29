@@ -13,7 +13,7 @@ class Templatefile extends Model
 	/**
 	 * @var string
 	 */
-	protected $table = 'lara_sys_templatefile';
+	protected $table = 'lara_sys_templatefiles';
 
 	/**
 	 * @var string[]

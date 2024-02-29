@@ -104,7 +104,7 @@ class CreateSysTable extends Migration
 
 		});
 
-		Schema::create($tablenames['sys']['templatefile'], function (Blueprint $table) {
+		Schema::create($tablenames['sys']['templatefiles'], function (Blueprint $table) {
 
 			$table->bigIncrements('id');
 			$table->string('template_file')->nullable();
@@ -122,7 +122,7 @@ class CreateSysTable extends Migration
 
 			$table->foreign('template_id')
 				->references('id')
-				->on($tablenames['sys']['templatefile'])
+				->on($tablenames['sys']['templatefiles'])
 				->onDelete('cascade');
 
 			$table->string('title_tag')->nullable();
