@@ -212,13 +212,13 @@ trait AdminDbUpdateTrait
 
 				}
 
-				if (in_array('8.2.01', $updates)) {
+				if (in_array('8.2.1', $updates)) {
 
 					$this->updateImageTable();
 					$this->updateMenuItemTable();
 					$this->addHeaderTagsTables();
 
-					$this->setSetting('system', 'lara_db_version', '8.2.01');
+					$this->setSetting('system', 'lara_db_version', '8.2.1');
 
 				}
 
