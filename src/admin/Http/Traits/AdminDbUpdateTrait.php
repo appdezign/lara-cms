@@ -4,7 +4,6 @@ namespace Lara\Admin\Http\Traits;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
@@ -216,9 +215,20 @@ trait AdminDbUpdateTrait
 
 					$this->updateImageTable();
 					$this->updateMenuItemTable();
-					$this->addHeaderTagsTables();
+
+					$this->updateConfigFiles();
+					$this->createSeoGroup();
+					$this->addHeaderTags();
 
 					$this->setSetting('system', 'lara_db_version', '8.2.1');
+
+				}
+
+				if (in_array('8.2.5', $updates)) {
+
+					$this->addSubtitleToHeaderTags();
+
+					$this->setSetting('system', 'lara_db_version', '8.2.5');
 
 				}
 
@@ -236,8 +246,180 @@ trait AdminDbUpdateTrait
 
 	}
 
-	private function addHeaderTagsTables() {
 
+
+	private function addSubtitleToHeaderTags() {
+
+		$tablenames = config('lara-common.database');
+		$tablename = $tablenames['sys']['headertags'];
+		if (!Schema::hasColumn($tablename, 'subtitle_tag')) {
+			Schema::table($tablename, function ($table) {
+				$table->string('subtitle_tag')->nullable()->after('title_tag');
+			});
+		}
+
+	}
+
+	private function updateConfigFiles()
+	{
+
+		// lara-admin
+		$laraAdminSource = base_path() . '/laracms/core/config/lara-admin.php';
+		$laraAdminDest = config_path() . '/lara-admin.php';
+		$laraAdminBck = config_path() . '/lara-admin-org.php';
+		if (!file_exists($laraAdminBck)) {
+			if (file_exists($laraAdminDest)) {
+				rename($laraAdminDest, $laraAdminBck);
+			}
+			if (file_exists($laraAdminSource)) {
+				copy($laraAdminSource, $laraAdminDest);
+			}
+		}
+
+		// lara-common
+		$laraCommonSource = base_path() . '/laracms/core/config/lara-common.php';
+		$laraCommonDest = config_path() . '/lara-common.php';
+		$laraCommonBck = config_path() . '/lara-common-org.php';
+		if (!file_exists($laraCommonBck)) {
+			if (file_exists($laraCommonDest)) {
+				rename($laraCommonDest, $laraCommonBck);
+			}
+			if (file_exists($laraCommonSource)) {
+				copy($laraCommonSource, $laraCommonDest);
+			}
+		}
+
+	}
+
+	private function createSeoGroup(): bool
+	{
+
+		$seoGroup = Entitygroup::where('key', 'seo')->first();
+
+		if (empty($seoGroup)) {
+
+			// create new group
+			$seoGroup = Entitygroup::create([
+				'title'                     => 'SEO',
+				'key'                       => 'seo',
+				'path'                      => 'Lara',
+				'group_has_columns'         => 0,
+				'group_has_objectrelations' => 0,
+				'group_has_filters'         => 0,
+				'group_has_panels'          => 0,
+				'group_has_media'           => 0,
+				'group_has_customcolumns'   => 0,
+				'group_has_relations'       => 0,
+				'group_has_views'           => 0,
+				'group_has_widgets'         => 0,
+				'group_has_sortable'        => 0,
+				'group_has_managedtable'    => 0,
+			]);
+		}
+
+		// move SEO entity
+		$seoEntity = Entity::where('entity_key', 'seo')->first();
+		$seoEntity->group_id = $seoGroup->id;
+		$seoEntity->menu_parent = 'seo';
+		$seoEntity->menu_position = '990';
+		$seoEntity->save();
+
+		// move Redirect entity
+		$redirectEntity = Entity::where('entity_key', 'redirect')->first();
+		$redirectEntity->group_id = $seoGroup->id;
+		$redirectEntity->menu_parent = 'seo';
+		$redirectEntity->menu_position = '991';
+		$redirectEntity->save();
+
+		return true;
+
+	}
+
+	private function addHeaderTags(): bool
+	{
+
+		$seoGroup = Entitygroup::where('key', 'seo')->first();
+
+		if ($seoGroup) {
+
+			$headerTagEntity = Entity::where('entity_key', 'headertag')->first();
+
+			if (empty($headerTagEntity)) {
+				// add entity
+				$entity = Entity::create([
+					'group_id'           => $seoGroup->id,
+					'title'              => 'Headertags',
+					'entity_model_class' => 'Lara\Common\Models\Headertag',
+					'entity_key'         => 'headertag',
+					'entity_controller'  => 'HeadertagsController',
+					'resource_routes'    => 1,
+					'has_front_auth'     => 0,
+					'menu_parent'        => 'seo',
+					'menu_position'      => '992',
+					'menu_icon'          => null,
+				]);
+
+				$entity->columns()->create([
+					'entity_id'      => $entity->id,
+					'has_user'       => 0,
+					'has_lang'       => 0,
+					'has_slug'       => 0,
+					'has_lead'       => 0,
+					'has_body'       => 0,
+					'has_status'     => 0,
+					'has_hideinlist' => 0,
+					'has_expiration' => 0,
+					'has_app'        => 0,
+					'has_groups'     => 1,
+					'group_values'   => 'module, larawidget, textwidget, entitywidget, sliderwidget, ctawidget, pagetitlewidget',
+					'group_default'  => null,
+					'is_sortable'    => 0,
+					'sort_field'     => 'id',
+					'sort_order'     => 'asc',
+					'sort2_field'    => null,
+					'sort2_order'    => null,
+					'has_fields'     => 0,
+				]);
+
+				$entity->objectrelations()->create([
+					'entity_id'      => $entity->id,
+					'has_seo'        => 0,
+					'has_opengraph'  => 0,
+					'has_layout'     => 0,
+					'has_related'    => 0,
+					'is_relatable'   => 0,
+					'has_tags'       => 0,
+					'tag_default'    => null,
+					'has_sync'       => 0,
+					'has_images'     => 0,
+					'has_videos'     => 0,
+					'has_videofiles' => 0,
+					'has_files'      => 0,
+					'max_images'     => 1,
+					'max_videos'     => 1,
+					'max_videofiles' => 1,
+					'max_files'      => 1,
+					'disk_images'    => 'localdisk',
+					'disk_videos'    => 'localdisk',
+					'disk_files'     => 'localdisk',
+				]);
+
+				$entity->panels()->create([
+					'entity_id'     => $entity->id,
+					'has_search'    => 0,
+					'has_batch'     => 0,
+					'has_filters'   => 0,
+					'show_author'   => 0,
+					'show_status'   => 0,
+					'has_tiny_lead' => 0,
+					'has_tiny_body' => 0,
+				]);
+
+			}
+
+		}
+
+		// add tables
 		$tablenames = config('lara-common.database');
 
 		$tablename = $tablenames['sys']['templatefiles'];
@@ -283,9 +465,12 @@ trait AdminDbUpdateTrait
 			});
 		}
 
+		return true;
+
 	}
 
-	private function updateMenuItemTable() {
+	private function updateMenuItemTable()
+	{
 		$tablenames = config('lara-common.database');
 		$tablename = $tablenames['menu']['menuitems'];
 		if (!Schema::hasColumn($tablename, 'slug_lock')) {
@@ -295,7 +480,8 @@ trait AdminDbUpdateTrait
 		}
 	}
 
-	private function updateImageTable() {
+	private function updateImageTable()
+	{
 
 		$tablenames = config('lara-common.database');
 		$tablename = $tablenames['object']['images'];
@@ -307,27 +493,28 @@ trait AdminDbUpdateTrait
 
 	}
 
-	private function updateFormTranslations() {
+	private function updateFormTranslations()
+	{
 
 		$formEntities = Entity::EntityGroupIs('form')->get();
 
-		foreach($formEntities as $formEntity) {
+		foreach ($formEntities as $formEntity) {
 
 			$entityKey = $formEntity->entity_key;
 
 			// email subject
-			$subjectSource = Translation::langIs('nl')->where('module', 'lara-front')->where('cgroup', $entityKey)->where('tag', 'email')->where('key','subject')->first();
-			if($subjectSource) {
+			$subjectSource = Translation::langIs('nl')->where('module', 'lara-front')->where('cgroup', $entityKey)->where('tag', 'email')->where('key', 'subject')->first();
+			if ($subjectSource) {
 				$subjectTranslation = $subjectSource->value;
 				$this->checkTranslation('nl', 'lara-eve', $entityKey, 'email', 'subject', $subjectTranslation, true);
 			}
 
 			// custom form fields
 			$formFields = $formEntity->customcolumns()->get();
-			foreach($formFields as $formField) {
+			foreach ($formFields as $formField) {
 				$fieldname = $formField->fieldname;
 				$fieldSource = Translation::langIs('nl')->where('module', 'lara-front')->where('cgroup', $entityKey)->where('tag', 'formfield')->where('key', $fieldname)->first();
-				if($fieldSource) {
+				if ($fieldSource) {
 					$fieldTranslation = $fieldSource->value;
 					$this->checkTranslation('nl', 'lara-eve', $entityKey, 'formfield', $fieldname, $fieldTranslation, true);
 				}
@@ -338,7 +525,8 @@ trait AdminDbUpdateTrait
 
 	}
 
-	private function addPreventCropping() {
+	private function addPreventCropping()
+	{
 
 		$tablenames = config('lara-common.database');
 		$tablename = $tablenames['object']['images'];
@@ -352,9 +540,9 @@ trait AdminDbUpdateTrait
 	private function fixFormSortOrder()
 	{
 		$formGroup = Entitygroup::where('key', 'form')->first();
-		if($formGroup) {
+		if ($formGroup) {
 			$formEntities = Entity::where('group_id', $formGroup->id)->get();
-			foreach($formEntities as $formEntity) {
+			foreach ($formEntities as $formEntity) {
 				$columns = $formEntity->columns;
 				$columns->sort_field = 'created_at';
 				$columns->sort_order = 'desc';
@@ -1031,12 +1219,12 @@ trait AdminDbUpdateTrait
 	private function clearCache()
 	{
 
-		Artisan::call('cache:clear');
-		Artisan::call('config:clear');
-		Artisan::call('view:clear');
+		File::cleanDirectory(storage_path('framework/cache/data'));
+		File::delete(base_path('bootstrap/cache/config.php'));
+		File::cleanDirectory(storage_path('framework/views'));
+		File::cleanDirectory(storage_path('httpcache'));
 
 	}
-
 
 	/**
 	 * @param string $language

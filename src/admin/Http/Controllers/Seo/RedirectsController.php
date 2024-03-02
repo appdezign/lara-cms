@@ -1,38 +1,27 @@
 <?php
 
-namespace Lara\Admin\Http\Controllers\Menu;
+namespace Lara\Admin\Http\Controllers\Seo;
 
 use App\Http\Controllers\Controller;
-
+use Bouncer;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
-
-use Lara\Admin\Http\Traits\AdminTrait;
+use Jenssegers\Agent\Agent;
 use Lara\Admin\Http\Traits\AdminAuthTrait;
 use Lara\Admin\Http\Traits\AdminEntityTrait;
 use Lara\Admin\Http\Traits\AdminListTrait;
 use Lara\Admin\Http\Traits\AdminObjectTrait;
+use Lara\Admin\Http\Traits\AdminTrait;
 use Lara\Admin\Http\Traits\AdminViewTrait;
-
-use Lara\Admin\Http\Traits\AdminMenuTrait;
-
-use Illuminate\Http\Request;
-
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Route;
-
-use Lara\Common\Models\Page;
-use Lara\Common\Models\Seo;
-
-use Jenssegers\Agent\Agent;
-
+use Lara\Common\Models\Redirect;
 use LaravelLocalization;
 
-use Bouncer;
-
-class SeosController extends Controller
+class RedirectsController extends Controller
 {
 
 	use AdminTrait;
@@ -42,12 +31,10 @@ class SeosController extends Controller
 	use AdminObjectTrait;
 	use AdminViewTrait;
 
-	use AdminMenuTrait;
-
 	/**
 	 * @var string
 	 */
-	protected $modelClass = Seo::class;
+	protected $modelClass = Redirect::class;
 
 	/**
 	 * @var string
@@ -112,37 +99,61 @@ class SeosController extends Controller
 	}
 
 	/**
-	 * Display a listing of the resource.
-	 *
 	 * @param Request $request
 	 * @return Application|Factory|View
 	 */
 	public function index(Request $request)
 	{
-
 		// check if user has access to method
 		$this->authorizer('view', $this->modelClass);
 
+		// get content language
 		$this->clanguage = $this->getContentLanguage($request, $this->entity);
 
-		$this->data->force = $this->getRequestParam($request, 'force', false, $this->entity->getEntityKey());
+		// get filters
+		$this->data->filters = $this->getIndexFilters($this->entity, $request);
 
-		$mainMenuID = $this->getMainMenuId();
+		// get params
+		$this->data->params = $this->getIndexParams($this->entity, $request, $this->data->filters);
 
-		$tree = $this->getMenuTree($this->clanguage, $mainMenuID);
-
-		if ($tree) {
-			foreach ($tree as $node) {
-				$this->getMenuObject($node, $this->clanguage);
-			}
+		// get objects
+		$collection = $this->modelClass::langIs($this->clanguage);
+		if ($this->data->params->paginate) {
+			$this->data->objects = $collection->paginate($this->data->params->perpage);
+		} else {
+			$this->data->objects = $collection->get();
 		}
-
-		$this->data->tree = $tree;
 
 		// get view file and partials
 		$this->data->partials = $this->getPartials($this->entity);
 		$viewfile = $this->getViewFile($this->entity);
 
+		// pass all variables to the view
+		return view($viewfile, [
+			'data' => $this->data,
+		]);
+	}
+
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @param Request $request
+	 * @return Application|Factory|View
+	 */
+	public function create(Request $request)
+	{
+
+		// check if user has access to method
+		$this->authorizer('create', $this->modelClass);
+
+		// create empty object
+		$this->data->object = new $this->modelClass;
+
+		// get view file and partials
+		$this->data->partials = $this->getPartials($this->entity);
+		$viewfile = $this->getViewFile($this->entity);
+
+		// pass all variables to the view
 		return view($viewfile, [
 			'data' => $this->data,
 		]);
@@ -150,41 +161,26 @@ class SeosController extends Controller
 	}
 
 	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @param Request $request
-	 * @return void
-	 */
-	public function create(Request $request)
-	{
-
-		dd($request);
-
-	}
-
-	/**
 	 * Store a newly created resource in storage.
 	 *
 	 * @param Request $request
-	 * @return void
+	 * @return RedirectResponse
 	 */
 	public function store(Request $request)
 	{
 
-		dd($request);
+		// check if user has access to method
+		$this->authorizer('create', $this->modelClass);
 
-	}
+		$request->merge(['title' => $request->input('redirectfrom')]);
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param int $id
-	 * @return void
-	 */
-	public function show(int $id)
-	{
+		// save model
+		$object = $this->modelClass::create($request->all());
 
-		dd($id);
+		// flash message
+		$this->flashMessage($this->entity->entity_key, 'save_success', 'success');
+
+		return redirect()->route($this->entity->getPrefix() . '.' . $this->entity->getEntityRouteKey() . '.edit', ['id' => $object->id]);
 
 	}
 
@@ -205,24 +201,13 @@ class SeosController extends Controller
 		$this->clanguage = $this->getContentLanguage($request, $this->entity);
 
 		// get record
-		$this->data->object = Page::with('seo')->findOrFail($id);
-
-		// check SEO
-		if(empty($this->data->object->seo)) {
-			$this->data->object->seo()->create([
-				'seo_focus'       => null,
-				'seo_title'       => null,
-				'seo_description' => null,
-				'seo_keywords'    => null,
-			]);
-
-			// reload Page object
-			$this->data->object = Page::with('seo')->findOrFail($id);
-		}
-
+		$this->data->object = $this->modelClass::findOrFail($id);
 
 		// lock record
 		$this->data->object->lockRecord();
+
+		// get status
+		$this->data->status = $this->getObjectStatus($this->entity, $this->data->object);
 
 		// get view file and partials
 		$this->data->partials = $this->getPartials($this->entity);
@@ -249,13 +234,15 @@ class SeosController extends Controller
 		$this->authorizer('update', $this->modelClass);
 
 		// get record
-		$object = Page::findOrFail($id);
+		$object = $this->modelClass::findOrFail($id);
+
+		$request->merge(['title' => $request->input('redirectfrom')]);
 
 		// save object to database
-		$object->seo()->update($request->only('seo_title', 'seo_description', 'seo_keywords'));
+		$object->update($request->all());
 
 		// flash message
-		$this->flashMessage($this->entity->getEntityKey(), 'save_success', 'success');
+		$this->flashMessage($this->entity->entity_key, 'save_success', 'success');
 
 		// redirect
 		return redirect()->route($this->entity->getPrefix() . '.' . $this->entity->getEntityRouteKey() . '.edit', ['id' => $id]);
@@ -263,49 +250,33 @@ class SeosController extends Controller
 	}
 
 	/**
-	 * Perform batch operation
-	 *
-	 * @param Request $request
+	 * @param int $id
 	 * @return RedirectResponse
 	 */
-	public function batch(Request $request)
+	public function destroy(int $id)
 	{
 
 		// check if user has access to method
-		$this->authorizer('update', $this->modelClass);
+		$this->authorizer('delete', $this->modelClass);
 
-		$language = $request->input('language');
+		// get record
+		$object = $this->modelClass::findOrFail($id);
 
-		$objects = Page::langIs($language)->get();
-
-		foreach ($objects as $object) {
-
-			if ($object->seo) {
-
-				$seo = $object->seo;
-				$seo->seo_title = $object->title;
-				$seo->seo_description = '';
-				$seo->seo_keywords = '';
-
-				$seo->save();
-
-			} else {
-
-				$object->seo()->create([
-					'seo_title'       => $object->title,
-					'seo_description' => '',
-					'seo_keywords'    => '',
-				]);
-
-			}
-
-		}
+		// delete object
+		$object->delete();
 
 		// flash message
-		flash('All SEO data has been reset')->success();
+		$this->flashMessage($this->entity->entity_key, 'delete_success', 'succes', 1);
+
+		// get last page (pagination) for redirect
+		$lastpage = $this->getLastPage($this->entity->entity_key);
 
 		// redirect
-		return redirect()->route($this->entity->getPrefix() . '.' . $this->entity->getEntityRouteKey() . '.index');
+		if ($lastpage && is_numeric($lastpage) && $lastpage > 1) {
+			return redirect()->route($this->entity->getPrefix() . '.' . $this->entity->getEntityRouteKey() . '.index', ['page' => $lastpage]);
+		} else {
+			return redirect()->route($this->entity->getPrefix() . '.' . $this->entity->getEntityRouteKey() . '.index');
+		}
 
 	}
 
@@ -327,6 +298,9 @@ class SeosController extends Controller
 		// unlock record
 		$object->unlockRecord();
 
+		// redirect Module Page back to associated Entity
+		$this->redirectModulePageToEntity($object, $this->entity);
+
 		// get last page (pagination) for redirect
 		$lastpage = $this->getLastPage($this->entity->getEntityKey());
 
@@ -337,50 +311,6 @@ class SeosController extends Controller
 			return redirect()->route($this->entity->getPrefix() . '.' . $this->entity->getEntityRouteKey() . '.index');
 		}
 
-	}
-
-	/**
-	 * @param object $node
-	 * @param string $language
-	 * @return bool
-	 */
-	public function getMenuObject(object $node, string $language)
-	{
-
-		if ($node->type == 'page') {
-
-			// get page object for this menu item
-			$object = Page::with('seo')->find($node->object_id);
-
-			if (!empty($object)) {
-				$node->object = $object;
-			}
-
-		} elseif ($node->type == 'entity') {
-
-			// get module page for this menu item
-			$object = Page::langIs($language)->groupIs('module')->where('slug', $node->entity->entity_key . '-index-module-' . $language)->first();
-			if (!empty($object)) {
-				$node->object = $object;
-			}
-
-		} elseif ($node->type == 'form') {
-
-			// get module page object for this menu item
-			$object = Page::langIs($language)->groupIs('module')->where('slug', $node->entity->entity_key . '-form-module-' . $language)->first();
-			if (!empty($object)) {
-				$node->object = $object;
-			}
-
-		}
-
-		if (!$node->isLeaf()) {
-			foreach ($node->children as $child) {
-				$this->getMenuObject($child, $language);
-			}
-		}
-
-		return true;
 	}
 
 }

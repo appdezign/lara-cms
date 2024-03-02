@@ -12,6 +12,15 @@ $titleTags = [
 	'h6' => 'h6',
 ];
 
+$subTitleTags = [
+	'h1' => 'h1',
+	'h2' => 'h2',
+	'h3' => 'h3',
+	'h4' => 'h4',
+	'h5' => 'h5',
+	'h6' => 'h6',
+];
+
 $listTags = [
 	'h2' => 'h2',
 	'h3' => 'h3',
@@ -52,6 +61,14 @@ $listTags = [
 		{{ html()->label(_lanq('lara-admin::headertag.column.title_tag').':', 'title_tag') }}
 	</x-slot>
 	{{ html()->select('title_tag', $titleTags, null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
+</x-formrow>
+
+{{-- SUBTITLE TAG --}}
+<x-formrow>
+	<x-slot name="label">
+		{{ html()->label(_lanq('lara-admin::headertag.column.subtitle_tag').':', 'subtitle_tag') }}
+	</x-slot>
+	{{ html()->select('subtitle_tag', $subTitleTags, null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
 </x-formrow>
 
 {{-- LIST TAG --}}

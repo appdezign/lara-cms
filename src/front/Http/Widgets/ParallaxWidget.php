@@ -7,13 +7,20 @@ use Arrilot\Widgets\AbstractWidget;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
-use Lara\Common\Models\Slider;
 use Lara\Common\Models\Tag;
 
 use LaravelLocalization;
 
+use Lara\Front\Http\Traits\FrontTagTrait;
+use Lara\Front\Http\Traits\FrontEntityTrait;
+use Lara\Front\Http\Traits\FrontTrait;
+
 class ParallaxWidget extends AbstractWidget
 {
+
+	use FrontTrait;
+	use FrontEntityTrait;
+	use FrontTagTrait;
 
 	protected $config = [
 		'term' => 'home',
@@ -62,19 +69,19 @@ class ParallaxWidget extends AbstractWidget
 			$entity = $this->getFrontEntityByKey('slider');
 			$modelClass = $entity->getEntityModelClass();
 
-			// get the first slider
-			$widgetparallax = $modelClass::langIs($language)
+			// get sliders
+			$widgetsliders = $modelClass::langIs($language)
 				->isPublished()
 				->has('media')
 				->whereHas('tags', function ($query) use ($activeTerm) {
 					$query->where(config('lara-common.database.object.tags') . '.slug', $activeTerm);
 				})
 				->orderBy($entity->getSortField(), $entity->getSortOrder())
-				->first();
+				->get();
 
 		} else {
 
-			$widgetparallax = null;
+			$widgetsliders = null;
 
 		}
 
@@ -90,7 +97,7 @@ class ParallaxWidget extends AbstractWidget
 			return view($widgetview, [
 				'config'         => $this->config,
 				'grid'           => $this->config['grid'],
-				'widgetparallax' => $widgetparallax,
+				'widgetsliders' => $widgetsliders,
 				'headerTag'      => $headerTag,
 			]);
 

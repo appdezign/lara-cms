@@ -175,6 +175,8 @@ class ErrorController extends Controller
 		// get language versions
 		$this->data->langversions = $this->getFrontLanguageVersions($this->language, $this->entity, $this->data->object);
 
+		// header tags
+		$this->data->htag = $this->getEntityHeaderTag($this->entity);
 
 		$this->data->grid = $this->getGrid($this->data->layout);
 
