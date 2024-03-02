@@ -104,6 +104,12 @@ return [
 			'icon' => 'fad fa-tools',
 			'chld' => [],
 		],
+		'seo'   => [
+			'name' => 'SEO',
+			'slug' => '',
+			'icon' => 'fad fa-chart-bar',
+			'chld' => [],
+		],
 		'users'   => [
 			'name' => 'Users',
 			'slug' => '',

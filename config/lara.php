@@ -3,7 +3,7 @@
 return [
 
 	'lara_maj_ver'    => '8',
-	'lara_db_version' => '8.2.1',
+	'lara_db_version' => '8.2.5',
 
 	'lara_db_builds' => [
 		'6.0.1',
@@ -26,6 +26,7 @@ return [
 		'7.5.46',
 		'8.1.11',
 		'8.2.1',
+		'8.2.5',
 	],
 
 	'clanguage_default' => 'nl',

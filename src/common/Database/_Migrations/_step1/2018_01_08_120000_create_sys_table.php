@@ -126,6 +126,7 @@ class CreateSysTable extends Migration
 				->onDelete('cascade');
 
 			$table->string('title_tag')->nullable();
+			$table->string('subtitle_tag')->nullable();
 			$table->string('list_tag')->nullable();
 
 			$table->timestamps();

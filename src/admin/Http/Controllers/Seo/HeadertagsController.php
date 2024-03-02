@@ -1,18 +1,15 @@
 <?php
 
-namespace Lara\Admin\Http\Controllers\Tools;
+namespace Lara\Admin\Http\Controllers\Seo;
 
+use Illuminate\Http\Request;
 use Lara\Admin\Http\Controllers\Base\BaseController;
-
-use Lara\Admin\Http\Traits\AdminTrait;
 use Lara\Admin\Http\Traits\AdminAuthTrait;
 use Lara\Admin\Http\Traits\AdminEntityTrait;
 use Lara\Admin\Http\Traits\AdminListTrait;
 use Lara\Admin\Http\Traits\AdminObjectTrait;
+use Lara\Admin\Http\Traits\AdminTrait;
 use Lara\Admin\Http\Traits\AdminViewTrait;
-
-use Illuminate\Http\Request;
-
 use Lara\Common\Models\Headertag;
 
 class HeadertagsController extends BaseController

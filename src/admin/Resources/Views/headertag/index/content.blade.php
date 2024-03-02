@@ -46,6 +46,9 @@
 						{{ $obj->title_tag }}
 					</td>
 					<td class="media-icons d-none d-lg-table-cell">
+						{{ $obj->subtitle_tag }}
+					</td>
+					<td class="media-icons d-none d-lg-table-cell">
 						{{ $obj->list_tag }}
 					</td>
 

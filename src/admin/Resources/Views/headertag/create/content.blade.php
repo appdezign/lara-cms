@@ -17,4 +17,5 @@
 {{ html()->hidden('templatefile_id', null) }}
 
 {{ html()->hidden('title_tag', 'h2') }}
+{{ html()->hidden('subtitle_tag', 'h2') }}
 {{ html()->hidden('list_tag', 'h3') }}

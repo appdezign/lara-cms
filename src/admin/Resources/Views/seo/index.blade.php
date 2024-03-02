@@ -49,7 +49,7 @@
 		$(document).ready(function () {
 
 			const swalButton = document.querySelector('input.swal-seo-reset-confirm');
-			const form = document.getElementById('seoform');
+			const form = document.getElementById('batchform');
 			if(swalButton) {
 				swalButton.addEventListener('click', e => {
 					e.preventDefault();
