@@ -9,7 +9,10 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 
+use Lara\Front\Http\Traits\FrontTrait;
+
 use Lara\Common\Models\User;
+use Lara\Common\Lara\UserEntity;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +33,8 @@ class LoginController extends Controller
 	|
 	*/
 
+	use FrontTrait;
+
 	use AuthenticatesUsers;
 
 	/**
@@ -38,6 +43,16 @@ class LoginController extends Controller
 	 * @var string
 	 */
 	// protected $redirectTo = '/admin';
+
+	/**
+	 * @var object
+	 */
+	protected $data;
+
+	/**
+	 * @var object
+	 */
+	protected $entity;
 
 	/**
 	 * Create a new controller instance.
@@ -50,6 +65,11 @@ class LoginController extends Controller
 		$this->middleware('guest')->except('logout');
 
 		$this->autologin($request);
+
+		$this->entity = new UserEntity();
+		$this->entity->setMethod('loginform');
+
+		$this->data = $this->makeNewObj();
 
 	}
 
@@ -103,17 +123,26 @@ class LoginController extends Controller
 			session(['url.intended' => $returnToUrl]);
 		}
 
+		// header tags
+		$this->data->htag = $this->getEntityHeaderTag($this->entity);
+
 		if (config('lara.auth.has_front_auth')) {
 			if ($this->intendedIsBackend()) {
 				// show backend login
-				return view('lara-common::auth.login');
+				return view('lara-common::auth.login', [
+					'data' => $this->data,
+				]);
 			} else {
 				// show frontend login
-				return view('_user.auth.login');
+				return view('_user.auth.login', [
+					'data' => $this->data,
+				]);
 			}
 		} else {
 			// show backend login
-			return view('lara-common::auth.login');
+			return view('lara-common::auth.login', [
+				'data' => $this->data,
+			]);
 		}
 
 	}
