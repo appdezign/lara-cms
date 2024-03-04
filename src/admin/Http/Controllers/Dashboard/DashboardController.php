@@ -17,7 +17,6 @@ use Lara\Admin\Http\Traits\AdminViewTrait;
 
 use Lara\Admin\Http\Traits\AdminAnalyticsTrait;
 use Lara\Admin\Http\Traits\AdminTranslationTrait;
-use Lara\Admin\Http\Traits\AdminDbUpdateTrait;
 use Lara\Admin\Http\Traits\AdminMenuTrait;
 use Eve\Http\Traits\EveUpdateTrait;
 
@@ -47,7 +46,6 @@ class DashboardController extends Controller
 
 	use AdminTranslationTrait;
 	use AdminAnalyticsTrait;
-	use AdminDbUpdateTrait;
 	use AdminMenuTrait;
 	use EveUpdateTrait;
 
@@ -114,32 +112,6 @@ class DashboardController extends Controller
 	 */
 	public function index(Request $request)
 	{
-
-		/* ~~~~~~~~~~~~~~~~ check for updates (start) ~~~~~~~~~~~~~~~~ */
-		$processLara = $request->get('update-lara') == 'true';
-		$processEve = $request->get('update-eve') == 'true';
-		$processTranslation = $request->get('update-translation') == 'true';
-
-		$laraUpdates = $this->checkForLaraUpdates($processLara);
-		$eveUpdates = $this->checkForEveUpdates($processEve);
-		$translationUpdates = $this->checkForTranslationUpdates($processTranslation);
-
-		$this->data->updates = $this->makeNewObject();
-		$this->data->updates->lara = $laraUpdates;
-		$this->data->updates->eve = $eveUpdates;
-		$this->data->updates->translation = $translationUpdates;
-
-		// get new versions
-		if ($request->has('newversion')) {
-			$this->data->newversion = $request->get('newversion');
-		}
-		if ($request->has('eveversion')) {
-			$this->data->eveversion = $request->get('eveversion');
-		}
-		if ($request->has('newtranslation')) {
-			$this->data->translationversion = $request->get('newtranslation');
-		}
-		/* ~~~~~~~~~~~~~~~~ check for updates (end) ~~~~~~~~~~~~~~~~ */
 
 		// get Google Analytics
 		$this->data->site = $this->getSiteStats(false, true);

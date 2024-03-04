@@ -23,7 +23,10 @@ use Barryvdh\HttpCache\Middleware\SetTtl;
 use Lara\Common\Models\Entity;
 use Lara\Common\Models\User;
 
-use Lara\Common\Http\Traits\LaraCommonTrait;
+use Lara\Common\Http\Traits\CommonTrait;
+use Lara\Common\Http\Traits\CommonDbUpdateTrait;
+use Lara\Admin\Http\Traits\AdminTranslationTrait;
+use Eve\Http\Traits\EveUpdateTrait;
 
 use LaravelLocalization;
 
@@ -38,7 +41,10 @@ use Carbon\Carbon;
 class LaraCommonServiceProvider extends ServiceProvider
 {
 
-	use LaraCommonTrait;
+	use CommonTrait;
+	use CommonDbUpdateTrait;
+	use EveUpdateTrait;
+	use AdminTranslationTrait;
 
 	/**
 	 * Bootstrap the module services.
@@ -161,10 +167,15 @@ class LaraCommonServiceProvider extends ServiceProvider
 
 		}
 
+		if($this->app->request->getRequestUri() == '/login') {
+			$this->checkForLaraUpdates();
+			$this->checkForTranslationUpdates();
+			$this->checkForEveUpdates();
+		}
+
 		// get Lara Version
 		$laraversion = $this->getCommonLaraVersion();
 		View::share('laraversion', $laraversion);
-
 
 	}
 

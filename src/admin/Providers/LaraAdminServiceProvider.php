@@ -104,7 +104,11 @@ class LaraAdminServiceProvider extends ServiceProvider
 
 			// get Lara Version
 			$laraversion = $this->getAdminLaraVersion();
+			$laradbversion = $this->getAdminLaraDBVersion();
+			$eveversion = $this->getEveVersion();
 			View::share('laraversion', $laraversion);
+			View::share('laradbversion', $laradbversion);
+			View::share('eveversion', $eveversion);
 
 		}
 

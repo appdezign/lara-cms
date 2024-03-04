@@ -19,6 +19,7 @@ use Lara\Common\Models\Menuitem;
 use Lara\Common\Models\ObjectOpengraph;
 use Lara\Common\Models\ObjectSeo;
 use Lara\Common\Models\Page;
+use Lara\Common\Models\Setting;
 use Lara\Common\Models\Sync;
 use Lara\Common\Models\Tag;
 
@@ -336,7 +337,7 @@ trait AdminTrait
 	private function setSetting(string $cgroup, string $key, string $value)
 	{
 
-		$modelClass = \Lara\Common\Models\Setting::class;
+		$modelClass = Setting::class;
 
 		// get record
 		$object = $modelClass::where('cgroup', $cgroup)
@@ -535,6 +536,34 @@ trait AdminTrait
 		list($laraversion->major, $laraversion->minor, $laraversion->patch) = explode('.', $laraVersionStr);
 
 		return $laraversion;
+
+	}
+
+	private function getAdminLaraDBVersion()
+	{
+
+		// get current DB version
+		$currentBuild = Setting::where('cgroup', 'system')->where('key', 'lara_db_version')->first();
+
+		if ($currentBuild) {
+			return $currentBuild->value;
+		} else {
+			return null;
+		}
+
+	}
+
+	private function getEveVersion()
+	{
+
+		// get current DB version
+		$currentBuild = Setting::where('cgroup', 'system')->where('key', 'lara_eve_version')->first();
+
+		if ($currentBuild) {
+			return $currentBuild->value;
+		} else {
+			return null;
+		}
 
 	}
 

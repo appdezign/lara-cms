@@ -814,20 +814,21 @@ trait AdminTranslationTrait
 
 	}
 
-	private function checkForTranslationUpdates($process = false)
+	private function checkForTranslationUpdates()
 	{
 
-		$laraCoreVer  = $this->getLaraCoreVersion();
-		$laraCoreVersion  = $laraCoreVer->version;
+		$laraCoreVer = $this->getLaraCoreVersion();
+		$laraCoreVersion = $laraCoreVer->version;
 		$languageVersion = $this->getTranslationVersion();
 
 		$updates = array();
 
-		if(version_compare($laraCoreVersion, $languageVersion, '>')) {
+		if (version_compare($laraCoreVersion, $languageVersion, '>')) {
 			$updates[] = $laraCoreVersion;
 		}
 
-		if($process) {
+		if (!empty($updates)) {
+
 			$allmodules = config('lara-common.translations.modules');
 			unset($allmodules['lara-eve']);
 			$modules = array_keys($allmodules);
@@ -872,14 +873,9 @@ trait AdminTranslationTrait
 			$this->exportTranslationsToFile($modules);
 
 			$this->setTranslationVersion($laraCoreVersion);
-
-			return redirect()->route('admin.dashboard.index', ['newtranslation' => end($updates)])->send();
-
-		} else {
-
-			return $updates;
-
 		}
+
+		return null;
 
 	}
 
