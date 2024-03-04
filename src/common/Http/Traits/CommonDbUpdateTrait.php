@@ -25,6 +25,7 @@ trait CommonDbUpdateTrait
 			'8.1.11',
 			'8.2.1',
 			'8.2.5',
+			'8.2.10',
 		];
 
 		// current versions
@@ -73,6 +74,14 @@ trait CommonDbUpdateTrait
 
 			}
 
+			if (in_array('8.2.10', $updates)) {
+
+				$this->addHeadertagTranslations();
+
+				$this->setSetting('system', 'lara_db_version', '8.2.10');
+
+			}
+
 			// Post-update actions
 			$this->clearCache();
 
@@ -84,6 +93,25 @@ trait CommonDbUpdateTrait
 
 		}
 
+	}
+
+	private function addHeadertagTranslations()
+	{
+
+		$this->checkTranslation('nl', 'lara-admin', 'mainmenu', 'items', 'headertags', 'header tags', true);
+
+		$this->checkTranslation('nl', 'lara-admin', 'headertag', 'entity', 'entity_title', 'header tags', true);
+		$this->checkTranslation('nl', 'lara-admin', 'headertag', 'entity', 'entity_single', 'header tag', true);
+		$this->checkTranslation('nl', 'lara-admin', 'headertag', 'entity', 'entity_plural', 'header tags', true);
+
+		$this->checkTranslation('nl', 'lara-admin', 'headertag', 'column', 'title', 'titel', true);
+		$this->checkTranslation('nl', 'lara-admin', 'headertag', 'column', 'cgroup', 'groep', true);
+		$this->checkTranslation('nl', 'lara-admin', 'headertag', 'column', 'templatefile_id', 'template file id', true);
+		$this->checkTranslation('nl', 'lara-admin', 'headertag', 'column', 'title_tag', 'title tag', true);
+		$this->checkTranslation('nl', 'lara-admin', 'headertag', 'column', 'list_tag', 'list tag', true);
+		$this->checkTranslation('nl', 'lara-admin', 'headertag', 'column', 'subtitle_tag', 'subtitle tag', true);
+
+		$this->exportTranslationsToFile(['lara-admin']);
 	}
 
 	private function addSubtitleToHeaderTags()
