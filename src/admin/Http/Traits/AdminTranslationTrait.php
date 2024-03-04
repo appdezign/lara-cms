@@ -873,9 +873,12 @@ trait AdminTranslationTrait
 			$this->exportTranslationsToFile($modules);
 
 			$this->setTranslationVersion($laraCoreVersion);
-		}
 
-		return null;
+			return end($updates);
+
+		} else {
+			return null;
+		}
 
 	}
 
