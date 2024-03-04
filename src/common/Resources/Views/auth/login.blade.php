@@ -54,7 +54,7 @@
 					<div class="update-alert alert alert-info alert-important">
 						<ul>
 							@if($updates->lara)
-								<li>Lara CMS was updated to {{ $updates->lara }}</li>
+								<li>Lara DB was updated to {{ $updates->lara }}</li>
 							@endif
 							@if($updates->translation)
 								<li>Translations were updated to {{ $updates->translation }}</li>
