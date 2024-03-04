@@ -6,7 +6,7 @@
 				Media</a>
 		</div>
 		<div class="d-none d-md-block text-muted">
-			Powered by Lara v{{ $laraversion->version }} | DB v{{ config('lara.lara_db_version') }}  | App v{{ config('lara-eve.lara_eve_version') }} | Laravel v{{ app()->version() }} | PHP v{{ phpversion() }}
+			Powered by Lara v{{ $laraversion->version }} | DB v{{ $laradbversion }}  | App v{{ $eveversion }} | Laravel v{{ app()->version() }} | PHP v{{ phpversion() }}
 		</div>
 	</div>
 </div>

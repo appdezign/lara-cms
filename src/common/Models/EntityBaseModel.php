@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
 
-use Lara\Common\Http\Traits\LaraCommonTrait;
+use Lara\Common\Http\Traits\CommonTrait;
 
 
 use Carbon\Carbon;
@@ -23,7 +23,7 @@ class EntityBaseModel extends Model
 {
 
 	use SoftDeletes;
-	use LaraCommonTrait;
+	use CommonTrait;
 
 	/**
 	 * @var string[]
