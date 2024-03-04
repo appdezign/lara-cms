@@ -16,7 +16,7 @@ trait CommonDbUpdateTrait
 {
 
 	/**
-	 * @return RedirectResponse|null
+	 * @return false|string|null
 	 */
 	private function checkForLaraUpdates()
 	{
@@ -76,9 +76,13 @@ trait CommonDbUpdateTrait
 			// Post-update actions
 			$this->clearCache();
 
-		}
+			return end($builds);
 
-		return null;
+		} else {
+
+			return null;
+
+		}
 
 	}
 

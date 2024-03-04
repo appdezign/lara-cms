@@ -167,15 +167,22 @@ class LaraCommonServiceProvider extends ServiceProvider
 
 		}
 
+		// Updates
+		$app = app();
+		$updates = $app->make('stdClass');
+		$updates->lara = null;
+		$updates->translation = null;
+		$updates->eve = null;
 		if($this->app->request->getRequestUri() == '/login') {
-			$this->checkForLaraUpdates();
-			$this->checkForTranslationUpdates();
-			$this->checkForEveUpdates();
+			$updates->lara = $this->checkForLaraUpdates();
+			$updates->translation = $this->checkForTranslationUpdates();
+			$updates->eve = $this->checkForEveUpdates();
 		}
 
 		// get Lara Version
 		$laraversion = $this->getCommonLaraVersion();
 		View::share('laraversion', $laraversion);
+		View::share('updates', $updates);
 
 	}
 
