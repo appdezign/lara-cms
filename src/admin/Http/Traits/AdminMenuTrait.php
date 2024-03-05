@@ -262,20 +262,20 @@ trait AdminMenuTrait
 
 			if ($entityView) {
 
-				$entity = $entityView->entity;
+				$ent = $entityView->entity;
 
 				// find or create module page
-				$this->findOrCreateModulePageBySlug($clanguage, $entity, $entityView);
+				$this->findOrCreateModulePageBySlug($clanguage, $ent, $entityView);
 
-				$object->entity_id = $entity->id;
+				$object->entity_id = $ent->id;
 
 				$object->entity_view_id = $entityView->id;
 				$object->object_id = null;
 				$object->url = null;
 
 				// build routename
-				$prefix = ($entity->objectrelations->has_tags ? 'entitytag' : 'entity');
-				$object->routename = $prefix . '.' . $entity->getEntityKey() . '.' . $entityView->method;
+				$prefix = ($ent->objectrelations->has_tags ? 'entitytag' : 'entity');
+				$object->routename = $prefix . '.' . $ent->getEntityKey() . '.' . $entityView->method;
 
 			} else {
 				$error = true;
@@ -291,19 +291,19 @@ trait AdminMenuTrait
 
 			if ($entityView) {
 
-				$entity = $entityView->entity;
+				$ent = $entityView->entity;
 
 				// find or create module page
-				$this->findOrCreateModulePageBySlug($clanguage, $entity, $entityView);
+				$this->findOrCreateModulePageBySlug($clanguage, $ent, $entityView);
 
-				$object->entity_id = $entity->id;
+				$object->entity_id = $ent->id;
 
 				$object->entity_view_id = $entityView->id;
 				$object->object_id = null;
 				$object->url = null;
 
 				$prefix = 'form';
-				$object->routename = $prefix . '.' . $entity->getEntityKey() . '.' . $entityView->method;
+				$object->routename = $prefix . '.' . $ent->getEntityKey() . '.' . $entityView->method;
 
 			} else {
 				$error = true;
@@ -383,16 +383,16 @@ trait AdminMenuTrait
 				$obj_id = $this->createNewPage(Auth::user()->id, $clanguage, $request->get('title'));
 			}
 
-			$entity = Entity::where('entity_key', 'page')->first();
+			$pageEntity = Entity::where('entity_key', 'page')->first();
 
 			// get default show method for Page entity
-			$entityView = $entity->views()->where('method', 'show')->first();
+			$pageEntityView = $pageEntity->views()->where('method', 'show')->first();
 
-			if ($entity) {
+			if ($pageEntity) {
 
-				$object->entity_id = $entity->id;
+				$object->entity_id = $pageEntity->id;
 
-				$object->entity_view_id = $entityView->id;
+				$object->entity_view_id = $pageEntityView->id;
 				$object->object_id = $obj_id;
 				$object->url = null;
 
@@ -402,7 +402,7 @@ trait AdminMenuTrait
 					$object->routename = 'special.home.show';
 				} else {
 					$prefix = 'entity';
-					$object->routename = $prefix . '.' . $entity->entity_key . '.' . $entityView->method . '.' . $obj_id;
+					$object->routename = $prefix . '.' . $pageEntity->entity_key . '.' . $pageEntityView->method . '.' . $obj_id;
 				}
 
 			} else {
@@ -432,20 +432,20 @@ trait AdminMenuTrait
 
 			if ($entityView) {
 
-				$entity = $entityView->entity;
+				$ent = $entityView->entity;
 
 				// find or create module page
 				$this->findOrCreateModulePageBySlug($clanguage, $entity, $entityView);
 
-				$object->entity_id = $entity->id;
+				$object->entity_id = $ent->id;
 
 				$object->entity_view_id = $entityView->id;
 				$object->object_id = null;
 				$object->url = null;
 
 				// build routename
-				$prefix = ($entity->objectrelations->has_tags ? 'entitytag' : 'entity');
-				$object->routename = $prefix . '.' . $entity->getEntityKey() . '.' . $entityView->method;
+				$prefix = ($ent->objectrelations->has_tags ? 'entitytag' : 'entity');
+				$object->routename = $prefix . '.' . $ent->getEntityKey() . '.' . $entityView->method;
 
 				// tag
 
@@ -479,19 +479,19 @@ trait AdminMenuTrait
 
 			if ($entityView) {
 
-				$entity = $entityView->entity;
+				$ent = $entityView->entity;
 
 				// find or create module page
-				$this->findOrCreateModulePageBySlug($clanguage, $entity, $entityView);
+				$this->findOrCreateModulePageBySlug($clanguage, $ent, $entityView);
 
-				$object->entity_id = $entity->id;
+				$object->entity_id = $ent->id;
 
 				$object->entity_view_id = $entityView->id;
 				$object->object_id = null;
 				$object->url = null;
 
 				$prefix = 'form';
-				$object->routename = $prefix . '.' . $entity->getEntityKey() . '.' . $entityView->method;
+				$object->routename = $prefix . '.' . $ent->getEntityKey() . '.' . $entityView->method;
 
 			} else {
 				$error = true;
