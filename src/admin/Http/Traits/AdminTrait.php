@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Lara\Common\Models\Entity;
+use Lara\Common\Models\Language;
 use Lara\Common\Models\Layout;
 use Lara\Common\Models\MediaFile;
 use Lara\Common\Models\MediaImage;
@@ -828,6 +829,15 @@ trait AdminTrait
 
 		return $mySlug;
 
+	}
+
+	private function getBackendLanguagesCodeList() {
+
+		return Language::where('publish', 1)->where('backend', 1)->orderby('backend_default', 'desc')->pluck('code', 'code');
+	}
+
+	private function getBackendLanguages() {
+		return Language::where('publish', 1)->where('backend', 1)->orderby('backend_default', 'desc')->get();
 	}
 
 }
