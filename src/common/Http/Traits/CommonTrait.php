@@ -128,6 +128,27 @@ trait CommonTrait {
 	}
 
 	/**
+	 * Translate entity key to a full Lara Entity class name
+	 *
+	 * @param string $entityKey
+	 * @return string
+	 */
+	private function getCommonEntityVarByKey(string $entityKey)
+	{
+
+		$laraClass = (ucfirst($entityKey) . 'Entity');
+
+		if (class_exists('\\Lara\\Common\\Lara\\' . $laraClass)) {
+			$laraClass = '\\Lara\\Common\\Lara\\' . $laraClass;
+		} else {
+			$laraClass = '\\Eve\\Lara\\' . $laraClass;
+		}
+
+		return $laraClass;
+
+	}
+
+	/**
 	 * @return void
 	 */
 	private function clearCache()

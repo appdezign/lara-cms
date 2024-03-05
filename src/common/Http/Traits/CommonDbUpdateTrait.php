@@ -23,6 +23,10 @@ trait CommonDbUpdateTrait
 	{
 
 		$builds = [
+			'7.1.4',
+			'7.5.11',
+			'7.5.36',
+			'7.5.46',
 			'8.1.11',
 			'8.2.1',
 			'8.2.5',
@@ -46,6 +50,38 @@ trait CommonDbUpdateTrait
 		if (!empty($updates)) {
 
 			/* ~~~~~~~~~~~~ UPDATES ~~~~~~~~~~~~ */
+
+			if (in_array('7.1.4', $updates)) {
+
+				$this->addImageTranslations();
+
+				$this->setSetting('system', 'lara_db_version', '7.1.4');
+
+			}
+
+			if (in_array('7.5.11', $updates)) {
+
+				$this->addIndexToSlugColumn();
+
+				$this->setSetting('system', 'lara_db_version', '7.5.11');
+
+			}
+
+			if (in_array('7.5.36', $updates)) {
+
+				$this->updateAdminMenuIcons();
+
+				$this->setSetting('system', 'lara_db_version', '7.5.36');
+
+			}
+
+			if (in_array('7.5.46', $updates)) {
+
+				$this->addPreventCropping();
+
+				$this->setSetting('system', 'lara_db_version', '7.5.46');
+
+			}
 
 			if (in_array('8.1.11', $updates)) {
 
@@ -436,6 +472,94 @@ trait CommonDbUpdateTrait
 		}
 
 		$this->exportTranslationsToFile(['lara-eve']);
+
+	}
+	private function addPreventCropping()
+	{
+
+		$tablenames = config('lara-common.database');
+		$tablename = $tablenames['object']['images'];
+		if (!Schema::hasColumn($tablename, 'prevent_cropping')) {
+			Schema::table($tablename, function ($table) {
+				$table->boolean('prevent_cropping')->default(0)->after('image_alt');
+			});
+		}
+	}
+
+	private function fixFormSortOrder()
+	{
+		$formGroup = Entitygroup::where('key', 'form')->first();
+		if ($formGroup) {
+			$formEntities = Entity::where('group_id', $formGroup->id)->get();
+			foreach ($formEntities as $formEntity) {
+				$columns = $formEntity->columns;
+				$columns->sort_field = 'created_at';
+				$columns->sort_order = 'desc';
+				$columns->save();
+			}
+		}
+	}
+
+	private function updateAdminMenuIcons()
+	{
+
+		// dashboard
+		$dashboardEntity = Entity::where('entity_key', 'dashboard')->first();
+		if ($dashboardEntity) {
+			$dashboardEntity->menu_icon = 'fad fa-home-alt';
+			$dashboardEntity->save;
+		}
+
+		// page
+		$pageEntity = Entity::where('entity_key', 'page')->first();
+		if ($pageEntity) {
+			$pageEntity->menu_icon = 'fad fa-file-alt';
+			$pageEntity->save();
+		}
+
+		// blog
+		$blogEntity = Entity::where('entity_key', 'blog')->first();
+		if ($blogEntity) {
+			$blogEntity->menu_icon = 'fad fa-file-alt';
+			$blogEntity->save;
+		}
+
+	}
+
+	private function addIndexToSlugColumn()
+	{
+
+		$ents = Entity::where('group_id', 9)->get();
+		foreach ($ents as $ent) {
+			if ($ent->columns->has_slug == 1) {
+
+				$lara = $this->getCommonEntityVarByKey($ent->entity_key);
+				$entity = new $lara;
+
+				$modelClass = $entity->getEntityModelClass();
+				$tablename = $modelClass::getTableName();
+				$columnName = 'slug';
+				$indexName = $tablename . '_' . $columnName . '_index';
+
+				Schema::table($tablename, function (Blueprint $table) use ($tablename, $columnName, $indexName) {
+					$sm = Schema::getConnection()->getDoctrineSchemaManager();
+					$indexesFound = $sm->listTableIndexes($tablename);
+
+					if (!array_key_exists($indexName, $indexesFound)) {
+						$table->index($columnName);
+					}
+				});
+			}
+		}
+	}
+
+	private function addImageTranslations()
+	{
+
+		$this->checkTranslation('nl', 'lara-admin', 'default', 'label', 'prevent_cropping', 'voorkom afsnijden', true);
+		$this->checkTranslation('en', 'lara-admin', 'default', 'label', 'prevent_cropping', 'prevent cropping', true);
+
+		$this->exportTranslationsToFile(['lara-admin']);
 
 	}
 
