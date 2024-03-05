@@ -22,7 +22,13 @@ class CreateSysLanguageTable extends Migration {
 			$table->text('name')->nullable();
 
 			$table->boolean('default')->default(0);
+
+			$table->boolean('backend')->default(0);
+			$table->boolean('backend_default')->default(0);
+
 			$table->boolean('publish')->default(0);
+
+			$table->timestamps();
 
 			// sortable
 			$table->integer('position')->unsigned()->nullable()->index();

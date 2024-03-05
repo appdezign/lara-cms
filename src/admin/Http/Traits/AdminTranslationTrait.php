@@ -4,14 +4,13 @@ namespace Lara\Admin\Http\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 use Lara\Common\Models\Entity;
 use Lara\Common\Models\Entitygroup;
 use Lara\Common\Models\Language;
 use Lara\Common\Models\Setting;
 use Lara\Common\Models\Translation;
-
-use File;
 
 use Bouncer;
 
@@ -228,19 +227,15 @@ trait AdminTranslationTrait
 		$resourcepath = resource_path('lang/vendor/' . $module . '/');
 		$langpath = $resourcepath . $locale . '/';
 
-		$files = File::allFiles($langpath);
-		foreach ($files as $file) {
-
-			$contents = File::getRequire($file);
-
-			foreach ($contents as $tag => $values) {
-
-				foreach ($values as $key => $value) {
-
-					$counter++;
-
+		if(File::isDirectory($langpath)) {
+			$files = File::allFiles($langpath);
+			foreach ($files as $file) {
+				$contents = File::getRequire($file);
+				foreach ($contents as $tag => $values) {
+					foreach ($values as $key => $value) {
+						$counter++;
+					}
 				}
-
 			}
 		}
 
@@ -299,37 +294,43 @@ trait AdminTranslationTrait
 				foreach ($supportedLocales as $locale) {
 
 					$langpath = $resourcepath . $locale . '/';
-					$files = File::allFiles($langpath);
-					foreach ($files as $file) {
 
-						$cgroup = basename($file, ".php");
-
-						$contents = File::getRequire($file);
-
-						foreach ($contents as $tag => $values) {
-
-							foreach ($values as $key => $value) {
-
-								$object = new Translation;
-
-								$object->language = $locale;
-								$object->module = $module;
-								$object->cgroup = $cgroup;
-								$object->tag = $tag;
-								$object->key = $key;
-								$object->value = $value;
-
-								$object->save();
-
-								$counter++;
-
-							}
-
-						}
+					if (!File::isDirectory($entityImagePath)) {
+						File::makeDirectory($entityImagePath);
 					}
 
-				}
+					if(File::isDirectory($langpath)) {
 
+						$files = File::allFiles($langpath);
+
+						foreach ($files as $file) {
+
+							$cgroup = basename($file, ".php");
+
+							$contents = File::getRequire($file);
+
+							foreach ($contents as $tag => $values) {
+
+								foreach ($values as $key => $value) {
+
+									$object = new Translation;
+
+									$object->language = $locale;
+									$object->module = $module;
+									$object->cgroup = $cgroup;
+									$object->tag = $tag;
+									$object->key = $key;
+									$object->value = $value;
+
+									$object->save();
+
+									$counter++;
+
+								}
+							}
+						}
+					}
+				}
 			}
 
 			$this->setLastTranslationSync();
@@ -366,61 +367,70 @@ trait AdminTranslationTrait
 				$resourcepath = resource_path('lang/vendor/' . $module . '/');
 				$localepath = $resourcepath . $locale . '/';
 
-				$this->unlockFilesInTranslationDir($localepath);
+				// create language path
+				if (!File::isDirectory($localepath)) {
+					File::makeDirectory($localepath);
+				}
 
-				File::cleanDirectory($localepath);
+				if(File::isDirectory($localepath)) {
 
-				// get groups
-				$groups = Translation::distinct()
-					->where('module', $module)
-					->select('cgroup')
-					->orderBy('cgroup', 'asc')
-					->get();
+					$this->unlockFilesInTranslationDir($localepath);
 
-				foreach ($groups as $group) {
+					File::cleanDirectory($localepath);
 
-					// get tags
-					$tags = Translation::distinct()
+					// get groups
+					$groups = Translation::distinct()
 						->where('module', $module)
-						->where('cgroup', $group->cgroup)
-						->select('tag')
-						->orderBy('tag', 'asc')
+						->select('cgroup')
+						->orderBy('cgroup', 'asc')
 						->get();
 
-					$contents = "<?php\n\nreturn [\n";
+					foreach ($groups as $group) {
 
-					foreach ($tags as $tag) {
-
-						$contents .= "\t'" . $tag->tag . "' => [\n";
-
-						$objects = Translation::langIs($locale)
+						// get tags
+						$tags = Translation::distinct()
 							->where('module', $module)
 							->where('cgroup', $group->cgroup)
-							->where('tag', $tag->tag)
-							->orderBy('key', 'asc')
-							->select('cgroup', 'key', 'value')
+							->select('tag')
+							->orderBy('tag', 'asc')
 							->get();
 
-						foreach ($objects as $object) {
-							$contents .= "\t\t'" . $object->key . "' => '" . addslashes($object->value) . "',\n";
-							$counter++;
+						$contents = "<?php\n\nreturn [\n";
+
+						foreach ($tags as $tag) {
+
+							$contents .= "\t'" . $tag->tag . "' => [\n";
+
+							$objects = Translation::langIs($locale)
+								->where('module', $module)
+								->where('cgroup', $group->cgroup)
+								->where('tag', $tag->tag)
+								->orderBy('key', 'asc')
+								->select('cgroup', 'key', 'value')
+								->get();
+
+							foreach ($objects as $object) {
+								$contents .= "\t\t'" . $object->key . "' => '" . addslashes($object->value) . "',\n";
+								$counter++;
+							}
+
+							$contents .= "\t],\n";
+
 						}
 
-						$contents .= "\t],\n";
+						$contents .= "];\n";
+
+						// define path
+						$path = $localepath . $group->cgroup . '.php';
+
+						// write to file
+						File::put($path, $contents);
 
 					}
 
-					$contents .= "];\n";
-
-					// define path
-					$path = $localepath . $group->cgroup . '.php';
-
-					// write to file
-					File::put($path, $contents);
+					$this->lockFilesInTranslationDir($localepath);
 
 				}
-
-				$this->lockFilesInTranslationDir($localepath);
 
 			}
 
@@ -645,15 +655,18 @@ trait AdminTranslationTrait
 		$resourcepath = resource_path('lang/vendor/' . $module . '/');
 		$langpath = $resourcepath . $locale . '/';
 
-		$files = File::allFiles($langpath);
+		if(File::isDirectory($langpath)) {
 
-		foreach ($files as $file) {
+			$files = File::allFiles($langpath);
 
-			$cgroup = basename($file, ".php");
+			foreach ($files as $file) {
 
-			$contents = File::getRequire($file);
-			foreach ($contents as $tag => $values) {
-				$translations[$cgroup][$tag] = $values;
+				$cgroup = basename($file, ".php");
+
+				$contents = File::getRequire($file);
+				foreach ($contents as $tag => $values) {
+					$translations[$cgroup][$tag] = $values;
+				}
 			}
 		}
 
@@ -677,15 +690,14 @@ trait AdminTranslationTrait
 		$resourcepath = config('lara.lara_path') . '/src/' . $moduleDir . '/Resources/Lang/';
 		$langpath = $resourcepath . $locale . '/';
 
-		$files = File::allFiles($langpath);
-
-		foreach ($files as $file) {
-
-			$cgroup = basename($file, ".php");
-
-			$contents = File::getRequire($file);
-			foreach ($contents as $tag => $values) {
-				$translations[$cgroup][$tag] = $values;
+		if(File::isDirectory($langpath)) {
+			$files = File::allFiles($langpath);
+			foreach ($files as $file) {
+				$cgroup = basename($file, ".php");
+				$contents = File::getRequire($file);
+				foreach ($contents as $tag => $values) {
+					$translations[$cgroup][$tag] = $values;
+				}
 			}
 		}
 
@@ -753,23 +765,27 @@ trait AdminTranslationTrait
 	private function lockFilesInTranslationDir(string $dirpath, $pattern = null)
 	{
 
-		$files = File::allFiles($dirpath);
+		if(File::isDirectory($dirpath)) {
 
-		foreach ($files as $file) {
+			$files = File::allFiles($dirpath);
 
-			if (!empty($pattern)) {
+			foreach ($files as $file) {
 
-				$filename = $file->getFilename();
+				if (!empty($pattern)) {
 
-				if (substr($filename, 0, strlen($pattern)) == $pattern) {
+					$filename = $file->getFilename();
+
+					if (substr($filename, 0, strlen($pattern)) == $pattern) {
+
+						chmod($file->getPathname(), 0444);
+
+					}
+
+				} else {
 
 					chmod($file->getPathname(), 0444);
 
 				}
-
-			} else {
-
-				chmod($file->getPathname(), 0444);
 
 			}
 
@@ -788,23 +804,27 @@ trait AdminTranslationTrait
 	private function unlockFilesInTranslationDir(string $dirpath, $pattern = null)
 	{
 
-		$files = File::allFiles($dirpath);
+		if(File::isDirectory($dirpath)) {
 
-		foreach ($files as $file) {
+			$files = File::allFiles($dirpath);
 
-			if (!empty($pattern)) {
+			foreach ($files as $file) {
 
-				$filename = $file->getFilename();
+				if (!empty($pattern)) {
 
-				if (substr($filename, 0, strlen($pattern)) == $pattern) {
+					$filename = $file->getFilename();
+
+					if (substr($filename, 0, strlen($pattern)) == $pattern) {
+
+						chmod($file->getPathname(), 0644);
+
+					}
+
+				} else {
 
 					chmod($file->getPathname(), 0644);
 
 				}
-
-			} else {
-
-				chmod($file->getPathname(), 0644);
 
 			}
 

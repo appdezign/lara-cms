@@ -114,6 +114,8 @@ class ProfileController extends Controller
 		// get record
 		$this->data->object = User::findOrFail($id);
 
+		$this->data->backendLanguages = $this->getBackendLanguagesCodeList();
+
 		// lock record
 		$this->data->object->lockRecord();
 

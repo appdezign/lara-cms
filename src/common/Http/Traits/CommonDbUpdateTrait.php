@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Schema;
 use Lara\Common\Models\Entity;
 use Lara\Common\Models\Entitygroup;
 use Lara\Common\Models\Translation;
+use Lara\Common\Models\Language;
 
 use Bouncer;
 
@@ -26,6 +27,7 @@ trait CommonDbUpdateTrait
 			'8.2.1',
 			'8.2.5',
 			'8.2.10',
+			'8.2.11',
 		];
 
 		// current versions
@@ -82,6 +84,14 @@ trait CommonDbUpdateTrait
 
 			}
 
+			if (in_array('8.2.11', $updates)) {
+
+				$this->addBackendLanguages();
+
+				$this->setSetting('system', 'lara_db_version', '8.2.11');
+
+			}
+
 			// Post-update actions
 			$this->clearCache();
 
@@ -91,6 +101,43 @@ trait CommonDbUpdateTrait
 
 			return null;
 
+		}
+
+	}
+
+	private function addBackendLanguages()
+	{
+
+		$tablenames = config('lara-common.database');
+		$tablename = $tablenames['sys']['languages'];
+		if (!Schema::hasColumn($tablename, 'backend')) {
+			Schema::table($tablename, function ($table) {
+				$table->boolean('backend')->default(0)->after('default');
+			});
+		}
+		if (!Schema::hasColumn($tablename, 'backend_default')) {
+			Schema::table($tablename, function ($table) {
+				$table->boolean('backend_default')->default(0)->after('backend');
+			});
+		}
+		if (!Schema::hasColumn($tablename, 'updated_at')) {
+			Schema::table($tablename, function ($table) {
+				$table->timestamps();
+			});
+		}
+
+		$nl = Language::where('code', 'nl')->first();
+		if($nl) {
+			$nl->backend = 1;
+			$nl->backend_default = 1;
+			$nl->save();
+		}
+
+		$en = Language::where('code', 'en')->first();
+		if($en) {
+			$en->backend = 1;
+			$en->backend_default = 0;
+			$en->save();
 		}
 
 	}

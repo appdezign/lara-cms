@@ -61,7 +61,7 @@
 					{{ html()->label(_lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.column.language').':', 'user_language') }}
 				</x-slot>
 				<div class="select-two-md">
-					{{ html()->select('user_language', ['nl' => 'nl', 'en' => 'en'], null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
+					{{ html()->select('user_language', $data->backendLanguages, null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
 				</div>
 			</x-formrow>
 
