@@ -250,15 +250,21 @@ trait FrontTrait
 				if (!$found) {
 
 					// fall back to homepage
-
-					$menuitem = Menuitem::langIs($lang->code)->whereNull('parent_id')->first();
+					$menu = Menu::where('slug', 'main')->first();
+					$menuitem = Menuitem::langIs($lang->code)->where('menu_id', $menu->id)->whereNull('parent_id')->first();
 
 					if ($menuitem) {
 						$version->entity = $menuitem->entity->entity_key;
-						$version->object = $menuitem->routename;
+						$version->object = $menuitem->object_id;
 						$version->route = url($lang->code . '/');
 						$version->routename = 'special.home.show';
-
+					} else {
+						// last fall back
+						// no homepage defined yet
+						$version->entity = 'page';
+						$version->object = null;
+						$version->route = url($lang->code . '/');
+						$version->routename = 'special.home.show';
 					}
 
 				}
