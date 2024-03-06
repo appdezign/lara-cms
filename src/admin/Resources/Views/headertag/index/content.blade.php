@@ -13,10 +13,13 @@
 					Title Tag
 				</th>
 				<th class="w-10 d-none d-lg-table-cell">
+					Subtitle Tag
+				</th>
+				<th class="w-10 d-none d-lg-table-cell">
 					List Tag
 				</th>
 				<th class="w-20 d-none d-lg-table-cell">
-					{{ _lanq('lara-admin::default.column.group') }}
+					Group
 				</th>
 				<th class="w-20 d-none d-lg-table-cell">
 					Template
@@ -57,14 +60,8 @@
 					</td>
 
 					<td class="d-none d-lg-table-cell">
-						@if($obj->cgroup == 'module')
-							@if(!empty($obj->entity))
-								{{ $obj->entity->entity_key }}
-							@endif
-						@else
-							@if(!empty($obj->templatefile))
-								{{ $obj->templatefile->template_file }}
-							@endif
+						@if(!empty($obj->templatefile))
+							{{ $obj->templatefile->template_file }}
 						@endif
 					</td>
 
