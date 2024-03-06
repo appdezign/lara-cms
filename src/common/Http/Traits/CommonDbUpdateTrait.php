@@ -3,7 +3,6 @@
 namespace Lara\Common\Http\Traits;
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Schema;
 
 use Lara\Common\Models\Entity;
