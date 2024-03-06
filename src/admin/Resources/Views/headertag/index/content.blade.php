@@ -80,18 +80,9 @@
 							@endcan
 						</td>
 						<td class="text-center action-icons">
-							@can('delete', $obj)
-								<a href="{{ route('admin.'.$entity->getEntityRouteKey().'.destroy', ['id' => $obj->id]) }}"
-								   data-token="{{ csrf_token() }}"
-								   data-confirm="{{ _lanq('lara-admin::default.message.confirm') }}"
-								   data-method="delete">
-									<i class="las la-trash"></i>
-								</a>
-							@else
-								<div class="action-icon-disabled text-muted">
-									<i class="las la-trash"></i>
-								</div>
-							@endcan
+							<div class="action-icon-disabled text-muted">
+								<i class="las la-trash"></i>
+							</div>
 						</td>
 
 					@else

@@ -72,4 +72,11 @@ class HeadertagsController extends BaseController
 
 	}
 
+	public function destroy(int $id)
+	{
+
+		abort(response()->view('lara-admin::errors.405', [], 405));
+
+	}
+
 }
