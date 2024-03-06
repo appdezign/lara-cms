@@ -36,7 +36,8 @@ $listTags = [
 	<x-slot name="label">
 		{{ html()->label(_lanq('lara-admin::headertag.column.title').':', 'title') }}
 	</x-slot>
-	{{ html()->text('title', null)->class('form-control')->attribute('required') }}
+	{{ html()->text('title', null)->class('form-control')->disabled() }}
+	{{ html()->hidden('title', null) }}
 </x-formrowreq>
 
 {{-- CGROUP --}}
