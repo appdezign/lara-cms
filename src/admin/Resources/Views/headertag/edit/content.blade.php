@@ -44,7 +44,8 @@ $listTags = [
 	<x-slot name="label">
 		{{ html()->label(_lanq('lara-admin::headertag.column.cgroup').':', 'cgroup') }}
 	</x-slot>
-	{{ html()->select('cgroup', $entity->getGroups(), null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
+	{{ html()->select('cgroup', $entity->getGroups(), null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true')->disabled() }}
+	{{ html()->hidden('cgroup', null) }}
 </x-formrow>
 
 {{-- TEMPLATEWIDGET_ID --}}
@@ -52,7 +53,8 @@ $listTags = [
 	<x-slot name="label">
 		{{ html()->label(_lanq('lara-admin::headertag.column.templatefile_id').':', 'templatefile_id') }}
 	</x-slot>
-	{{ html()->select('templatefile_id', [null=>'- Select template widget -'] + $templateFileList, null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
+	{{ html()->select('templatefile_id', [null=>'- Select template widget -'] + $templateFileList, null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true')->disabled() }}
+	{{ html()->hidden('templatefile_id', null) }}
 </x-formrow>
 
 {{-- TITLE TAG --}}
