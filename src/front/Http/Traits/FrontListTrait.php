@@ -365,7 +365,7 @@ trait FrontListTrait
 
 		if (!$node->isLeaf()) {
 			foreach ($node->children as $child) {
-				$childobjectcount = $this->getTagObjects($child, $entity, $language, $isgrid);
+				$childobjectcount = $this->getTagObjects($child, $entity, $language, $isgrid, $menutaxonomy);
 
 				// add child count to total count
 				$totalcount = $totalcount + $childobjectcount;
