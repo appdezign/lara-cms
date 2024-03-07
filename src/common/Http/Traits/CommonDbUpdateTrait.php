@@ -9,6 +9,7 @@ use Lara\Common\Models\Entity;
 use Lara\Common\Models\Entitygroup;
 use Lara\Common\Models\Translation;
 use Lara\Common\Models\Language;
+use Lara\Common\Models\Headertag;
 
 use Bouncer;
 
@@ -205,6 +206,15 @@ trait CommonDbUpdateTrait
 			Schema::table($tablename, function ($table) {
 				$table->string('subtitle_tag')->nullable()->after('title_tag');
 			});
+		}
+
+		// add default values fo existing rows
+		$headerTags = Headertag::get();
+		foreach($headerTags as $htag) {
+			if(empty($htag->subtitle_tag)) {
+				$htag->subtitle_tag = ($htag->cgroup == 'module') ? 'h2' : 'h3';
+				$htag->save();
+			}
 		}
 
 	}

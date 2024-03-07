@@ -4,6 +4,7 @@ namespace Lara\Admin\Http\Controllers\Seo;
 
 use Illuminate\Http\Request;
 use Lara\Admin\Http\Controllers\Base\BaseController;
+use Lara\Admin\Http\Requests\StoreObjectRequest;
 use Lara\Admin\Http\Traits\AdminAuthTrait;
 use Lara\Admin\Http\Traits\AdminEntityTrait;
 use Lara\Admin\Http\Traits\AdminListTrait;
@@ -56,6 +57,25 @@ class HeadertagsController extends BaseController
 		return view($viewfile, [
 			'data' => $this->data,
 		]);
+
+	}
+
+	public function create(Request $request)
+	{
+		abort(response()->view('lara-admin::errors.405', [], 405));
+	}
+
+	public function store(StoreObjectRequest $request)
+	{
+
+		abort(response()->view('lara-admin::errors.405', [], 405));
+
+	}
+
+	public function destroy(int $id)
+	{
+
+		abort(response()->view('lara-admin::errors.405', [], 405));
 
 	}
 
