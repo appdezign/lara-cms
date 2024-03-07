@@ -93,7 +93,7 @@
 				$('#tag_id').find('option').remove();
 
 				$.ajax({
-					url: '/admin/tag/' + menuView + '/gettags/',
+					url: '/admin/tag/' + menuView + '/gettags',
 					type: 'get',
 					dataType: 'json',
 					success: function (response) {
@@ -145,8 +145,6 @@
 			$('#entity_form_view_id').val(menuView).trigger('change');
 			$('#object_id').val(menuObjectID).trigger('change');
 
-
-			console.log(slugLock);
 
 			if(slugLock == 1) {
 				$('#slug_lock').prop('checked', true);

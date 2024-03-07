@@ -435,7 +435,7 @@ trait AdminMenuTrait
 				$ent = $entityView->entity;
 
 				// find or create module page
-				$this->findOrCreateModulePageBySlug($clanguage, $entity, $entityView);
+				$this->findOrCreateModulePageBySlug($clanguage, $ent, $entityView);
 
 				$object->entity_id = $ent->id;
 
