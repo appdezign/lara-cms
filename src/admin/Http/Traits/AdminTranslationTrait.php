@@ -227,7 +227,7 @@ trait AdminTranslationTrait
 		$resourcepath = resource_path('lang/vendor/' . $module . '/');
 		$langpath = $resourcepath . $locale . '/';
 
-		if(File::isDirectory($langpath)) {
+		if (File::isDirectory($langpath)) {
 			$files = File::allFiles($langpath);
 			foreach ($files as $file) {
 				$contents = File::getRequire($file);
@@ -299,7 +299,7 @@ trait AdminTranslationTrait
 						File::makeDirectory($entityImagePath);
 					}
 
-					if(File::isDirectory($langpath)) {
+					if (File::isDirectory($langpath)) {
 
 						$files = File::allFiles($langpath);
 
@@ -372,7 +372,7 @@ trait AdminTranslationTrait
 					File::makeDirectory($localepath);
 				}
 
-				if(File::isDirectory($localepath)) {
+				if (File::isDirectory($localepath)) {
 
 					$this->unlockFilesInTranslationDir($localepath);
 
@@ -655,7 +655,7 @@ trait AdminTranslationTrait
 		$resourcepath = resource_path('lang/vendor/' . $module . '/');
 		$langpath = $resourcepath . $locale . '/';
 
-		if(File::isDirectory($langpath)) {
+		if (File::isDirectory($langpath)) {
 
 			$files = File::allFiles($langpath);
 
@@ -690,7 +690,7 @@ trait AdminTranslationTrait
 		$resourcepath = config('lara.lara_path') . '/src/' . $moduleDir . '/Resources/Lang/';
 		$langpath = $resourcepath . $locale . '/';
 
-		if(File::isDirectory($langpath)) {
+		if (File::isDirectory($langpath)) {
 			$files = File::allFiles($langpath);
 			foreach ($files as $file) {
 				$cgroup = basename($file, ".php");
@@ -762,28 +762,32 @@ trait AdminTranslationTrait
 	 * @param string|null $pattern
 	 * @return void
 	 */
-	private function lockFilesInTranslationDir(string $dirpath, $pattern = null)
+	private function lockFilesInTranslationDir(string $dirpath, string $pattern = null): void
 	{
 
-		if(File::isDirectory($dirpath)) {
+		if (config('lara.lock_files')) {
 
-			$files = File::allFiles($dirpath);
+			if (File::isDirectory($dirpath)) {
 
-			foreach ($files as $file) {
+				$files = File::allFiles($dirpath);
 
-				if (!empty($pattern)) {
+				foreach ($files as $file) {
 
-					$filename = $file->getFilename();
+					if (!empty($pattern)) {
 
-					if (substr($filename, 0, strlen($pattern)) == $pattern) {
+						$filename = $file->getFilename();
+
+						if (substr($filename, 0, strlen($pattern)) == $pattern) {
+
+							chmod($file->getPathname(), 0444);
+
+						}
+
+					} else {
 
 						chmod($file->getPathname(), 0444);
 
 					}
-
-				} else {
-
-					chmod($file->getPathname(), 0444);
 
 				}
 
@@ -801,36 +805,40 @@ trait AdminTranslationTrait
 	 * @param string|null $pattern
 	 * @return void
 	 */
-	private function unlockFilesInTranslationDir(string $dirpath, $pattern = null)
+	private function unlockFilesInTranslationDir(string $dirpath, string $pattern = null): void
 	{
 
-		if(File::isDirectory($dirpath)) {
+		if (config('lara.lock_files')) {
 
-			$files = File::allFiles($dirpath);
+			if (File::isDirectory($dirpath)) {
 
-			foreach ($files as $file) {
+				$files = File::allFiles($dirpath);
 
-				if (!empty($pattern)) {
+				foreach ($files as $file) {
 
-					$filename = $file->getFilename();
+					if (!empty($pattern)) {
 
-					if (substr($filename, 0, strlen($pattern)) == $pattern) {
+						$filename = $file->getFilename();
+
+						if (substr($filename, 0, strlen($pattern)) == $pattern) {
+
+							chmod($file->getPathname(), 0644);
+
+						}
+
+					} else {
 
 						chmod($file->getPathname(), 0644);
 
 					}
 
-				} else {
-
-					chmod($file->getPathname(), 0644);
-
 				}
 
 			}
 
-		}
+			sleep(1);
 
-		sleep(1);
+		}
 
 	}
 
