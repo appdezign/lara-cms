@@ -1103,7 +1103,7 @@ trait AdminBuilderTrait
 
 		// add column (with foreign key)
 		Schema::table($tablename, function ($table) use ($colname, $reltablename, $useBigInt) {
-			if($useBigInt) {
+			if ($useBigInt) {
 				$table->bigInteger($colname)->unsigned()->after('id');
 			} else {
 				$table->integer($colname)->unsigned()->after('id');
@@ -2675,26 +2675,30 @@ trait AdminBuilderTrait
 	 * @param string|null $pattern
 	 * @return void
 	 */
-	private function lockFilesInDir(string $dirpath, $pattern = null)
+	private function lockFilesInDir(string $dirpath, string $pattern = null): void
 	{
 
-		$files = File::allFiles($dirpath);
+		if (config('lara.lock_files')) {
 
-		foreach ($files as $file) {
+			$files = File::allFiles($dirpath);
 
-			if (!empty($pattern)) {
+			foreach ($files as $file) {
 
-				$filename = $file->getFilename();
+				if (!empty($pattern)) {
 
-				if (substr($filename, 0, strlen($pattern)) == $pattern) {
+					$filename = $file->getFilename();
+
+					if (substr($filename, 0, strlen($pattern)) == $pattern) {
+
+						chmod($file->getPathname(), 0444);
+
+					}
+
+				} else {
 
 					chmod($file->getPathname(), 0444);
 
 				}
-
-			} else {
-
-				chmod($file->getPathname(), 0444);
 
 			}
 
@@ -2710,34 +2714,37 @@ trait AdminBuilderTrait
 	 * @param string|null $pattern
 	 * @return void
 	 */
-	private function unlockFilesInDir(string $dirpath, $pattern = null)
+	private function unlockFilesInDir(string $dirpath, string $pattern = null): void
 	{
 
-		$files = File::allFiles($dirpath);
+		if (config('lara.lock_files')) {
 
-		foreach ($files as $file) {
+			$files = File::allFiles($dirpath);
 
-			if (!empty($pattern)) {
+			foreach ($files as $file) {
 
-				$filename = $file->getFilename();
+				if (!empty($pattern)) {
 
-				if (substr($filename, 0, strlen($pattern)) == $pattern) {
+					$filename = $file->getFilename();
+
+					if (substr($filename, 0, strlen($pattern)) == $pattern) {
+
+						chmod($file->getPathname(), 0644);
+
+					}
+
+				} else {
 
 					chmod($file->getPathname(), 0644);
 
 				}
 
-			} else {
-
-				chmod($file->getPathname(), 0644);
-
 			}
+
+			sleep(1);
 
 		}
 
-		sleep(1);
-
 	}
-
 
 }
