@@ -8,6 +8,8 @@ return [
 	'is_multi_language' => false,
 	'multi_language_slugs_in_menu' => false,
 
+	'lock_files' => env('LARA_LOCK_FILES', true),
+
 	'auth' => [
 		'has_front_auth'     => env('LARA_AUTH_HAS_FRONT_AUTH', false),
 		'can_register'       => env('LARA_AUTH_CAN_REGISTER', false),
