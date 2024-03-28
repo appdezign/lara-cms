@@ -35,18 +35,38 @@
 		],
 		templates: [
 			{
-				title: '2 kolommen',
-				description: '2 responsive kolommen',
+				title: '2 kolommen [-][-]',
+				description: '2 responsive kolommen [-][-]',
 				content: '<p>[kolom_1van2]</p><p>...</p><p>[/kolom_1van2]</p><p>[kolom_2van2]</p><p>...</p><p>[/kolom_2van2]</p>'
 			},
 			{
-				title: '3 kolommen',
-				description: '3 responsive kolommen',
+				title: '2 kolommen [-][- -]',
+				description: '2 responsive kolommen ([-][- -])',
+				content: '<p>[kolom_1van3]</p><p>...</p><p>[/kolom_1van3]</p><p>[kolom_23van3]</p><p>...</p><p>[/kolom_23van3]</p>'
+			},
+			{
+				title: '2 kolommen [- -][-]',
+				description: '2 responsive kolommen ([- -][-])',
+				content: '<p>[kolom_12van3]</p><p>...</p><p>[/kolom_12van3]</p><p>[kolom_3van3]</p><p>...</p><p>[/kolom_3van3]</p>'
+			},
+			{
+				title: '2 kolommen [-][- - -]',
+				description: '2 responsive kolommen ([-][- - -])',
+				content: '<p>[kolom_1van4]</p><p>...</p><p>[/kolom_1van4]</p><p>[kolom_234van4]</p><p>...</p><p>[/kolom_234van4]</p>'
+			},
+			{
+				title: '2 kolommen [- - -][-]',
+				description: '2 responsive kolommen [- - -][-]',
+				content: '<p>[kolom_123van4]</p><p>...</p><p>[/kolom_123van4]</p><p>[kolom_4van4]</p><p>...</p><p>[/kolom_4van4]</p>'
+			},
+			{
+				title: '3 kolommen [-][-][-]',
+				description: '3 responsive kolommen [-][-][-]',
 				content: '<p>[kolom_1van3]</p><p>...</p><p>[/kolom_1van3]</p><p>[kolom_2van3]</p><p>...</p><p>[/kolom_2van3]</p><p>[kolom_3van3]</p><p>...</p><p>[/kolom_3van3]</p>'
 			},
 			{
-				title: '4 kolommen',
-				description: '4 responsive kolommen',
+				title: '4 kolommen [-][-][-][-]',
+				description: '4 responsive kolommen [-][-][-][-]',
 				content: '<p>[kolom_1van4]</p><p>...</p><p>[/kolom_1van4]</p><p>[kolom_2van4]</p><p>...</p><p>[/kolom_2van4]</p><p>[kolom_3van4]</p><p>...</p><p>[/kolom_3van4]</p><p>[kolom_4van4]</p><p>...</p><p>[/kolom_4van4]</p>'
 			},
 		],
