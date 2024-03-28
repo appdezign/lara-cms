@@ -210,6 +210,15 @@ class SearchController extends Controller
 					$collection = $collection->where('publish', 1);
 				}
 
+				if ($entity_key != 'page') {
+					if ($laraEntity->getSortField()) {
+						$collection = $collection->orderBy($laraEntity->getSortField(), $laraEntity->getSortOrder());
+					}
+					if ($laraEntity->getSortField2nd()) {
+						$collection = $collection->orderBy($laraEntity->getSortField2nd(), $laraEntity->getSortOrder2nd());
+					}
+				}
+
 				$objects = $collection->get();
 
 				// get menu urls
