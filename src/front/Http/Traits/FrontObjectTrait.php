@@ -591,20 +591,94 @@ trait FrontObjectTrait
 	{
 		if ($str) {
 
-			$col_min = 2;
-			$col_max = 4;
+			// See: Lara\Admin\Resources\Views\_scripts\tiny.blade.php
 
-			for ($col = $col_min; $col <= $col_max; $col++) {
+			$columns = [
+				2 => [
+					'colcount' => 2,
+					'cols'     => [
+						[
+							'colnr'    => '1',
+							'colwidth' => 6,
+						],
+						[
+							'colnr'    => '2',
+							'colwidth' => 6,
+						],
+					],
+				],
+				3 => [
+					'colcount' => 3,
+					'cols'     => [
+						[
+							'colnr'    => '1',
+							'colwidth' => 4,
+						],
+						[
+							'colnr'    => '2',
+							'colwidth' => 4,
+						],
+						[
+							'colnr'    => '3',
+							'colwidth' => 4,
+						],
+						[
+							'colnr'    => '12',
+							'colwidth' => 8,
+						],
+						[
+							'colnr'    => '23',
+							'colwidth' => 8,
+						],
+					],
+				],
+				4 => [
+					'colcount' => 4,
+					'cols'     => [
+						[
+							'colnr'    => '1',
+							'colwidth' => 3,
+						],
+						[
+							'colnr'    => '2',
+							'colwidth' => 3,
+						],
+						[
+							'colnr'    => '3',
+							'colwidth' => 3,
+						],
+						[
+							'colnr'    => '4',
+							'colwidth' => 3,
+						],
+						[
+							'colnr'    => '123',
+							'colwidth' => 9,
+						],
+						[
+							'colnr'    => '234',
+							'colwidth' => 9,
+						],
 
-				$varfound = 'sc_col' . $col . '_found';
+					],
+				],
+			];
+
+			$columns = json_decode(json_encode($columns), false);
+
+			foreach ($columns as $cl) {
+
+				$varfound = 'sc_col' . $cl->colcount . '_found';
 				$$varfound = false;
 
-				for ($i = 1; $i <= $col; $i++) {
+				foreach ($cl->cols as $rcol) {
 
-					$var_str = 'pos_str' . $i . $col;
-					$var_end = 'pos_end' . $i . $col;
-					$$var_str = strpos($str, '[kolom_' . $i . 'van' . $col . ']');
-					$$var_end = strpos($str, '[/kolom_' . $i . 'van' . $col . ']');
+					$rcol->colnr = $rcol->colnr;
+
+					$var_str = 'pos_str' . $rcol->colnr . $cl->colcount;
+					$var_end = 'pos_end' . $rcol->colnr . $cl->colcount;
+					$$var_str = strpos($str, '[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']');
+					$$var_end = strpos($str, '[/kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']');
 
 					if ($$var_str !== false || $$var_end !== false) {
 						// shortcode found
@@ -615,22 +689,23 @@ trait FrontObjectTrait
 				if ($$varfound == true) {
 
 					// first remove the <p> tags form the shortcode
-					for ($i = 1; $i <= $col; $i++) {
-						$str = str_replace('<p>[kolom_' . $i . 'van' . $col . ']</p>', '[kolom_' . $i . 'van' . $col . ']',
+					foreach ($cl->cols as $rcol) {
+
+						$str = str_replace('<p>[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']</p>', '[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']',
 							$str);
-						$str = str_replace('<p>[/kolom_' . $i . 'van' . $col . ']</p>',
-							'[/kolom_' . $i . 'van' . $col . ']', $str);
+						$str = str_replace('<p>[/kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']</p>',
+							'[/kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']', $str);
 					}
 
 					// check if shortcode is complete
 
-					$varcomplete = 'sc_col' . $col . '_complete';
+					$varcomplete = 'sc_col' . $cl->colcount . '_complete';
 					$$varcomplete = true;
 
-					for ($i = 1; $i <= $col; $i++) {
+					foreach ($cl->cols as $rcol) {
 
-						$var_str = 'pos_str' . $i . $col;
-						$var_end = 'pos_end' . $i . $col;
+						$var_str = 'pos_str' . $rcol->colnr . $cl->colcount;
+						$var_end = 'pos_end' . $rcol->colnr . $cl->colcount;
 
 						if ($$var_str === false || $$var_end === false) {
 							// shortcode incomplete
@@ -641,20 +716,20 @@ trait FrontObjectTrait
 					if ($$varcomplete = true) {
 
 						// correct shortcode found, start replacing
-						for ($i = 1; $i <= $col; $i++) {
+						foreach ($cl->cols as $rcol) {
 
-							if ($i == 1) {
-								$str = str_replace('[kolom_' . $i . 'van' . $col . ']',
-									'<div class="row"><div class="col-sm-' . (12 / $col) . '">', $str);
+							if ($rcol->colnr == 1) {
+								$str = str_replace('[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']',
+									'<div class="row"><div class="test col-sm-' . $rcol->colwidth . '">', $str);
 							} else {
-								$str = str_replace('[kolom_' . $i . 'van' . $col . ']',
-									'<div class="col-sm-' . (12 / $col) . '">', $str);
+								$str = str_replace('[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']',
+									'<div class="test col-sm-' . $rcol->colwidth . '">', $str);
 							}
 
-							if ($i < $col) {
-								$str = str_replace('[/kolom_' . $i . 'van' . $col . ']', '</div>', $str);
+							if ($rcol->colnr < $cl->colcount) {
+								$str = str_replace('[/kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']', '</div>', $str);
 							} else {
-								$str = str_replace('[/kolom_' . $i . 'van' . $col . ']', '</div></div>', $str);
+								$str = str_replace('[/kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']', '</div></div>', $str);
 							}
 
 						}
@@ -662,9 +737,10 @@ trait FrontObjectTrait
 					} else {
 
 						// incorrect shortcode, remove all shortcodes
-						for ($i = 1; $i <= $col; $i++) {
-							$str = str_replace('[kolom_' . $i . 'van' . $col . ']', '', $str);
-							$str = str_replace('[/kolom_' . $i . 'van' . $col . ']', '', $str);
+						foreach ($cl->cols as $rcol) {
+
+							$str = str_replace('[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']', '', $str);
+							$str = str_replace('[/kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']', '', $str);
 						}
 
 					}
@@ -761,6 +837,5 @@ trait FrontObjectTrait
 
 		return $url;
 	}
-
 
 }
