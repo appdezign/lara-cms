@@ -25,9 +25,9 @@
 						{{ html()->label(_lanq('lara-admin::default.column.seo_description').':', '_seo_description') }}
 					</x-slot>
 					@if($data->object->seo)
-						{{ html()->textarea('_seo_description', old('_seo_description', $data->object->seo->seo_description))->class('form-control')->rows(4)->maxlength(160) }}
+						{{ html()->textarea('_seo_description', old('_seo_description', $data->object->seo->seo_description))->class('form-control')->rows(4)->maxlength($settngz->seo_desc_max_len) }}
 					@else
-						{{ html()->textarea('_seo_description', null)->class('form-control')->rows(4)->maxlength(160) }}
+						{{ html()->textarea('_seo_description', null)->class('form-control')->rows(4)->maxlength($settngz->seo_desc_max_len) }}
 					@endif
 					<div id="seo_description_counter" class="character-counter"></div>
 				</x-formrow>
@@ -37,9 +37,9 @@
 						{{ html()->label(_lanq('lara-admin::default.column.seo_keywords').':', '_seo_keywords') }}
 					</x-slot>
 					@if($data->object->seo)
-						{{ html()->textarea('_seo_keywords', old('_seo_keywords', $data->object->seo->seo_keywords))->class('form-control')->rows(4)->maxlength(200) }}
+						{{ html()->textarea('_seo_keywords', old('_seo_keywords', $data->object->seo->seo_keywords))->class('form-control')->rows(4)->maxlength($settngz->seo_keyw_max_len) }}
 					@else
-						{{ html()->textarea('_seo_keywords', null)->class('form-control')->rows(4)->maxlength(200) }}
+						{{ html()->textarea('_seo_keywords', null)->class('form-control')->rows(4)->maxlength($settngz->seo_keyw_max_len) }}
 					@endif
 					<div id="seo_keywords_counter" class="character-counter"></div>
 
@@ -142,7 +142,7 @@
 
 			$(document).ready(function () {
 
-				var description_max = 160;
+				var description_max = {{ $settngz->seo_desc_max_len }};
 
 				var descr_start_length = $('#_seo_description').val().length;
 				var descr_start_remaining = description_max - descr_start_length;
@@ -161,7 +161,7 @@
 
 			$(document).ready(function () {
 
-				var keywords_max = 200;
+				var keywords_max = {{ $settngz->seo_keyw_max_len }};
 
 				var keyw_start_length = $('#_seo_keywords').val().length;
 				var keyw_start_remaining = keywords_max - keyw_start_length;

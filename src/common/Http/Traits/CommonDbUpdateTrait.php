@@ -10,6 +10,7 @@ use Lara\Common\Models\Entitygroup;
 use Lara\Common\Models\Translation;
 use Lara\Common\Models\Language;
 use Lara\Common\Models\Headertag;
+use Lara\Common\Models\Setting;
 
 use Bouncer;
 
@@ -21,6 +22,7 @@ trait CommonDbUpdateTrait
 	 */
 	private function checkForLaraUpdates()
 	{
+		$this->addSeoToSettings();
 
 		$builds = [
 			'7.1.4',
@@ -32,6 +34,7 @@ trait CommonDbUpdateTrait
 			'8.2.5',
 			'8.2.10',
 			'8.2.11',
+			'8.2.22',
 		];
 
 		// current versions
@@ -128,6 +131,15 @@ trait CommonDbUpdateTrait
 
 			}
 
+			if (in_array('8.2.22', $updates)) {
+
+				$this->updateSeoTable();
+				$this->addSeoToSettings();
+
+				$this->setSetting('system', 'lara_db_version', '8.2.22');
+
+			}
+
 			// Post-update actions
 			$this->clearCache();
 
@@ -139,6 +151,49 @@ trait CommonDbUpdateTrait
 
 		}
 
+	}
+
+	private function addSeoToSettings() {
+
+		$maxLen = 300;
+
+		$seoDesc = Setting::where('key', 'seo_desc_max_len')->first();
+		if(empty($seoDesc)) {
+			Setting::create([
+				'title' => 'Seo Description Max Length',
+				'cgroup' => 'system',
+				'key' => 'seo_desc_max_len',
+				'value' => $maxLen,
+				'locked_by_admin' => 1,
+			]);
+		} else {
+			$seoDesc->value = $maxLen;
+			$seoDesc->save();
+		}
+
+		$seoKeyw = Setting::where('key', 'seo_keyw_max_len')->first();
+		if(empty($seoKeyw)) {
+			Setting::create([
+				'title' => 'Seo Keywords Max Length',
+				'cgroup' => 'system',
+				'key' => 'seo_keyw_max_len',
+				'value' => $maxLen,
+				'locked_by_admin' => 1,
+			]);
+		} else {
+			$seoKeyw->value = $maxLen;
+			$seoKeyw->save();
+		}
+	}
+
+	private function updateSeoTable() {
+
+		Schema::table('lara_object_seo', function (Blueprint $table) {
+			// Change column type to text
+			$table->text('seo_title')->change();
+			$table->text('seo_description')->change();
+			$table->text('seo_keywords')->change();
+		});
 	}
 
 	private function addBackendLanguages()
