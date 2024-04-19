@@ -464,17 +464,13 @@ trait CommonDbUpdateTrait
 					->onDelete('cascade');
 
 				$table->string('title_tag')->nullable();
+				$table->string('subtitle_tag')->nullable();
 				$table->string('list_tag')->nullable();
 
 				$table->timestamps();
 
 				$table->timestamp('locked_at')->nullable();
 				$table->bigInteger('locked_by')->nullable()->unsigned();
-
-				$table->foreign('locked_by')
-					->references('id')
-					->on($tablenames['auth']['users'])
-					->onDelete('cascade');
 
 			});
 		}
