@@ -7,12 +7,16 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 use Lara\Admin\Http\Traits\AdminTrait;
+use Lara\Admin\Http\Traits\AdminDbTrait;
 use Lara\Admin\Http\Traits\AdminAuthTrait;
 use Lara\Admin\Http\Traits\AdminEntityTrait;
 use Lara\Admin\Http\Traits\AdminListTrait;
+use Lara\Admin\Http\Traits\AdminObjectTrait;
 use Lara\Admin\Http\Traits\AdminViewTrait;
 
 use Lara\Admin\Http\Traits\AdminAnalyticsTrait;
@@ -27,6 +31,9 @@ use Illuminate\Support\Facades\Route;
 
 use Jenssegers\Agent\Agent;
 
+use Lara\Common\Models\Entity;
+use Lara\Common\Models\Entitygroup;
+use Lara\Common\Models\Page;
 use LaravelLocalization;
 
 use Bouncer;
@@ -39,9 +46,11 @@ class DashboardController extends Controller
 {
 
 	use AdminTrait;
+	use AdminDbTrait;
 	use AdminAuthTrait;
 	use AdminEntityTrait;
 	use AdminListTrait;
+	use AdminObjectTrait;
 	use AdminViewTrait;
 
 	use AdminTranslationTrait;
@@ -234,6 +243,123 @@ class DashboardController extends Controller
 		return view($viewfile, [
 			'data' => $this->data,
 		]);
+
+	}
+
+	public function purge(Request $request)
+	{
+		if (!Auth::user()->isAn('administrator')) {
+			return response()->view('lara-admin::errors.405', [], 405);
+		}
+
+		$this->data->force = $this->getRequestParam($request, 'force');
+
+		$this->data->purgeable = $this->getPurgeableObjects();
+
+		// get view file and partials
+		$viewfile = $this->getViewFile($this->entity);
+
+		// pass all variables to the view
+		return view($viewfile, [
+			'data' => $this->data,
+		]);
+
+	}
+
+	public function purgeprocess(Request $request)
+	{
+
+
+		$purgeable = $this->getPurgeableObjects();
+
+
+		foreach($purgeable as $entGroup => $ents) {
+
+			foreach($ents as $ent) {
+
+				$objects = $ent['objects'];
+
+				// get full Lara Entity
+				$modelclass =$ent['modelClass'];
+				$lara = $this->getEntityVarByModel($modelclass);
+				$entity = new $lara;
+
+				foreach($objects as $object) {
+					$this->deleteEntityObject($entity, $object, true);
+				}
+			}
+		}
+
+
+
+		// menu
+		DB::table('lara_menu_menu_items')->whereNotNull('parent_id')->delete();
+		DB::table('lara_object_files')->delete();
+		DB::table('lara_object_images')->delete();
+		DB::table('lara_object_opengraph')->delete();
+		DB::table('lara_object_pageables')->delete();
+		DB::table('lara_object_related')->delete();
+		DB::table('lara_object_sync')->delete();
+		DB::table('lara_object_taggables')->delete();
+		DB::table('lara_object_videofiles')->delete();
+		DB::table('lara_object_videos')->delete();
+
+		// get Homepages, so we can exclude them
+		$homepages = Page::where('ishome', 1)->pluck('id')->toArray();
+
+		// Layout
+		DB::table('lara_object_layout')->where('entity_type', 'Lara\Common\Models\Page')->whereNotIn('entity_id', $homepages)->delete();
+
+		// SEO
+		DB::table('lara_object_seo')->where('entity_type', 'Lara\Common\Models\Page')->whereNotIn('entity_id', $homepages)->delete();
+		DB::table('lara_object_seo')->where('entity_type', '!=', 'Lara\Common\Models\Page')->delete();
+
+		// Tags
+		DB::table('lara_object_tags')->whereNotNull('parent_id')->where('entity_key', '!=', 'slider')->delete();
+
+		flash('All demo content has been successfully deleted')->success();
+
+
+		return redirect()->route($this->entity->getPrefix() . '.dashboard.purge');
+
+	}
+
+	private function getPurgeableObjects() {
+
+		$results = $this->makeNewObject();
+
+		$purgeableGroups = ['page', 'entity', 'block', 'form'];
+
+		foreach($purgeableGroups as $groupKey) {
+			$result = array();
+			$entityGroup = Entitygroup::where('key', $groupKey)->first();
+			if ($entityGroup) {
+				$entities = Entity::where('group_id', $entityGroup->id)->get();
+				foreach ($entities as $ent) {
+					$entKey = $ent->entity_key;
+					$modelclass = $ent->entity_model_class;
+
+					if($entKey == 'page') {
+						$objects = $modelclass::where('ishome', 0)->where('cgroup', 'page')->whereNotIn('slug', ['404','privacy'])->withTrashed()->get();
+					} else {
+						$objects = $modelclass::withTrashed()->get();
+					}
+
+					$objectCount = $objects->count();
+
+					$result[] = [
+						'entityKey'   => $entKey,
+						'modelClass'   => $modelclass,
+						'objectCount' => $objectCount,
+						'objects'     => $objects,
+					];
+
+				}
+			}
+			$results->$groupKey = $result;
+		}
+
+		return $results;
 
 	}
 

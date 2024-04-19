@@ -42,6 +42,8 @@ if (!App::runningInConsole() && !config('lara.needs_setup')) {
 			Route::post('dashboard/getrefresh', 'Dashboard\DashboardController@getrefresh')->name('admin.dashboard.getrefresh');
 			Route::get('dashboard/db', 'Dashboard\DashboardController@dbshow')->name('admin.dashboard.dbshow');
 			Route::post('dashboard/db', 'Dashboard\DashboardController@dbcheck')->name('admin.dashboard.dbcheck');
+			Route::get('dashboard/purge', 'Dashboard\DashboardController@purge')->name('admin.dashboard.purge');
+			Route::post('dashboard/purgeprocess', 'Dashboard\DashboardController@purgeprocess')->name('admin.dashboard.purgeprocess');
 
 			// Cache Manager
 			Route::get('cache', 'Misc\CacheController@index')->name('admin.cache.index');
