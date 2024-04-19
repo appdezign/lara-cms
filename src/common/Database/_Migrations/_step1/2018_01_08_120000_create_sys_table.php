@@ -113,14 +113,15 @@ class CreateSysTable extends Migration
 
 		});
 
-		Schema::create($tablenames['sys']['headertags'], function (Blueprint $table) {
+		Schema::create($tablenames['sys']['headertags'], function (Blueprint $table) use ($tablenames) {
 
 			$table->bigIncrements('id');
 
 			$table->string('title')->nullable();
 			$table->string('cgroup')->nullable();
 
-			$table->foreign('template_id')
+			$table->bigInteger('templatefile_id')->unsigned();
+			$table->foreign('templatefile_id')
 				->references('id')
 				->on($tablenames['sys']['templatefiles'])
 				->onDelete('cascade');
@@ -133,11 +134,6 @@ class CreateSysTable extends Migration
 
 			$table->timestamp('locked_at')->nullable();
 			$table->bigInteger('locked_by')->nullable()->unsigned();
-
-			$table->foreign('locked_by')
-				->references('id')
-				->on($tablenames['auth']['users'])
-				->onDelete('cascade');
 
 		});
 
