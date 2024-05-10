@@ -46,7 +46,7 @@ trait FrontObjectTrait
 			$item->slug = $object->slug;
 
 			// check if related Item is a Doc entity
-			if ($rel->related_entity_key == 'doc') {
+			if ($rel->related_entity_key == 'doc' && !config('lara-front.skip_direct_download_related_docs')) {
 				$doc = \Eve\Models\Doc::find($rel->related_object_id);
 				if ($doc && $doc->hasFiles()) {
 					$item->target = '_blank';
@@ -716,14 +716,17 @@ trait FrontObjectTrait
 					if ($$varcomplete = true) {
 
 						// correct shortcode found, start replacing
+
+						$gutterClass = config('lara-front.bootstrap_gutter_class');
+
 						foreach ($cl->cols as $rcol) {
 
 							if ($rcol->colnr == 1) {
 								$str = str_replace('[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']',
-									'<div class="row"><div class="test col-sm-' . $rcol->colwidth . '">', $str);
+									'<div class="row '. $gutterClass .'"><div class="col-sm-' . $rcol->colwidth . '">', $str);
 							} else {
 								$str = str_replace('[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']',
-									'<div class="test col-sm-' . $rcol->colwidth . '">', $str);
+									'<div class="col-sm-' . $rcol->colwidth . '">', $str);
 							}
 
 							if ($rcol->colnr < $cl->colcount) {

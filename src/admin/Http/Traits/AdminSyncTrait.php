@@ -24,7 +24,7 @@ trait AdminSyncTrait
 
 		foreach ($entities as $entity) {
 
-			$laraClass = $this->getEntityVarByKey($entity->entity_key);
+			$laraClass = $this->getSyncEntityVarByKey($entity->entity_key);
 			$laraEntity = new $laraClass;
 
 			if ($laraEntity->hasSync()) {
@@ -150,6 +150,21 @@ trait AdminSyncTrait
 			$object->media()->save($newMediaObject);
 
 		}
+
+	}
+
+	private function getSyncEntityVarByKey(string $entityKey)
+	{
+
+		$laraClass = (ucfirst($entityKey) . 'Entity');
+
+		if (class_exists('\\Lara\\Common\\Lara\\' . $laraClass)) {
+			$laraClass = '\\Lara\\Common\\Lara\\' . $laraClass;
+		} else {
+			$laraClass = '\\Eve\\Lara\\' . $laraClass;
+		}
+
+		return $laraClass;
 
 	}
 

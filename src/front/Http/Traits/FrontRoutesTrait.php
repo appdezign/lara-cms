@@ -108,7 +108,7 @@ trait FrontRoutesTrait
 
 			if ($object->publish == 1) {
 
-				$menuitem = Menuitem::where('type', 'entity')
+				$menuitem = Menuitem::langIs($language)->where('type', 'entity')
 					->where('entity_id', $entity->id)
 					->first();
 

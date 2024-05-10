@@ -202,7 +202,12 @@ trait AdminMenuTrait
 		$object->menu_id = $menuId;
 		$object->title = $request->get('new_title');
 		$object->type = $request->get('new_type');
-		$object->publish = 0;
+
+		if(config('app.env') == 'production') {
+			$object->publish = 0;
+		} else {
+			$object->publish = 1;
+		}
 
 		$error = false;
 
@@ -317,7 +322,9 @@ trait AdminMenuTrait
 			$object->appendToNode($parent)->save();
 
 			// add language to slug
-			$this->updateLanguageSlug($entity, $object);
+			if(config('lara.multi_language_slugs_in_menu')) {
+				$this->updateLanguageSlug($entity, $object);
+			}
 
 			return $object->id;
 
@@ -434,8 +441,12 @@ trait AdminMenuTrait
 
 				$ent = $entityView->entity;
 
+				$modelClass = $ent->entity_model_class;
+				$lara = $this->getEntityVarByModel($modelClass);
+				$entity = new $lara;
+
 				// find or create module page
-				$this->findOrCreateModulePageBySlug($clanguage, $ent, $entityView);
+				$this->findOrCreateModulePageBySlug($clanguage, $entity, $entityView);
 
 				$object->entity_id = $ent->id;
 
