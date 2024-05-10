@@ -384,6 +384,11 @@ return [
 			'type'  => 'text',
 			'check' => true,
 		],
+		'color'         => [
+			'name'  => 'color',
+			'type'  => 'string',
+			'check' => true,
+		],
 		'custom'        => [
 			'name'  => 'custom',
 			'type'  => 'text',

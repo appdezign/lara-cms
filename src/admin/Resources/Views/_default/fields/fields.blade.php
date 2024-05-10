@@ -158,6 +158,14 @@
 							}) }}
 					@endif
 
+					@if($cvar->fieldtype == 'color')
+						{{ html()->text($cvar->fieldname, null)->class('form-control')->data('jscolor', '{}')
+							->if($cvardisabled, function ($el) {
+								return $el->disabled();
+							}) }}
+					@endif
+
+
 					{{-- add hidden field, if field is disabled --}}
 					@if($cvardisabled)
 						{{ html()->hidden($cvar->fieldname, null) }}
