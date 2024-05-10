@@ -216,7 +216,7 @@ class EntityBaseModel extends Model
 	/**
 	 * @return bool
 	 */
-	public function heroIsFeatured()
+	public function heroIsFeatured() : bool
 	{
 		$hero = $this->media->where('ishero', 1)->first();
 
@@ -224,6 +224,31 @@ class EntityBaseModel extends Model
 			$featured = $this->media->where('featured', 1)->first();
 			if ($featured) {
 				if ($hero->id == $featured->id) {
+					return true;
+				} else {
+					return false;
+				}
+
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function iconIsFeatured() : bool
+	{
+		$icon = $this->media->where('isicon', 1)->first();
+
+		if ($icon) {
+			$featured = $this->media->where('featured', 1)->first();
+			if ($featured) {
+				if ($icon->id == $featured->id) {
 					return true;
 				} else {
 					return false;

@@ -33,7 +33,7 @@
 
 	<div class="col-5">
 		<div class="search">
-			@if($entity->hasSearch() && $data->filters->filter === false)
+			@if($entity->hasSearch())
 				@include('lara-admin::_partials.search')
 			@else
 				&nbsp;

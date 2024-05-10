@@ -130,8 +130,14 @@ class ErrorController extends Controller
 		// get params
 		$this->data->params = $this->getFrontParams($this->entity, $request);
 
+		if(config('lara.is_multi_language')) {
+			$errorSlug = $errorId . '-' . $this->language;
+		} else {
+			$errorSlug = $errorId;
+		}
+
 		$errorPage = Page::langIs($this->language)
-			->where('slug', $errorId)
+			->where('slug', $errorSlug)
 			->first();
 
 		if ($errorPage) {
@@ -142,9 +148,11 @@ class ErrorController extends Controller
 
 			if ($errorId == '404') {
 				if ($this->language == 'nl') {
-					$title = 'Oeps, de pagina die u zoekt, is niet gevonden';
+					$title = 'Oeps';
+					$body = 'De pagina die u zoekt, is niet gevonden';
 				} else {
-					$title = 'Oops, the page you requested was not found';
+					$title = 'Oops';
+					$body = 'The page you requested was not found';
 				}
 			} else {
 				$title = 'Oops, error ' . $errorId;
@@ -156,8 +164,8 @@ class ErrorController extends Controller
 					'user_id'  => $user->id,
 					'language' => $this->language,
 					'title'    => $title,
-					'slug'     => $errorId,
-					'body'     => '',
+					'slug'     => $errorSlug,
+					'body'     => $body,
 					'cgroup'   => 'page',
 				];
 				$entity = Entity::where('entity_key', 'page')->first();
