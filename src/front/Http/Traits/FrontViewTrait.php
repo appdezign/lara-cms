@@ -152,7 +152,11 @@ trait FrontViewTrait
 						$offsetcols = '';
 					}
 
-					$grid->gridColumns = $gridcols . $offsetcols;
+					if ($colcount == 8 && $offset == 2) {
+						$grid->gridColumns = 'col-xl-' . $colcount . ' offset-xl-' . $offset . ' col-lg-10 offset-lg-1';
+					} else {
+						$grid->gridColumns = $gridcols . $offsetcols;
+					}
 
 				}
 

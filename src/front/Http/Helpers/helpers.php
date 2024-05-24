@@ -78,7 +78,7 @@ if (!function_exists('in_array_r')) {
 if (!function_exists('_header')) {
 
 	/**
-	 * @param string $content
+	 * @param string|null $content
 	 * @param string|null $class
 	 * @param string|null $tag
 	 * @param int|null $id
@@ -86,8 +86,12 @@ if (!function_exists('_header')) {
 	 * @param string|null $linkClass
 	 * @return string
 	 */
-	function _header(string $type, string $content, string|null $class, string $tag = null, int $id = null, string $link = null, string $linkClass = null, string $style = null)
+	function _header(string $type, string|null $content, string|null $class, string $tag = null, int $id = null, string $link = null, string $linkClass = null, string $style = null)
 	{
+
+		if(empty($content)) {
+			return null;
+		}
 
 		if(empty($tag)) {
 			$tag = 'h3';
