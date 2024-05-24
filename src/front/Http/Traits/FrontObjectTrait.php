@@ -110,10 +110,10 @@ trait FrontObjectTrait
 						['slug' => $object->slug]);
 				} elseif (Route::has('contenttag.' . $entity_key . '.' . $parentmethod . '.' . $method)) {
 					$route = route('contenttag.' . $entity_key . '.' . $parentmethod . '.' . $method,
-						['slug' => $object->slug]);
+						['id' => $object->id]);
 				} else {
 					$route = route('content.' . $entity_key . '.' . $parentmethod . '.' . $method,
-						['slug' => $object->slug]);
+						['id' => $object->id]);
 				}
 
 			} else {
@@ -717,16 +717,17 @@ trait FrontObjectTrait
 
 						// correct shortcode found, start replacing
 
-						$gutterClass = config('lara-front.bootstrap_gutter_class');
+						$gutterClass = config('lara-front.shortcode.bootstrap_gutter_class');
+						$breakpoint = config('lara-front.shortcode.bootstrap_breakpoint');
 
 						foreach ($cl->cols as $rcol) {
 
 							if ($rcol->colnr == 1) {
 								$str = str_replace('[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']',
-									'<div class="row '. $gutterClass .'"><div class="col-sm-' . $rcol->colwidth . '">', $str);
+									'<div class="row '. $gutterClass .'"><div class="col-' . $breakpoint . '-' . $rcol->colwidth . '">', $str);
 							} else {
 								$str = str_replace('[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']',
-									'<div class="col-sm-' . $rcol->colwidth . '">', $str);
+									'<div class="col-' . $breakpoint . '-' . $rcol->colwidth . '">', $str);
 							}
 
 							if ($rcol->colnr < $cl->colcount) {

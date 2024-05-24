@@ -201,7 +201,7 @@ class EntityBaseModel extends Model
 	 */
 	public function hasGallery()
 	{
-		$count = $this->media->where('featured', 0)->where('ishero', 0)->count();
+		$count = $this->media->where('featured', 0)->where('ishero', 0)->where('isicon', 0)->count();
 		return boolval($count);
 	}
 
@@ -210,7 +210,7 @@ class EntityBaseModel extends Model
 	 */
 	public function getGalleryAttribute()
 	{
-		return $this->media->where('hide_in_gallery', 0);
+		return $this->media->where('hide_in_gallery', 0)->where('isicon', 0);
 	}
 
 	/**

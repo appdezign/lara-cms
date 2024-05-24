@@ -163,6 +163,7 @@ class SearchController extends Controller
 				->menuIs($mainMenuID)
 				->where('type', 'page')
 				->orWhere('type', 'entity')
+				->where('publish', 1)
 				->pluck('entity_id');
 
 			foreach ($entities as $entity_id) {
