@@ -323,12 +323,7 @@ class BaseFrontController extends Controller
 		}
 
 		// replace shortcodes
-		if ($this->entity->hasLead()) {
-			$this->data->object->lead = $this->replaceShortcodes($this->data->object->lead);
-		}
-		if ($this->entity->hasBody()) {
-			$this->data->object->body = $this->replaceShortcodes($this->data->object->body);
-		}
+		$this->data->object = $this->replaceAllSortCodes($this->entity, $this->data->object);
 
 		// related objects (from other entities)
 		if ($this->entity->hasRelated()) {

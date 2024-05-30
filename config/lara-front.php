@@ -125,4 +125,11 @@ return [
 		'loginurl' => '/',
 	],
 
+	'shortcode' => [
+		'bootstrap_gutter_class' => 'gx-48',
+		'bootstrap_breakpoint' => 'md',
+	],
+
+	'skip_direct_download_related_docs' => true,
+
 ];
