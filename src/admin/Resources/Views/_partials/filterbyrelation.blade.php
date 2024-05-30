@@ -2,7 +2,7 @@
 
 $filtermodelclass = $entity->getRelationFilterModelclass();
 
-$filterobjects = $filtermodelclass::pluck('title', 'id');
+$filterobjects = $filtermodelclass::langIs($clanguage)->pluck('title', 'id');
 
 ?>
 

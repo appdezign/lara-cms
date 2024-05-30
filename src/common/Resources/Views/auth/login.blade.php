@@ -47,7 +47,7 @@
 
 				<div class="d-flex justify-content-center align-items-center mb-12">
 					<img src="{{ asset('assets/admin/img/lara8-logo.svg') }}" width="48" alt="Lara" class="me-4"/>
-					<h1 class="m-0" class="lara-admin-logo-title">Lara 8</h1>
+					<h1 class="m-0" class="lara-admin-logo-title">Lara {{ config('lara.lara_maj_ver') }}</h1>
 				</div>
 
 				@if($updates->lara || $updates->translation || $updates->eve)

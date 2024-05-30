@@ -234,6 +234,11 @@ class SearchController extends Controller
 
 			}
 
+		} else {
+
+			$this->data->keywords = null;
+			$this->data->results = [];
+
 		}
 
 		// get language versions

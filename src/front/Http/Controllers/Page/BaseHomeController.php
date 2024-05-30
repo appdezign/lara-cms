@@ -134,12 +134,7 @@ class BaseHomeController extends Controller
 		$this->data->object = $this->getHomePage($this->language);
 
 		// replace shortcodes
-		if ($this->entity->hasLead()) {
-			$this->data->object->lead = $this->replaceShortcodes($this->data->object->lead);
-		}
-		if ($this->entity->hasBody()) {
-			$this->data->object->body = $this->replaceShortcodes($this->data->object->body);
-		}
+		$this->data->object = $this->replaceAllSortCodes($this->entity, $this->data->object);
 
 		// Use Page object for Intro (Hero)
 		$this->data->page = $this->data->object;

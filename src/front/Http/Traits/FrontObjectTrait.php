@@ -29,6 +29,8 @@ trait FrontObjectTrait
 
 		$relatedItems = Related::where('entity_key', $entity_key)
 			->where('object_id', $id)
+			->orderBy('related_entity_key')
+			->orderBy('related_object_id', 'DESC')
 			->get();
 
 		$related = array();
@@ -578,6 +580,32 @@ trait FrontObjectTrait
 		}
 
 		return $og;
+
+	}
+
+	/**
+	 * @param $entity
+	 * @param $object
+	 * @return void
+	 */
+	private function replaceAllSortCodes($entity, $object) {
+
+		if ($entity->hasLead()) {
+			$object->lead = $this->replaceShortcodes($object->lead);
+		}
+		if ($entity->hasBody()) {
+			$object->body = $this->replaceShortcodes($object->body);
+		}
+
+		$mceFields = $entity->getCustomColumns()->whereIn('fieldtype', ['mcefull', 'mcemin']);
+		foreach ($mceFields as $mceField) {
+			$mceFieldName = $mceField->fieldname;
+			if (!empty($object->$mceFieldName)) {
+				$object->$mceFieldName = $this->replaceShortcodes($object->$mceFieldName);
+			}
+		}
+
+		return $object;
 
 	}
 
