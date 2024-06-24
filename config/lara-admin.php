@@ -12,7 +12,12 @@ return [
 		'cgroups_with_lead' => [
 			'email',
 		],
-		'templates_with_lead' => [],
+		'templates_with_lead' => [
+			'featured_left',
+			'featured_left_responsive',
+			'featured_right',
+			'featured_right_responsive',
+		],
 	],
 
 	'settings' => [

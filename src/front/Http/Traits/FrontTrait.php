@@ -317,7 +317,11 @@ trait FrontTrait
 	private function getGlobalWidgets($language)
 	{
 
-		$widgets = Larawidget::where('language', $language)->where('isglobal', 1)->get();
+		$widgets = Larawidget::where('language', $language)
+			->where('isglobal', 1)
+			->orderBy('hook')
+			->orderBy('sortorder')
+			->get();
 
 		return $widgets;
 
