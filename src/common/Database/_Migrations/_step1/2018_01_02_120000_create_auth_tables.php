@@ -1,17 +1,21 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
 use Silber\Bouncer\Database\Models;
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+return new class extends Migration
+{
 
-class CreateAuthTables extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up() {
+	public function up(): void
+	{
 
 		$tablenames = config('lara-common.database');
 
@@ -148,7 +152,8 @@ class CreateAuthTables extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
+	public function down(): void
+	{
 
 		$tablenames = config('lara-common.database');
 
@@ -166,4 +171,4 @@ class CreateAuthTables extends Migration {
 
 	}
 
-}
+};

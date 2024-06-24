@@ -97,7 +97,7 @@ if (!App::runningInConsole() && !config('lara.needs_setup')) {
 
 				if($ekey == 'tag') {
 					Route::get($ekey . '/{id}/taggable', $prfx . '\\' . $ecntr . '@taggable')->name('admin.' . $ekey . '.taggable');
-					Route::post($ekey . '/{id}/savetaggable', $prfx . '\\' . $ecntr . '@savetaggable')->name('admin.' . $ekey . '.savetaggable');
+					Route::patch($ekey . '/{id}/savetaggable', $prfx . '\\' . $ecntr . '@savetaggable')->name('admin.' . $ekey . '.savetaggable');
 				}
 
 				Route::resource($ekey, $prfx . '\\' . $ecntr, ['as' => 'admin', 'parameters' => [$ekey => 'id']]);

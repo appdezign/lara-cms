@@ -47,9 +47,24 @@ class MailConfirmation extends Mailable {
 	 */
 	public function build() {
 
-		return $this->from($this->maildata->from->email, $this->maildata->from->name)
-			->subject($this->maildata->subject)
-			->view($this->maildata->view);
+		if(property_exists($this->maildata, 'attachment') & !empty($this->maildata->attachment)) {
+
+			$attach = $this->maildata->attachment;
+
+			return $this->from($this->maildata->from->email, $this->maildata->from->name)
+				->subject($this->maildata->subject)
+				->view($this->maildata->view)->attach($attach->filepath, [
+					'as' => $attach->filename,
+					'mime' => $attach->mimetype,
+				]);
+
+		} else {
+			return $this->from($this->maildata->from->email, $this->maildata->from->name)
+				->subject($this->maildata->subject)
+				->view($this->maildata->view);
+		}
+
+
 
 	}
 }
