@@ -11,6 +11,7 @@ use Lara\Common\Models\Translation;
 use Lara\Common\Models\Language;
 use Lara\Common\Models\Headertag;
 use Lara\Common\Models\Setting;
+use Lara\Common\Models\Larawidget;
 
 use Bouncer;
 
@@ -22,7 +23,6 @@ trait CommonDbUpdateTrait
 	 */
 	private function checkForLaraUpdates()
 	{
-		$this->addSeoToSettings();
 
 		$builds = [
 			'7.1.4',
@@ -35,6 +35,7 @@ trait CommonDbUpdateTrait
 			'8.2.10',
 			'8.2.11',
 			'8.2.22',
+			'8.2.30',
 		];
 
 		// current versions
@@ -140,6 +141,14 @@ trait CommonDbUpdateTrait
 
 			}
 
+			if (in_array('8.2.30', $updates)) {
+
+				$this->updateLaraWidgetTemplateField();
+
+				$this->setSetting('system', 'lara_db_version', '8.2.30');
+
+			}
+
 			// Post-update actions
 			$this->clearCache();
 
@@ -151,6 +160,31 @@ trait CommonDbUpdateTrait
 
 		}
 
+	}
+
+	private function updateLaraWidgetTemplateField() {
+		$entity = Entity::where('entity_key', 'larawidget')->first();
+		if($entity) {
+			$customcol = $entity->customcolumns->where('fieldname', 'template')->first();
+			if($customcol) {
+
+				// change column type to custom in the builder
+				$customcol->fieldtype = 'custom';
+				$customcol->save();
+
+				// change column type to custom in the database
+				Schema::table('lara_blocks_larawidgets', function (Blueprint $table) {
+					$table->text('template')->change();
+				});
+
+				// set empty template values to 'default'
+				$widgets = Larawidget::where('template', '')->orWhereNull('template')->get();
+				foreach($widgets as $widget) {
+					$widget->template = 'default';
+					$widget->save();
+				}
+			}
+		}
 	}
 
 	private function addSeoToSettings() {

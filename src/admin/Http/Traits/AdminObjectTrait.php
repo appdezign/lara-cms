@@ -5,7 +5,10 @@ namespace Lara\Admin\Http\Traits;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
 use Lara\Common\Models\Setting;
+
 use Spatie\Geocoder\Facades\Geocoder;
 
 use Qirolab\Theme\Theme;
@@ -646,6 +649,56 @@ trait AdminObjectTrait
 
 	}
 
+	/**
+	 * @param $type
+	 * @return array
+	 */
+	private function getBladeTemplates($object) : array {
+
+		$themepath = config('theme.active');
+		$widgetpath = 'laracms/themes/' . $themepath . '/views/_widgets/lara/';
+
+		if($object->type == 'module') {
+
+			$bladepath = $widgetpath . 'entity';
+			$files = Storage::disk('lara')->files($bladepath);
+
+			$fileArray = array();
+
+			foreach($files as $file) {
+				$filename = basename($file);
+				$pos = strrpos($filename, '.blade.php');
+				if($pos !== false) {
+					$tname = substr($filename, 0,$pos);
+					if(str_ends_with($tname, $object->relentkey)) {
+						$fileArray[] = substr($tname, 0, strlen($tname) - strlen($object->relentkey) - 1);
+					}
+				}
+			}
+
+		} else {
+
+			$bladepath = $widgetpath . 'text';
+			$files = Storage::disk('lara')->files($bladepath);
+
+			$fileArray = array();
+
+			foreach($files as $file) {
+				$filename = basename($file);
+				$pos = strrpos($filename, '.blade.php');
+				if($pos !== false) {
+					$tname = substr($filename, 0,$pos);
+					if(str_starts_with($tname, $object->type)) {
+						$val = substr($tname, strlen($object->type) + 1);
+						$fileArray[$val] = $val;
+					}
+				}
+			}
+		}
+
+		return $fileArray;
+
+	}
 
 
 }
