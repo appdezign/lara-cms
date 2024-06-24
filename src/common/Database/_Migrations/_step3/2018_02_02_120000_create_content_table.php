@@ -1,14 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 use Lara\Admin\Http\Traits\AdminBuilderTrait;
 
 use Lara\Common\Models\Entity;
 
-class CreateContentTable extends Migration {
+return new class extends Migration
+{
 
 	use AdminBuilderTrait;
 
@@ -17,7 +18,8 @@ class CreateContentTable extends Migration {
 	 *
 	 * @return void
 	 */
-	public function up() {
+	public function up(): void
+	{
 
 		$tablenames = config('lara-common.database');
 
@@ -87,7 +89,8 @@ class CreateContentTable extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
+	public function down(): void
+	{
 
 		$tablenames = config('lara-common.database');
 
@@ -108,4 +111,5 @@ class CreateContentTable extends Migration {
 		Schema::enableForeignKeyConstraints();
 
 	}
-}
+
+};
