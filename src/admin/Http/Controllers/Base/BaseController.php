@@ -293,6 +293,11 @@ class BaseController extends Controller
 		// get record
 		$this->data->object = $this->modelClass::findOrFail($id);
 
+		// get templates for Dynamic Widgets
+		if($this->entity->getEntityKey() == 'larawidget') {
+			$this->data->widgetTemplates = $this->getBladeTemplates($this->data->object);
+		}
+
 		// check Image Positions
 		if ($this->entity->hasImages()) {
 			if ($this->checkImagePosition($this->entity, $this->data->object)) {
