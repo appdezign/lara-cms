@@ -658,12 +658,12 @@ trait AdminObjectTrait
 		$themepath = config('theme.active');
 		$widgetpath = 'laracms/themes/' . $themepath . '/views/_widgets/lara/';
 
+		$fileArray = array();
+
 		if($object->type == 'module') {
 
 			$bladepath = $widgetpath . 'entity';
 			$files = Storage::disk('lara')->files($bladepath);
-
-			$fileArray = array();
 
 			foreach($files as $file) {
 				$filename = basename($file);
@@ -681,8 +681,6 @@ trait AdminObjectTrait
 			$bladepath = $widgetpath . 'text';
 			$files = Storage::disk('lara')->files($bladepath);
 
-			$fileArray = array();
-
 			foreach($files as $file) {
 				$filename = basename($file);
 				$pos = strrpos($filename, '.blade.php');
@@ -699,7 +697,6 @@ trait AdminObjectTrait
 		return $fileArray;
 
 	}
-
 
 }
 
