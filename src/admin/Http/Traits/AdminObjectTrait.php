@@ -650,45 +650,54 @@ trait AdminObjectTrait
 	}
 
 	/**
-	 * @param $type
-	 * @return array
+	 * @param $object
+	 * @param $default
+	 * @return array|string[]
 	 */
-	private function getBladeTemplates($object) : array {
+	private function getBladeTemplates($object, bool $default = false): array
+	{
 
-		$themepath = config('theme.active');
-		$widgetpath = 'laracms/themes/' . $themepath . '/views/_widgets/lara/';
+		if ($default) {
 
-		$fileArray = array();
-
-		if($object->type == 'module') {
-
-			$bladepath = $widgetpath . 'entity';
-			$files = Storage::disk('lara')->files($bladepath);
-
-			foreach($files as $file) {
-				$filename = basename($file);
-				$pos = strrpos($filename, '.blade.php');
-				if($pos !== false) {
-					$tname = substr($filename, 0,$pos);
-					if(str_ends_with($tname, $object->relentkey)) {
-						$fileArray[] = substr($tname, 0, strlen($tname) - strlen($object->relentkey) - 1);
-					}
-				}
-			}
+			$fileArray = ['default' => 'default'];
 
 		} else {
 
-			$bladepath = $widgetpath . 'text';
-			$files = Storage::disk('lara')->files($bladepath);
+			$themepath = config('theme.active');
+			$widgetpath = 'laracms/themes/' . $themepath . '/views/_widgets/lara/';
 
-			foreach($files as $file) {
-				$filename = basename($file);
-				$pos = strrpos($filename, '.blade.php');
-				if($pos !== false) {
-					$tname = substr($filename, 0,$pos);
-					if(str_starts_with($tname, $object->type)) {
-						$val = substr($tname, strlen($object->type) + 1);
-						$fileArray[$val] = $val;
+			$fileArray = array();
+
+			if ($object->type == 'module') {
+
+				$bladepath = $widgetpath . 'entity';
+				$files = Storage::disk('lara')->files($bladepath);
+
+				foreach ($files as $file) {
+					$filename = basename($file);
+					$pos = strrpos($filename, '.blade.php');
+					if ($pos !== false) {
+						$tname = substr($filename, 0, $pos);
+						if (str_ends_with($tname, $object->relentkey)) {
+							$fileArray[] = substr($tname, 0, strlen($tname) - strlen($object->relentkey) - 1);
+						}
+					}
+				}
+
+			} else {
+
+				$bladepath = $widgetpath . 'text';
+				$files = Storage::disk('lara')->files($bladepath);
+
+				foreach ($files as $file) {
+					$filename = basename($file);
+					$pos = strrpos($filename, '.blade.php');
+					if ($pos !== false) {
+						$tname = substr($filename, 0, $pos);
+						if (str_starts_with($tname, $object->type)) {
+							$val = substr($tname, strlen($object->type) + 1);
+	 						$fileArray[$val] = $val;
+						}
 					}
 				}
 			}
