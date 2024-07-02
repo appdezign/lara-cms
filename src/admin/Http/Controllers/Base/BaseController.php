@@ -200,6 +200,11 @@ class BaseController extends Controller
 		// create empty object
 		$this->data->object = new $this->modelClass;
 
+		// get templates for Dynamic Widgets
+		if($this->entity->getEntityKey() == 'larawidget') {
+			$this->data->widgetTemplates = $this->getBladeTemplates($this->data->object, true);
+		}
+
 		// get view file and partials
 		$this->data->partials = $this->getPartials($this->entity);
 		$viewfile = $this->getViewFile($this->entity);
