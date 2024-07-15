@@ -301,8 +301,8 @@ class UsersController extends Controller
 		// lock record
 		$this->data->object->lockRecord();
 
-		// get user role
-		$this->data->objectrole = $this->data->object->roles()->value('name');
+		// get user roles
+		$this->data->objectroles = $this->data->object->roles()->pluck('name', 'id')->toArray();
 
 		// get all roles
 		$this->data->roles = Role::where('level', '<=', $mylevel)->orderBy('level', 'desc')->get();
@@ -350,13 +350,12 @@ class UsersController extends Controller
 
 
 		/**
-		 * Save role.
-		 * We have a many-to-many relationship (user to role),
-		 * but for now we allow only one role per user.
-		 * The form uses radio buttons instead of checkboxes.*
+		 * Save roles.
+		 * Bouncer allows for multiple roles
 		 */
 
-		$newRoles = (array)$request['_role_name'];
+		$newRoles = (array)$request['_role_names'];
+
 		foreach ($object->roles as $role) {
 			$object->retract($role);
 		}

@@ -102,7 +102,7 @@
 						{{ html()->label(ucfirst($role->name), $role->name) }}
 					</x-slot>
 					<div class="form-check">
-						{{ html()->radio('_role_name', old('role_name', $data->objectrole) == $role->name, $role->name)->id('_role_name_'.$role->id)->class('form-check-input') }}
+						{{ html()->checkbox('_role_names[]', in_array($role->name, $data->objectroles), $role->name)->class('form-check-input') }}
 					</div>
 				</x-formrow>
 

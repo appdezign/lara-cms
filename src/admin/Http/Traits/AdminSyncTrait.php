@@ -121,7 +121,7 @@ trait AdminSyncTrait
 	private function saveRemoteMedia(string $remote_url, string $entityKey, object $object, object $remoteImg)
 	{
 
-		$laraClass = $this->getEntityVarByKey($entityKey);
+		$laraClass = $this->getSyncEntityVarByKey($entityKey);
 		$laraEntity = new $laraClass;
 
 		$imgfilename = $remoteImg->filename;
