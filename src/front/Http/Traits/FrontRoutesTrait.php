@@ -110,6 +110,7 @@ trait FrontRoutesTrait
 
 				$menuitem = Menuitem::langIs($language)->where('type', 'entity')
 					->where('entity_id', $entity->id)
+					->whereNull('tag_id')
 					->first();
 
 				if ($menuitem) {

@@ -36,6 +36,7 @@ trait CommonDbUpdateTrait
 			'8.2.11',
 			'8.2.22',
 			'8.2.30',
+			'8.2.33',
 		];
 
 		// current versions
@@ -149,6 +150,14 @@ trait CommonDbUpdateTrait
 
 			}
 
+			if (in_array('8.2.33', $updates)) {
+
+				$this->updateLaraTextWidget();
+
+				$this->setSetting('system', 'lara_db_version', '8.2.33');
+
+			}
+
 			// Post-update actions
 			$this->clearCache();
 
@@ -160,6 +169,26 @@ trait CommonDbUpdateTrait
 
 		}
 
+	}
+
+	private function updateLaraTextWidget() {
+		$entity = Entity::where('entity_key', 'larawidget')->first();
+		if($entity) {
+			$customcol = $entity->customcolumns->where('fieldname', 'usecache')->first();
+			if($customcol) {
+				$customcol->fieldstate = 'enabled';
+				$customcol->condition_field = null;
+				$customcol->condition_operator = null;
+				$customcol->condition_value = null;
+				$customcol->save();
+			}
+		}
+
+		$textWidgets = Larawidget::where('type', 'text')->get();
+		foreach ($textWidgets as $textWidget) {
+			$textWidget->usecache = 1;
+			$textWidget->save();
+		}
 	}
 
 	private function updateLaraWidgetTemplateField() {

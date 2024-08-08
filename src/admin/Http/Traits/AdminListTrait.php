@@ -461,21 +461,6 @@ trait AdminListTrait
 
 		}
 
-		// check if entity has a hasMany relationship,
-		// and lock the object if necessary
-		foreach ($objects as $obj) {
-			$obj->is_locked = false;
-			foreach ($entity->getRelations() as $relation) {
-
-				if ($relation->type == 'hasMany') {
-					$rel_model_count = str_plural($relation->entity) . '_count';
-					if ($obj->$rel_model_count > 0) {
-						$obj->is_locked = true;
-					}
-				}
-			}
-		}
-
 		return $objects;
 
 	}

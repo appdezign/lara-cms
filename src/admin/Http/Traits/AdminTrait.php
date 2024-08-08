@@ -177,6 +177,24 @@ trait AdminTrait
 	}
 
 	/**
+	 * Make sure that the session language is the same as the object language
+	 *
+	 * @param $entity
+	 * @param $id
+	 * @param $sessionLanguage
+	 * @param $objectLanguage
+	 * @return null
+	 */
+	private function checkObjectLanguage($entity, $id, $sessionLanguage, $objectLanguage) {
+
+		if($sessionLanguage != $objectLanguage) {
+			return redirect()->route($entity->getPrefix() . '.' . $entity->getEntityRouteKey() . '.edit', ['id' => $id, 'clanguage' => $objectLanguage])->send();
+		}
+
+		return null;
+	}
+
+	/**
 	 * Get the status of an object
 	 *
 	 * Check the publish field

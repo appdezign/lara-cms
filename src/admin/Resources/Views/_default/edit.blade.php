@@ -289,7 +289,7 @@
 	{{ html()->hidden('_entity_key', $entity->getEntityKey()) }}
 
 	@if($entity->hasLanguage())
-		{{ html()->hidden('language', $clanguage) }}
+		{{ html()->hidden('language', $data->object->language) }}
 	@endif
 
 	{{ html()->closeModelForm() }}
