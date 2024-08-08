@@ -152,4 +152,6 @@ return [
 		'spam_score_email'    => 50,
 		'spam_score_language' => 100,
 	],
+
+	'testkey' => env('LARA_TEST_KEY', null),
 ];
