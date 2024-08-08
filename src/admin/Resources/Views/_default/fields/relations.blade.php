@@ -1,11 +1,16 @@
 @foreach($entity->getRelations() as $relation)
 
-	@php
+		<?php
 		$relatedModelClass = $relation->relatedEntity->getEntityModelClass();
 		$relatedSortField = $relation->relatedEntity->columns->sort_field;
 		$relatedSortOrder = $relation->relatedEntity->columns->sort_order;
-		$relatedObjects = $relatedModelClass::langIs($clanguage)->orderBy($relatedSortField, $relatedSortOrder)->pluck('title', 'id');
-	@endphp
+		if ($relation->relatedEntity->has_lang == 1) {
+			$relatedObjects = $relatedModelClass::langIs($clanguage)->orderBy($relatedSortField,
+				$relatedSortOrder)->pluck('title', 'id');
+		} else {
+			$relatedObjects = $relatedModelClass::orderBy($relatedSortField, $relatedSortOrder)->pluck('title', 'id');
+		}
+		?>
 
 	@if($relation->type == 'belongsTo')
 

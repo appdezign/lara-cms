@@ -5,6 +5,7 @@ namespace Lara\Front\Http\Traits;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Lara\Common\Models\Menuitem;
@@ -78,7 +79,11 @@ trait FrontListTrait
 			}
 
 			if ($entity->hasStatus()) {
-				$collection = $collection->isPublished();
+				if($this->getTestMode($request) == 'showall') {
+					$collection = $collection->whereIn('publish', [0,1]);
+				} else {
+					$collection = $collection->isPublished();
+				}
 			}
 
 			if ($entity->hasHideinlist()) {
@@ -94,29 +99,42 @@ trait FrontListTrait
 			}
 
 			if (method_exists($entity->getEntityModelClass(), 'scopeFront')) {
-				$collection = $collection->front();
+				if($this->getTestMode($request) != 'showall') {
+					$collection = $collection->front();
+				}
 			}
 
 			if ($view->showtags == 'filterbytaxonomy') {
-				if (!empty($entity->getActiveTags())) {
 
-					$activeTags = $entity->getActiveTags();
-					$term = end($activeTags);
-					$excludeEntityTags = config('lara-eve.use_tags_for_sorting.' . $entity->getEntityKey());
-					$excludeTags = (!empty($excludeEntityTags)) ? $excludeEntityTags : [];
-					if (!in_array($term, $excludeTags)) {
-						$collection = $collection->whereHas('tags', function ($query) use ($term) {
-							$query->where(config('lara-common.database.object.tags') . '.slug', $term);
-						});
+				if ($menutaxonomy) {
+
+					// if the menu-item has a tag, then we overrule the other filters
+					$collection = $collection->whereHas('tags', function ($query) use ($menutaxonomy) {
+						$query->where(config('lara-common.database.object.tags') . '.id', $menutaxonomy->id);
+					});
+
+				} else {
+
+					if (!empty($entity->getActiveTags())) {
+
+						$activeTags = $entity->getActiveTags();
+						$term = end($activeTags);
+						$excludeEntityTags = config('lara-eve.use_tags_for_sorting.' . $entity->getEntityKey());
+						$excludeTags = (!empty($excludeEntityTags)) ? $excludeEntityTags : [];
+						if (!in_array($term, $excludeTags)) {
+							$collection = $collection->whereHas('tags', function ($query) use ($term) {
+								$query->where(config('lara-common.database.object.tags') . '.slug', $term);
+							});
+						}
+
 					}
 
-				}
-
-				if (!empty($params->xtratags)) {
-					foreach ($params->xtratags as $xtag) {
-						$collection = $collection->whereHas('tags', function ($query) use ($xtag) {
-							$query->where(config('lara-common.database.object.tags') . '.slug', $xtag['slug']);
-						});
+					if (!empty($params->xtratags)) {
+						foreach ($params->xtratags as $xtag) {
+							$collection = $collection->whereHas('tags', function ($query) use ($xtag) {
+								$query->where(config('lara-common.database.object.tags') . '.slug', $xtag['slug']);
+							});
+						}
 					}
 				}
 
@@ -1184,6 +1202,24 @@ trait FrontListTrait
 		}
 
 		return $tags;
+
+	}
+
+	private function getTestMode($request) {
+
+		if (Auth::check()) {
+			if($request->has('testkey') && $request->input('testkey') == config('lara.testkey')) {
+				if($request->has('testmode')) {
+					return $request->input('testmode');
+				} else {
+					return null;
+				}
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
 
 	}
 }

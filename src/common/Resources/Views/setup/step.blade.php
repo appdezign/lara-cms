@@ -9,7 +9,7 @@
 				<!-- Content Header (Page header) -->
 				<section class="content-header m-b-40">
 					<h1 class="fw-light color-white text-center my-10">
-						Lara 7
+						Lara {{ config('lara.lara_maj_ver') }}
 					</h1>
 				</section>
 

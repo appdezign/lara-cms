@@ -298,6 +298,8 @@ class BaseController extends Controller
 		// get record
 		$this->data->object = $this->modelClass::findOrFail($id);
 
+		$this->checkObjectLanguage($this->entity, $id, $this->clanguage, $this->data->object->language);
+
 		// get templates for Dynamic Widgets
 		if($this->entity->getEntityKey() == 'larawidget') {
 			$this->data->widgetTemplates = $this->getBladeTemplates($this->data->object);
