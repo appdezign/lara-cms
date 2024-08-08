@@ -11,7 +11,7 @@ use Lara\Common\Models\Larawidget;
 
 use Lara\Front\Http\Traits\FrontTrait;
 
-class LaraTextWidget extends AbstractWidget
+class LaraTextCacheWidget extends AbstractWidget
 {
 
 	use FrontTrait;
@@ -22,6 +22,12 @@ class LaraTextWidget extends AbstractWidget
 	];
 
 	public $cacheTime = false;
+
+	public function __construct(array $config = [])
+	{
+		$this->cacheTime = config('lara-front.widget_cache_time');
+		parent::__construct($config);
+	}
 
 	public function cacheKey(array $params = [])
 	{

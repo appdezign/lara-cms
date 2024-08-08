@@ -27,7 +27,7 @@ class MenuSubWidget extends AbstractWidget
 		'mnu'   => 'main',
 		'slug'  => 'products',
 		'depth' => 0,
-		'force' => 'false',
+		'force' => false,
 		'grid'  => null,
 	];
 
@@ -35,7 +35,7 @@ class MenuSubWidget extends AbstractWidget
 
 	public function cacheKey(array $params = [])
 	{
-		return 'lara.widgets.menuSubWidget.' . $this->config['mnu'];
+		return 'lara.widgets.menuSubWidget.' . $this->config['slug'];
 	}
 
 	/**
@@ -50,47 +50,57 @@ class MenuSubWidget extends AbstractWidget
 
 		$menu = Menu::where('slug', $this->config['mnu'])->first();
 
-		if (!empty($menu)) {
+		$objectStatusArray = ($this->config['force']) ? [1, 0] : [1];
+
+		if ($menu) {
 
 			// find subroot first
-			$subroot = Menuitem::langIs($language)
-				->menuIs($menu->id)
-				->where('slug', $this->config['slug'])
-				->first();
-
-			if ($this->config['depth'] == 1) {
-
-				$depth = $subroot->depth + 1;
-
-				// get children of subroot
-				$tree = Menuitem::scoped(['menu_id' => $menu->id, 'language' => $language])
-					->defaultOrder()
-					->withDepth()
-					->having('depth', '=', $depth)
-					->where('publish', 1)
-					->descendantsOf($subroot->id)
-					->toTree();
-
+			if(is_numeric($this->config['slug'])) {
+				// find by ID
+				$menuId = $this->config['slug'];
+				$subroot = Menuitem::find($menuId);
 			} else {
-
-				// get children of subroot
-				$tree = Menuitem::scoped(['menu_id' => $menu->id, 'language' => $language])
-					->defaultOrder()
-					->where('publish', 1)
-					->descendantsOf($subroot->id)
-					->toTree();
-
+				// find by slug
+				$subroot = Menuitem::langIs($language)
+					->menuIs($menu->id)
+					->where('slug', $this->config['slug'])
+					->first();
 			}
 
+			if($subroot) {
+
+				if ($this->config['depth'] == 1) {
+
+					$depth = $subroot->depth + 1;
+
+					// get children of subroot
+					$tree = Menuitem::scoped(['menu_id' => $menu->id, 'language' => $language])
+						->defaultOrder()
+						->withDepth()
+						->having('depth', '=', $depth)
+						->whereIn('publish', $objectStatusArray)
+						->descendantsOf($subroot->id)
+						->toTree();
+
+				} else {
+
+					// get children of subroot
+					$tree = Menuitem::scoped(['menu_id' => $menu->id, 'language' => $language])
+						->defaultOrder()
+						->whereIn('publish', $objectStatusArray)
+						->descendantsOf($subroot->id)
+						->toTree();
+
+				}
+
+			} else {
+				$tree = null;
+			}
 		} else {
-
 			$tree = null;
-
 		}
 
 		$widgetview = '_widgets.menu.sub';
-
-
 
 		if(view()->exists($widgetview)) {
 
