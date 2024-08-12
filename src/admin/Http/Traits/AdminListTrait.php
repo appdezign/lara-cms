@@ -10,8 +10,13 @@ use Illuminate\Support\Facades\Session;
 use Lara\Common\Models\Tag;
 use Lara\Common\Models\Taxonomy;
 
+use Eve\Http\Traits\Filters;
+use Lara\Common\Models\User;
+
 trait AdminListTrait
 {
+
+	use Filters;
 
 	/**
 	 * Get the specified request parameter
@@ -350,6 +355,11 @@ trait AdminListTrait
 			$collection = $collection->langIs($clanguage);
 		}
 
+		// custom Filter Hook
+		if(method_exists($this, 'customAdminEntityFilter')) {
+			$collection = $this->customAdminEntityFilter($entity, $collection);
+		}
+
 		// archive
 		if ($filters->trashed) {
 			$collection = $collection->onlyTrashed();
@@ -399,13 +409,12 @@ trait AdminListTrait
 			$filterkey = $entity->getRelationFilterForeignkey();
 			$collection = $collection->where($filterkey, $filterrelation);
 
-		} elseif ($filters->autofilter) {
+		}
 
-			// AUTO FILTER
+		if ($filters->autofilter) {
 			foreach ($filters->autofilters as $filterkey => $filterval) {
 				$collection = $collection->where($filterkey, $filterval);
 			}
-
 		}
 
 		// eager loading
@@ -462,6 +471,21 @@ trait AdminListTrait
 		}
 
 		return $objects;
+
+	}
+
+	private function getActiveAuthors($entity) {
+
+		$modelClass = $entity->getEntityModelClass();
+		$authorIds = $modelClass::pluck('user_id')->unique();
+
+		$authors = array();
+		foreach($authorIds as $authorId) {
+			$authorName = User::where('id', $authorId)->value('name');
+			$authors[$authorId] = $authorName;
+		}
+
+		return $authors;
 
 	}
 

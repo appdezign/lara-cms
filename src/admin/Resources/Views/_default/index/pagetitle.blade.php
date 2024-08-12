@@ -19,7 +19,7 @@
 
 	<!--begin:Tools-->
 	<div class="col-6 col-sm-3 order-2 order-sm-3">
-
+		@include('lara-admin::_partials.filterbyuser')
 	</div>
 	<!--end:Tools-->
 

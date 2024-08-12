@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Lara\Common\Models\Entity;
 use Lara\Common\Models\MediaVideo;
+use Lara\Common\Models\Setting;
 use Lara\Common\Models\Upload;
 
 trait AdminMediaTrait
@@ -219,17 +220,14 @@ trait AdminMediaTrait
 
 	/**
 	 * @param object $entity
-	 * @return void
+	 * @return bool
 	 */
-	private function checkEntityImagePosition(object $entity)
+	private function checkEntityImagePosition(object $entity) : bool
 	{
 
 		$status = $this->checkEntityImagePositionDone($this->entity);
 
 		if ($status === false) {
-
-			$lara = $this->getMediaEntityVarByKey($entity->getEntityKey());
-			$entity = new $lara;
 
 			if ($entity->hasImages()) {
 				$modelClass = $entity->getEntityModelClass();
@@ -252,6 +250,13 @@ trait AdminMediaTrait
 					],
 				]);
 			}
+
+			return true;
+
+		} else {
+
+			return false;
+
 		}
 
 	}
@@ -594,13 +599,19 @@ trait AdminMediaTrait
 	/**
 	 * @param $entity
 	 */
-	private function syncFilesArchive($entity)
+	private function syncFilesArchive($entity): bool
 	{
 
 		if ($entity->hasFiles()) {
 
-			$modelClass = $entity->getEntityModelClass();
 			$entkey = $entity->getEntityKey();
+
+			$syncKey = 'last_media_file_sync';
+			if(!$this->checkMediaSync($entkey, $syncKey)) {
+				return false;
+			}
+
+			$modelClass = $entity->getEntityModelClass();
 
 			// get all objects
 			if (method_exists($modelClass, 'withTrashed')) {
@@ -691,6 +702,14 @@ trait AdminMediaTrait
 			}
 
 			$this->purgeOrphanFiles($entity);
+
+			$this->setLastMediaSync($entkey, $syncKey);
+
+			return true;
+
+		} else {
+
+			return false;
 
 		}
 
@@ -908,8 +927,14 @@ trait AdminMediaTrait
 
 		if ($entity->hasVideoFiles()) {
 
-			$modelClass = $entity->getEntityModelClass();
 			$entkey = $entity->getEntityKey();
+
+			$syncKey = 'last_media_videofile_sync';
+			if(!$this->checkMediaSync($entkey, $syncKey)) {
+				return false;
+			}
+
+			$modelClass = $entity->getEntityModelClass();
 
 			// get all objects
 			if (method_exists($modelClass, 'withTrashed')) {
@@ -1000,6 +1025,9 @@ trait AdminMediaTrait
 			}
 
 			$this->purgeOrphanFiles($entity);
+
+			$this->setLastMediaSync($entkey, $syncKey);
+
 		}
 
 	}
@@ -1043,6 +1071,48 @@ trait AdminMediaTrait
 		}
 
 		return $laraClass;
+
+	}
+
+	private function checkMediaSync($entkey, $key) : bool
+	{
+		$lastSyncStr = $this->getLastMediaSync($entkey, $key);
+
+		$lastSync = Carbon::createFromFormat("Y-m-d H:i:s", $lastSyncStr);
+		$now = Carbon::now();
+
+		return $lastSync->lt($now->subDay());
+
+	}
+
+	private function getLastMediaSync($entkey, $key) : string
+	{
+		$settingkey = $key . '_' . $entkey;
+
+		$timestamp = date("Y-m-d H:i:s");
+
+		$setting = Setting::firstOrCreate(
+			['key' => $settingkey],
+			['cgroup' => 'system', 'key' => $settingkey, 'title' => $settingkey, 'value' => $timestamp]
+		);
+
+		return $setting->value;
+
+	}
+
+	private function setLastMediaSync($entkey, $key) : bool
+	{
+
+		$settingkey = $key . '_' . $entkey;
+
+		$timestamp = date("Y-m-d H:i:s");
+
+		Setting::updateOrCreate(
+			['cgroup' => 'system', 'key' => $settingkey, 'title' => $settingkey],
+			['value' => $timestamp]
+		);
+
+		return true;
 
 	}
 

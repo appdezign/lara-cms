@@ -175,6 +175,9 @@ class BaseController extends Controller
 		// get module page
 		$this->data->modulepage = $this->getModulePage($this->clanguage, $this->entity, 'index');
 
+		// get Authors
+		$this->data->authors = $this->getActiveAuthors($this->entity);
+
 		// get view file and partials
 		$this->data->partials = $this->getPartials($this->entity);
 		$viewfile = $this->getViewFile($this->entity);

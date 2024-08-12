@@ -116,6 +116,15 @@ class BaseApiController extends Controller
 		$objects = $collection->get($this->columns);
 
 		foreach ($objects as $object) {
+
+			// add seo
+			if ($this->entity->hasSeo()) {
+				$object->seo_title = $object->seo->seo_title;
+				$object->seo_description = $object->seo->seo_description;
+				$object->seo_keywords = $object->seo->seo_keywords;
+				unset($object->seo);
+			}
+
 			// add featured image
 			if ($object->media()->count()) {
 				$object->image = _cimg($object->featured->filename, 1280, 960);
