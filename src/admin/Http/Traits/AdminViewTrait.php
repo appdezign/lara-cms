@@ -102,17 +102,19 @@ trait AdminViewTrait
 	{
 		$laraprefix = 'lara-';
 
-		if ($entity->getPrefix() == 'admin') {
-			// module can be 'admin' or 'entity', depending on entity group
-			$entityViewFile = $laraprefix . $entity->getModule() . '::' . $entity->getEntityKey() . '.' . $method . '.' . $viewfile;
+		$entityViewFile = $laraprefix . $entity->getModule() . '::' . $entity->getEntityKey() . '.' . $method . '.' . $viewfile;
+
+		if($entity->getModule() == 'admin') {
+			$overrideViewFile = $laraprefix . 'eve' . '::' . $entity->getEntityKey() . '.' . $method . '.' . $viewfile;
 		} else {
-			// builder
-			$entityViewFile = $laraprefix . $entity->getPrefix() . '::' . $entity->getEntityKey() . '.' . $method . '.' . $viewfile;
+			$overrideViewFile = null;
 		}
 
 		$defaultViewFile = 'lara-admin::_default.' . $method . '.' . $viewfile;
 
-		if (view()->exists($entityViewFile)) {
+		if ($overrideViewFile && view()->exists($overrideViewFile)) {
+			return $overrideViewFile;
+		} elseif (view()->exists($entityViewFile)) {
 			return $entityViewFile;
 		} elseif (view()->exists($defaultViewFile)) {
 			return $defaultViewFile;
