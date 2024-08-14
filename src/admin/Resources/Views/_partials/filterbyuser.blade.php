@@ -7,7 +7,7 @@
 		<select name="user_id" class="form-select form-select-sm" data-control="select2" data-placeholder="Select User"
 		        data-hide-search="true" onchange="if (this.value) window.location.href=this.value">
 
-			<option value="{!! route('admin.'.$entity->getEntityRouteKey().'.'.$entity->getMethod(), ['user_id' => '']) !!}"
+			<option value="{!! route('admin.'.$entity->getEntityRouteKey().'.'.$entity->getMethod(), ['user_id' => '', 'resetfilters' => 'true']) !!}"
 			        @if($activeUserId == '')) selected @endif >
 				[ {{ _lanq('lara-admin::default.filter.all_users') }} ]
 			</option>

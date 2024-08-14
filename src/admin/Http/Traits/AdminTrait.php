@@ -187,7 +187,7 @@ trait AdminTrait
 	 */
 	private function checkObjectLanguage($entity, $id, $sessionLanguage, $objectLanguage) {
 
-		if($sessionLanguage != $objectLanguage) {
+		if(!empty($objectLanguage) && $sessionLanguage != $objectLanguage) {
 			return redirect()->route($entity->getPrefix() . '.' . $entity->getEntityRouteKey() . '.edit', ['id' => $id, 'clanguage' => $objectLanguage])->send();
 		}
 
