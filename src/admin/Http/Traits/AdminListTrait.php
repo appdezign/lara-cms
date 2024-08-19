@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Session;
 use Lara\Common\Models\Tag;
 use Lara\Common\Models\Taxonomy;
 
-use Eve\Http\Traits\Filters;
+use Eve\Http\Traits\EveAdminFilters;
 use Lara\Common\Models\User;
 
 trait AdminListTrait
 {
 
-	use Filters;
+	use EveAdminFilters;
 
 	/**
 	 * Get the specified request parameter
