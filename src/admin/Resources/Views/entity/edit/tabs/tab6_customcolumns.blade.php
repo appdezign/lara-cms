@@ -75,7 +75,7 @@
 								{{ html()->text('_mtitle_'.$field['id'], old('_mtitle_'.$field['id'], $field['fieldtitle']))->class('form-control') }}
 							</div>
 							<div class="col-2 crud-col">
-								{{ html()->select('_mtype_'.$field['id'], $data->fieldTypes, old('_mtype_'.$field['id'], $field['fieldtype']))->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
+								{{ html()->select('_mtype_'.$field['id'], $data->fieldTypes, old('_mtype_'.$field['id'], $field['fieldtype']))->class('form-select form-select-sm')->data('control', 'select2') }}
 							</div>
 							<div class="col-2 crud-col">
 								{{ html()->select('_mhook_'.$field['id'], $data->fieldHooks, old('_mhook_'.$field['id'], $field['fieldhook']))->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
@@ -192,7 +192,7 @@
 							</div>
 							<div class="col-2 crud-col">
 								{{ html()->hidden('_mtype_'.$field['id'], $field['fieldtype']) }}
-								{{ html()->select('_mtype_'.$field['id'], $data->fieldTypes, old('_mtype_'.$field['id'], $field['fieldtype']))->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true')->disabled() }}
+								{{ html()->select('_mtype_'.$field['id'], $data->fieldTypes, old('_mtype_'.$field['id'], $field['fieldtype']))->class('form-select form-select-sm')->data('control', 'select2')->disabled() }}
 							</div>
 							<div class="col-2 crud-col">
 								{{ html()->hidden('_mhook_'.$field['id'], $field['fieldhook']) }}
@@ -412,7 +412,7 @@
 						{{ html()->text('_new_fieldtitle', null)->class('form-control') }}
 					</div>
 					<div class="col-2 crud-col">
-						{{ html()->select('_new_fieldtype', $data->fieldTypes, null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
+						{{ html()->select('_new_fieldtype', $data->fieldTypes, null)->class('form-select form-select-sm')->data('control', 'select2') }}
 					</div>
 					<div class="col-2 crud-col">
 						{{ html()->select('_new_fieldhook', $data->fieldHooks, null)->class('form-select form-select-sm')->data('control', 'select2')->data('hide-search', 'true') }}
