@@ -1,6 +1,6 @@
 <?php $activeUserId = $data->filters->autofilters['user_id'] ?? null; ?>
 
-@if(in_array($entity->getEntityKey(), config('lara-admin.filter_by_user.entities')))
+@if(!empty(config('lara-admin.filter_by_user')) && in_array($entity->getEntityKey(), config('lara-admin.filter_by_user.entities')))
 
 	@if(Auth::user()->mainrole->level >= config('lara-admin.filter_by_user.min_user_level', 100))
 

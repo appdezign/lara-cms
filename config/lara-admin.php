@@ -2,6 +2,11 @@
 
 return [
 
+	'filter_by_user' => [
+		'min_user_level' => 100,
+		'entities' => [],
+	],
+
 	'manual' => [
 		'online' => [
 			'url' => 'https://userguide.laracms.nl/'
