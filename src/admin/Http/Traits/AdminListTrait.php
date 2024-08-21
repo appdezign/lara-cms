@@ -474,15 +474,21 @@ trait AdminListTrait
 
 	}
 
-	private function getActiveAuthors($entity) {
-
-		$modelClass = $entity->getEntityModelClass();
-		$authorIds = $modelClass::pluck('user_id')->unique();
+	private function getActiveAuthors($entity) : array
+	{
 
 		$authors = array();
-		foreach($authorIds as $authorId) {
-			$authorName = User::where('id', $authorId)->value('name');
-			$authors[$authorId] = $authorName;
+
+		if($entity->hasUser()) {
+
+			$modelClass = $entity->getEntityModelClass();
+			$authorIds = $modelClass::pluck('user_id')->unique();
+
+			foreach($authorIds as $authorId) {
+				$authorName = User::where('id', $authorId)->value('name');
+				$authors[$authorId] = $authorName;
+			}
+
 		}
 
 		return $authors;
