@@ -22,7 +22,7 @@
 
 				this.on("error", function(file, response) {
 					alert(response);
-					DropzoneVideoFiles.removeAllFiles(true);
+					DropzoneImages.removeAllFiles(true);
 				});
 
 				this.on("sending", function (file, xhr, data) {
