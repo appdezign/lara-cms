@@ -133,3 +133,20 @@ if (!function_exists('_header')) {
 		return $str;
 	}
 }
+
+if (!function_exists('prepare_http_build_query')) {
+
+	/**
+	 * @param array $tags
+	 * @return array
+	 */
+	function prepare_http_build_query(array $tags)
+	{
+		$xtratags = array();
+		foreach ($tags as $xkey => $xtratag) {
+			$xtratags[$xkey] = $xtratag['slug'];
+		}
+
+		return $xtratags;
+	}
+}

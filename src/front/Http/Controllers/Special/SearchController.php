@@ -335,6 +335,12 @@ class SearchController extends Controller
 
 		}
 
+		// get language versions
+		$this->data->langversions = $this->getFrontLanguageVersions($this->language, $this->entity);
+
+		// header tags
+		$this->data->htag = $this->getEntityHeaderTag($this->entity);
+
 		$viewfile = '_search.result';
 
 		return view($viewfile, [

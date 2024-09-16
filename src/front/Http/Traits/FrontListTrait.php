@@ -232,6 +232,28 @@ trait FrontListTrait
 	}
 
 	/**
+	 * @param $entity
+	 * @return mixed|null
+	 */
+	private function getFrontOverride($entity): mixed
+	{
+
+		$frontOverride = config('lara-eve.override_front_entity_objects');
+		if(empty($frontOverride)) {
+			return null;
+		}
+
+		if(array_key_exists($entity->getEntityKey(), $frontOverride)) {
+			$entityFrontOverride = $frontOverride[$entity->getEntityKey()];
+			$override = json_decode(json_encode($entityFrontOverride), FALSE);
+			return json_decode(json_encode($entityFrontOverride), FALSE);
+		} else {
+			return null;
+		}
+
+	}
+
+	/**
 	 * Build the collection for a JSON feed
 	 *
 	 * @param string $language

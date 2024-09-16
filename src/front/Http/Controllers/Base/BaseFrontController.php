@@ -41,6 +41,8 @@ use ReflectionException;
 // use Theme;
 use Qirolab\Theme\Theme;
 
+use Carbon\Carbon;
+
 class BaseFrontController extends Controller
 {
 
@@ -168,7 +170,7 @@ class BaseFrontController extends Controller
 		$this->data->userview = $this->getFrontRequestParam($request, 'view', null, $this->entity->entity_key);
 
 		// get objects
-		$this->data->objects = $this->getFrontObjects($this->language, $this->entity, $request, $this->data->menutag, $this->data->params);
+		$this->data->objects = $this->getFrontObjects($this->language, $this->entity, $request, $this->data->menutag, $this->data->params, $this->getFrontOverride($this->entity));
 
 		// get object count
 		if ($this->data->params->tagsview == 'sort') {
