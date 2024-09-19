@@ -91,6 +91,18 @@
 					</button>
 				</div>
 				<!--end::Submit button-->
+
+				@if(config('lara.auth.can_reset_password'))
+					<hr class="mt-8 mb-6">
+					<div class="row">
+						<div class="col-sm-12">
+							<a href="{{ route('password.request') }}">
+								{{ _lanq('lara-common::auth.button.forgot_password') }}
+							</a>
+						</div>
+					</div>
+				@endif
+
 			</form>
 			<!--end::Form-->
 		</div>

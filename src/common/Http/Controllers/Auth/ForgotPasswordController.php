@@ -34,7 +34,11 @@ class ForgotPasswordController extends Controller
 	{
 		if(config('lara.auth.can_reset_password')) {
 
-			return view('_user.auth.passwords.email');
+			if (config('lara.auth.has_front_auth')) {
+				return view('_user.auth.passwords.email');
+			} else {
+				return view('lara-common::auth.passwords.email');
+			}
 
 		} else {
 			return redirect()->route('special.home.show');

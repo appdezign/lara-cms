@@ -37,6 +37,7 @@ trait CommonDbUpdateTrait
 			'8.2.22',
 			'8.2.30',
 			'8.2.33',
+			'8.2.40',
 		];
 
 		// current versions
@@ -158,6 +159,14 @@ trait CommonDbUpdateTrait
 
 			}
 
+			if (in_array('8.2.40', $updates)) {
+
+				$this->addAuthTranslations();
+
+				$this->setSetting('system', 'lara_db_version', '8.2.40');
+
+			}
+
 			// Post-update actions
 			$this->clearCache();
 
@@ -168,6 +177,27 @@ trait CommonDbUpdateTrait
 			return null;
 
 		}
+
+	}
+
+	private function addAuthTranslations()
+	{
+
+		$this->checkTranslation('nl', 'lara-common', 'auth', 'button', 'send_password_reset_link', 'verstuur link', true);
+		$this->checkTranslation('nl', 'lara-common', 'auth', 'button', 'back_to_login', 'terug naar login', true);
+		$this->checkTranslation('nl', 'lara-common', 'auth', 'button', 'forgot_password', 'wachtwoord vergeten', true);
+		$this->checkTranslation('nl', 'lara-common', 'auth', 'button', 'reset_password', 'opslaan', true);
+
+		$this->checkTranslation('nl', 'lara-common', 'auth', 'field', 'username', 'gebruikersnaam', true);
+		$this->checkTranslation('nl', 'lara-common', 'auth', 'field', 'password', 'wachtwoord', true);
+		$this->checkTranslation('nl', 'lara-common', 'auth', 'field', 'confirm_password', 'wachtwoord herhalen', true);
+		$this->checkTranslation('nl', 'lara-common', 'auth', 'field', 'email', 'e-mail', true);
+
+		$this->checkTranslation('nl', 'lara-common', 'auth', 'passwordforgot', 'placeholder_email', 'e-mail', true);
+		$this->checkTranslation('nl', 'lara-common', 'auth', 'passwordforgot', 'password_forgot_title', 'wachtwoord vergeten', true);
+		$this->checkTranslation('nl', 'lara-common', 'auth', 'passwordforgot', 'password_reset_title', 'wachtwoord resetten', true);
+
+		$this->exportTranslationsToFile(['lara-common']);
 
 	}
 
