@@ -275,16 +275,28 @@ class EntityController extends Controller
 			$this->data->customcolumns = $this->data->object->customcolumns;
 		}
 
-		// sort manually (before, between, after)
-		$before = array();
-		$between = array();
-		$after = array();
-		$default = array();
+		// sort manually (before, between, after, etc.)
+		$customFields = $this->makeNewObject();
 		foreach($this->data->customcolumns as $custcol) {
 			$varname = $custcol->fieldhook;
-			$$varname[] = $custcol;
+			$customFields->$varname[] = $custcol;
 		}
-		$this->data->customcolumns = collect(array_merge($before, $between, $after, $default));
+
+		// get the hook order from config
+		$entityFieldHooks = config('lara-admin.fieldHooks');
+		$formFieldHooks = config('lara-admin.formFieldHooks');
+		$hooks = array_merge($entityFieldHooks, $formFieldHooks);
+
+		// sort manually
+		$finalHooks = array();
+		foreach($hooks as $hookname) {
+			if(property_exists($customFields, $hookname)) {
+				foreach($customFields->$hookname as $customField) {
+					$finalHooks[] = $customField;
+				}
+			}
+		}
+		$this->data->customcolumns = collect($finalHooks);
 
 		// relations
 		$this->data->relationTypes = config('lara-admin.relationTypes');
