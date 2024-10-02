@@ -40,7 +40,13 @@
 
 					<input type="hidden" name="token" value="{{ $token }}">
 
-					<input id="email" type="hidden" name="email" value="{{ $email }}">
+					<div class="fv-row mb-8">
+						<label for="email">{{ _lanq('lara-common::auth.field.email') }}</label>
+
+						<input id="email" name="email" type="email" value="{{ $email }}" class="form-control" disabled>
+						<input id="email" type="hidden" name="email" value="{{ $email }}">
+					</div>
+
 
 					<div class="fv-row mb-8">
 						<label for="password">{{ _lanq('lara-common::auth.field.password') }}</label>

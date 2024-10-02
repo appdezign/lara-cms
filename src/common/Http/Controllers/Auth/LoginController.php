@@ -140,7 +140,15 @@ class LoginController extends Controller
 			}
 		} else {
 			// show backend login
-			return view('lara-common::auth.login', [
+			$defaultViewFile = 'lara-common::auth.login';
+			$overrideViewFile = 'lara-eve::auth.login';
+			if (view()->exists($overrideViewFile)) {
+				$viewFile = $overrideViewFile;
+			} else {
+				$viewFile = $defaultViewFile;
+			}
+
+			return view($viewFile, [
 				'data' => $this->data,
 			]);
 		}
