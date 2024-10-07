@@ -8,24 +8,7 @@
 
 	<!--begin:Message-->
 	<div class="col-12 col-sm-5 order-3 order-sm-2">
-
-		@if(isset($data->newversion))
-			<div class="alert alert-success alert-important text-center" role="alert">
-				Lara DB has been updated to {{ $data->newversion }}
-			</div>
-		@endif
-
-		@if(isset($data->eveversion))
-			<div class="alert alert-success alert-important text-center" role="alert">
-				This application has been updated to {{ $data->eveversion }}
-			</div>
-		@endif
-
-		@if(isset($data->translationversion))
-			<div class="alert alert-success alert-important text-center" role="alert">
-				Translations have been updated to {{ $data->translationversion }}
-			</div>
-		@endif
+		&nbsp;
 	</div>
 	<!--end:Message-->
 
