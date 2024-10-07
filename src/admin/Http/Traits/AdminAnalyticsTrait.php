@@ -28,10 +28,15 @@ trait AdminAnalyticsTrait
 		// get config
 		$conf = $this->getAnalyticsConfig();
 
-		// set property ID dynamically
-		Analytics::setPropertyId($conf->propID);
-
 		if (!empty($conf->propID)) {
+
+			// set property ID dynamically
+			try {
+				Analytics::setPropertyId($conf->propID);
+			} catch (\Exception $e) {
+				flash($e->getMessage())->warning();
+				return null;
+			}
 
 			$type = 'site';
 			$days = config('lara-admin.analytics.defaultDays');
@@ -86,10 +91,15 @@ trait AdminAnalyticsTrait
 		// get config
 		$conf = $this->getAnalyticsConfig();
 
-		// set property ID dynamically
-		Analytics::setPropertyId($conf->propID);
-
 		if (!empty($conf->propID)) {
+
+			// set property ID dynamically
+			try {
+				Analytics::setPropertyId($conf->propID);
+			} catch (\Exception $e) {
+				flash($e->getMessage())->warning();
+				return null;
+			}
 
 			$type = 'page';
 			$limit = config('lara-admin.analytics.topPagesLimit');
@@ -142,10 +152,15 @@ trait AdminAnalyticsTrait
 		// get config
 		$conf = $this->getAnalyticsConfig();
 
-		// set property ID dynamically
-		Analytics::setPropertyId($conf->propID);
-
 		if (!empty($conf->propID)) {
+
+			// set property ID dynamically
+			try {
+				Analytics::setPropertyId($conf->propID);
+			} catch (\Exception $e) {
+				flash($e->getMessage())->warning();
+				return null;
+			}
 
 			$type = 'ref';
 			$limit = config('lara-admin.analytics.topRefLimit');
@@ -198,10 +213,15 @@ trait AdminAnalyticsTrait
 		// get config
 		$conf = $this->getAnalyticsConfig();
 
-		// set property ID dynamically
-		Analytics::setPropertyId($conf->propID);
-
 		if (!empty($conf->propID)) {
+
+			// set property ID dynamically
+			try {
+				Analytics::setPropertyId($conf->propID);
+			} catch (\Exception $e) {
+				flash($e->getMessage())->warning();
+				return null;
+			}
 
 			$type = 'user';
 			$days = config('lara-admin.analytics.defaultDays');
@@ -256,13 +276,17 @@ trait AdminAnalyticsTrait
 		// get config
 		$conf = $this->getAnalyticsConfig();
 
-		// set property ID dynamically
-		Analytics::setPropertyId($conf->propID);
-
 		if (!empty($conf->propID)) {
 
-			$type = 'browser';
+			// set property ID dynamically
+			try {
+				Analytics::setPropertyId($conf->propID);
+			} catch (\Exception $e) {
+				flash($e->getMessage())->warning();
+				return null;
+			}
 
+			$type = 'browser';
 			$limit = config('lara-admin.analytics.topBrowserLimit');
 			$days = config('lara-admin.analytics.defaultDays');
 			$period = Period::days($days);
