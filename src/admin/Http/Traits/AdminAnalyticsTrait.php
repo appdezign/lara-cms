@@ -4,6 +4,7 @@ namespace Lara\Admin\Http\Traits;
 
 use Analytics;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Auth;
 use Lara\Common\Models\Entity;
 use Lara\Common\Models\Setting;
 use Lara\Common\Models\User;
@@ -21,15 +22,22 @@ trait AdminAnalyticsTrait
 	 * @param bool $useCacheOnly
 	 * @return object|null
 	 */
-	private function getSiteStats($forceRefresh = false, $useCacheOnly = false)
+	private function getSiteStats(bool $forceRefresh = false, bool $useCacheOnly = false): ?object
 	{
 
-		if (config('analytics.property_id')) {
+		// get config
+		$conf = $this->getAnalyticsConfig();
+
+		// set property ID dynamically
+		Analytics::setPropertyId($conf->propID);
+
+		if (!empty($conf->propID)) {
 
 			$type = 'site';
 			$days = config('lara-admin.analytics.defaultDays');
 			$period = Period::days($days);
-			$cache_key = 'lara.admin.analytics-' . $type . '-' . $days . '-days';
+
+			$cache_key = 'lara.admin.analytics-' . $conf->prefix . '-' . $type . '-' . $days . '-days';
 
 			if ($useCacheOnly) {
 				$rawdata = Cache::get($cache_key);
@@ -69,12 +77,19 @@ trait AdminAnalyticsTrait
 
 	/**
 	 * @param bool $forceRefresh
+	 * @param bool $useCacheOnly
 	 * @return object|null
 	 */
-	private function getPageStats($forceRefresh = false, $useCacheOnly = false)
+	private function getPageStats(bool $forceRefresh = false, bool $useCacheOnly = false): ?object
 	{
 
-		if (config('analytics.property_id')) {
+		// get config
+		$conf = $this->getAnalyticsConfig();
+
+		// set property ID dynamically
+		Analytics::setPropertyId($conf->propID);
+
+		if (!empty($conf->propID)) {
 
 			$type = 'page';
 			$limit = config('lara-admin.analytics.topPagesLimit');
@@ -118,12 +133,19 @@ trait AdminAnalyticsTrait
 
 	/**
 	 * @param bool $forceRefresh
+	 * @param bool $useCacheOnly
 	 * @return object|null
 	 */
-	private function getReferrerStats($forceRefresh = false, $useCacheOnly = false)
+	private function getReferrerStats(bool $forceRefresh = false, bool $useCacheOnly = false): ?object
 	{
 
-		if (config('analytics.property_id')) {
+		// get config
+		$conf = $this->getAnalyticsConfig();
+
+		// set property ID dynamically
+		Analytics::setPropertyId($conf->propID);
+
+		if (!empty($conf->propID)) {
 
 			$type = 'ref';
 			$limit = config('lara-admin.analytics.topRefLimit');
@@ -167,12 +189,19 @@ trait AdminAnalyticsTrait
 
 	/**
 	 * @param bool $forceRefresh
+	 * @param bool $useCacheOnly
 	 * @return object|null
 	 */
-	private function getUserStats($forceRefresh = false, $useCacheOnly = false)
+	private function getUserStats(bool $forceRefresh = false, bool $useCacheOnly = false): ?object
 	{
 
-		if (config('analytics.property_id')) {
+		// get config
+		$conf = $this->getAnalyticsConfig();
+
+		// set property ID dynamically
+		Analytics::setPropertyId($conf->propID);
+
+		if (!empty($conf->propID)) {
 
 			$type = 'user';
 			$days = config('lara-admin.analytics.defaultDays');
@@ -217,12 +246,20 @@ trait AdminAnalyticsTrait
 
 	/**
 	 * @param bool $forceRefresh
+	 * @param bool $useCacheOnly
 	 * @return object|null
+	 * @throws BindingResolutionException
 	 */
-	private function getBrowserStats($forceRefresh = false, $useCacheOnly = false)
+	private function getBrowserStats(bool $forceRefresh = false, bool $useCacheOnly = false): ?object
 	{
 
-		if (config('analytics.property_id')) {
+		// get config
+		$conf = $this->getAnalyticsConfig();
+
+		// set property ID dynamically
+		Analytics::setPropertyId($conf->propID);
+
+		if (!empty($conf->propID)) {
 
 			$type = 'browser';
 
@@ -269,10 +306,39 @@ trait AdminAnalyticsTrait
 	}
 
 	/**
+	 * @return object
+	 */
+	private function getAnalyticsConfig(): object
+	{
+
+		$app = app();
+		$conf = $app->make('stdClass');
+
+		// single site
+		$conf->multisite = false;
+		$conf->prefix = 'default';
+		$conf->propID = config('analytics.property_id');
+
+		if (class_exists('\\Eve\\Models\\Subsite')) {
+			$subsite = \Eve\Models\Subsite::where('user_id', Auth::user()->id)->first();
+			if($subsite) {
+				if(!empty($subsite->ga4propid)) {
+					// multisite
+					$conf->multisite = true;
+					$conf->prefix = $subsite->id;
+					$conf->propID = $subsite->ga4propid;
+				}
+			}
+		}
+
+		return $conf;
+	}
+
+	/**
 	 * @param bool $forceRefresh
 	 * @return object|null
 	 */
-	private function getContentStats($forceRefresh = false)
+	private function getContentStats(bool $forceRefresh = false): ?object
 	{
 
 		$cache_key = 'lara.admin.dashboard-content';
@@ -308,14 +374,12 @@ trait AdminAnalyticsTrait
 	/**
 	 * @return mixed
 	 */
-	private function getLaraUserStats()
+	private function getLaraUserStats(): mixed
 	{
 
 		$limit = 10;
 
-		$users = User::isWeb()->limit($limit)->get();
-
-		return $users;
+		return User::isWeb()->limit($limit)->get();
 
 	}
 
@@ -323,7 +387,7 @@ trait AdminAnalyticsTrait
 	 * @param array|null $types
 	 * @return void
 	 */
-	private function refreshAnalytics($types = null)
+	private function refreshAnalytics($types = null): void
 	{
 
 		if (config('analytics.property_id') ) {
@@ -368,7 +432,7 @@ trait AdminAnalyticsTrait
 	 *
 	 * @return mixed
 	 */
-	private function getLastAnalyticsSync()
+	private function getLastAnalyticsSync(): mixed
 	{
 
 		$object = Setting::where('cgroup', 'system')
@@ -376,9 +440,7 @@ trait AdminAnalyticsTrait
 			->first();
 
 		if ($object) {
-			$dateObject = Carbon::createFromFormat('Y-m-d H:i:s', $object->value);
-
-			return $dateObject;
+			return Carbon::createFromFormat('Y-m-d H:i:s', $object->value);
 		} else {
 			return false;
 		}
@@ -388,9 +450,9 @@ trait AdminAnalyticsTrait
 	/**
 	 * Save the timestamp of the last translation sync
 	 *
-	 * @return bool
+	 * @return void
 	 */
-	private function setLastAnalyticsSync()
+	private function setLastAnalyticsSync(): void
 	{
 
 		$timestamp = date("Y-m-d H:i:s");
@@ -400,8 +462,6 @@ trait AdminAnalyticsTrait
 			['value' => $timestamp]
 		);
 
-		return true;
-
 	}
 
 	/**
@@ -409,7 +469,7 @@ trait AdminAnalyticsTrait
 	 * @param int $limit
 	 * @return array
 	 */
-	private function limitStringsInArray(object $collection, int $limit)
+	private function limitStringsInArray(object $collection, int $limit): array
 	{
 
 		$array = array();
