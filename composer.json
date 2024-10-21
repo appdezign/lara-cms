@@ -1,7 +1,7 @@
 {
     "name": "appdezign/lara-cms",
     "description": "Lara CMS",
-	"version": "8.3.0",
+	"version": "8.3.1",
     "keywords": ["Lara", "CMS"],
     "license": "proprietary",
     "homepage": "https://firmaq.nl",
@@ -14,8 +14,8 @@
     ],
     "require": {
 		"php": "^8.0",
-		"appdezign/lara-base-theme": "^8.2",
-		"appdezign/lara-demo-theme": "^8.2",
+		"appdezign/lara-base-theme": "^8.3",
+		"appdezign/lara-demo-theme": "^8.3",
 		"arrilot/laravel-widgets": "^3.13",
 		"barryvdh/laravel-httpcache": "^0.3.8",
 		"composer/installers": "~1.0",
@@ -36,7 +36,7 @@
 		"nesbot/carbon": "^2.40|^3.0",
 		"orangehill/iseed": "^3.0",
 		"qirolab/laravel-themer": "^2.1",
-		"rutorika/sortable": "9.1",
+		"rutorika/sortable": "^9.1",
 		"silber/bouncer": "^1.0",
 		"spatie/geocoder": "^3.7",
 		"spatie/laravel-analytics": "^5.0",
