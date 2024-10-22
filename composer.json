@@ -1,7 +1,7 @@
 {
     "name": "appdezign/lara-cms",
     "description": "Lara CMS",
-	"version": "8.3.1",
+	"version": "8.3.2",
     "keywords": ["Lara", "CMS"],
     "license": "proprietary",
     "homepage": "https://firmaq.nl",
@@ -23,8 +23,7 @@
 		"doctrine/dbal": "^3.6|^4.2",
 		"google/cloud-translate": "^1.10",
 		"guzzlehttp/guzzle": "^7.0.1",
-		"intervention/image": "^2.7",
-		"intervention/imagecache": "^2.6",
+		"intervention/image": "^2.7|^3.0",
 		"jenssegers/agent": "^2.6",
 		"jenssegers/date": "^4.0",
 		"kalnoy/nestedset": "^6.0",
