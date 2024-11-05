@@ -39,6 +39,7 @@ return [
 			'parent' => 'Folder',
 			'entity' => 'Module',
 			'form'   => 'Form',
+			'url'   => 'URL',
 		],
 
 	],
