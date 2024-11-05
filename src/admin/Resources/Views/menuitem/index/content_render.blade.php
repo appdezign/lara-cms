@@ -1,10 +1,11 @@
 <?php use Lara\Common\Models\Tag;
 
-$padding = ($node->depth > 0) ? ($node->depth - 1) * 30 : 0; ?>
-<?php $nodeclass = $node->isLeaf() ? 'isLeaf' : 'hasChildren'; ?>
-<?php $rowstyle = ($node->publish == 1) ? 'published' : 'draft'; ?>
+$navlink = ($node->type == 'url') ? $node->url : url($clanguage . '/' . $node->route);
 
-<?php
+$padding = ($node->depth > 0) ? ($node->depth - 1) * 30 : 0;
+$nodeclass = $node->isLeaf() ? 'isLeaf' : 'hasChildren';
+$rowstyle = ($node->publish == 1) ? 'published' : 'draft';
+
 if ($node->type == 'entity') {
 	if ($node->tag_id) {
 		$tag = Tag::find($node->tag_id);
@@ -31,7 +32,7 @@ if ($node->type == 'entity') {
 				</div>
 			@endif
 
-			<a href="/{{ $clanguage }}/{{ $node->route }}" target="_blank" class="title">
+			<a href="{{ $navlink }}" target="_blank" class="title">
 				@if ($node->depth > 0)
 					@if ($node->type == 'parent')
 						<i class="fas fa-folder-open"></i>
@@ -95,6 +96,8 @@ if ($node->type == 'entity') {
 			@elseif ($node->type == 'page')
 				<?php $pg = \Lara\Common\Models\Page::where('id', $node->object_id)->first(); ?>
 				{{ str_limit($pg->title, 25, ' ...') }}
+			@elseif ($node->type == 'url')
+				<a href="{{ $node->url }}" target="_blank">{{ $node->url }}</a>
 			@elseif ($node->type == 'parent')
 				&nbsp;
 			@endif
@@ -117,7 +120,8 @@ if ($node->type == 'entity') {
 				   data-route="{{ $node->route }}"
 				   data-entview="{{ $node->entity_view_id }}"
 				   data-tagid="{{ $node->tag_id }}"
-				   data-objectid="{{ $node->object_id }}">
+				   data-objectid="{{ $node->object_id }}"
+				   data-url="{{ $node->url }}">
 					<i class="las la-edit"></i>
 				</a>
 			@else

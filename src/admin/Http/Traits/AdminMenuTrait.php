@@ -250,11 +250,21 @@ trait AdminMenuTrait
 		if ($request->get('new_type') == 'parent') {
 
 			$object->entity_id = null;
-
 			$object->entity_view_id = null;
 			$object->object_id = null;
 			$object->url = null;
+			$object->routename = null;
 
+		}
+
+		// type URL
+		if ($request->get('new_type') == 'url') {
+
+			$object->url = $request->get('url');
+
+			$object->entity_id = null;
+			$object->entity_view_id = null;
+			$object->object_id = null;
 			$object->routename = null;
 
 		}
@@ -422,11 +432,21 @@ trait AdminMenuTrait
 		if ($request->get('type') == 'parent') {
 
 			$object->entity_id = null;
-
 			$object->entity_view_id = null;
 			$object->object_id = null;
 			$object->url = null;
+			$object->routename = null;
 
+		}
+
+		// type URL
+		if ($request->get('type') == 'url') {
+
+			$object->url = $request->get('url');
+
+			$object->entity_id = null;
+			$object->entity_view_id = null;
+			$object->object_id = null;
 			$object->routename = null;
 
 		}

@@ -283,10 +283,11 @@ return [
 		],
 	],
 
+	// Laravel 11
 	'fieldTypes' => [
 		'string'        => [
 			'name'  => 'string',
-			'type'  => 'string',
+			'type'  => 'varchar',
 			'check' => true,
 		],
 		'text'          => [
@@ -306,12 +307,12 @@ return [
 		],
 		'email'         => [
 			'name'  => 'email',
-			'type'  => 'string',
+			'type'  => 'varchar',
 			'check' => true,
 		],
 		'datetime'      => [
 			'name'  => 'datetime',
-			'type'  => 'datetime',
+			'type'  => 'timestamp',
 			'check' => true,
 		],
 		'date'          => [
@@ -326,12 +327,12 @@ return [
 		],
 		'integer'       => [
 			'name'  => 'integer',
-			'type'  => 'integer',
+			'type'  => 'int',
 			'check' => true,
 		],
 		'intunsigned'   => [
 			'name'  => 'intunsigned',
-			'type'  => 'integer',
+			'type'  => 'int',
 			'check' => true,
 		],
 		'decimal101'    => [
@@ -361,22 +362,22 @@ return [
 		],
 		'geolocation'   => [
 			'name'  => 'geolocation',
-			'type'  => 'string',
+			'type'  => 'varchar',
 			'check' => true,
 		],
 		'boolean'       => [
 			'name'  => 'boolean',
-			'type'  => 'boolean',
+			'type'  => 'tinyint',
 			'check' => true,
 		],
 		'yesno'         => [
 			'name'  => 'yesno',
-			'type'  => 'boolean',
+			'type'  => 'tinyint',
 			'check' => true,
 		],
 		'video'         => [
 			'name'  => 'video',
-			'type'  => 'string',
+			'type'  => 'varchar',
 			'check' => true,
 		],
 		'selectone'     => [
@@ -396,7 +397,7 @@ return [
 		],
 		'color'         => [
 			'name'  => 'color',
-			'type'  => 'string',
+			'type'  => 'varchar',
 			'check' => true,
 		],
 		'custom'        => [
@@ -409,7 +410,7 @@ return [
 	'fieldFormTypes' => [
 		'string'  => [
 			'name'  => 'string',
-			'type'  => 'string',
+			'type'  => 'varchar',
 			'check' => true,
 		],
 		'text'    => [
@@ -419,12 +420,12 @@ return [
 		],
 		'email'   => [
 			'name'  => 'email',
-			'type'  => 'string',
+			'type'  => 'varchar',
 			'check' => true,
 		],
 		'integer' => [
 			'name'  => 'integer',
-			'type'  => 'integer',
+			'type'  => 'int',
 			'check' => true,
 		],
 		'date'    => [
@@ -434,12 +435,12 @@ return [
 		],
 		'yesno'   => [
 			'name'  => 'yesno',
-			'type'  => 'yesno',
+			'type'  => 'tinyint',
 			'check' => true,
 		],
 		'boolean' => [
 			'name'  => 'boolean',
-			'type'  => 'boolean',
+			'type'  => 'tinyint',
 			'check' => true,
 		],
 		'selectone' => [

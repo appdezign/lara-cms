@@ -153,20 +153,6 @@ class DashboardController extends Controller
 	public function refresh(Request $request)
 	{
 
-		$this->data->types = $this->makeNewObject();
-
-		$this->data->types->sitestats = false;
-		$this->data->types->pagestats = false;
-		$this->data->types->refstats = false;
-		$this->data->types->userstats = false;
-		$this->data->types->browserstats = false;
-
-		$singletype = $this->getRequestParam($request, 'gatype', null, $this->entity->getEntityKey(), true);
-
-		if (isset($this->data->types->$singletype)) {
-			$this->data->types->$singletype = true;
-		}
-
 		// get view file and partials
 		$this->data->partials = $this->getPartials($this->entity);
 		$viewfile = $this->getViewFile($this->entity);
@@ -202,50 +188,9 @@ class DashboardController extends Controller
 	}
 
 	/**
+	 * @param Request $request
 	 * @return Application|Factory|View
 	 */
-	public function dbshow()
-	{
-
-		$this->data->dbcurrent = config('lara-common.database.db_database');
-
-		$this->data->objects = $this->getDatabaseStructure($this->data->dbcurrent);
-
-		// get view file and partials
-		$viewfile = $this->getViewFile($this->entity);
-
-		// pass all variables to the view
-		return view($viewfile, [
-			'data' => $this->data,
-		]);
-
-	}
-
-	/**
-	 * @return Application|Factory|View
-	 */
-	public function dbcheck()
-	{
-
-		$this->data->dbsource = config('lara-common.database.db_database_src');
-		$this->data->dbdest = config('lara-common.database.db_database');
-
-		$connsrc = config('lara-common.database.db_connection_src');
-		$conndest = config('lara-common.database.db_connection');
-
-		// check database
-		$this->data->result = $this->compareDatabaseStructure($this->data->dbsource, $this->data->dbdest, $connsrc, $conndest);
-
-		// get view file and partials
-		$viewfile = $this->getViewFile($this->entity);
-
-		// pass all variables to the view
-		return view($viewfile, [
-			'data' => $this->data,
-		]);
-
-	}
-
 	public function purge(Request $request)
 	{
 		if (!Auth::user()->isAn('administrator')) {

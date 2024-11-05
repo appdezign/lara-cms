@@ -12,9 +12,6 @@ return [
 		'db_connection' => env('DB_CONNECTION', null),
 		'db_database'   => env('DB_DATABASE'),
 
-		'db_connection_src' => env('DB_CONNECTION_SRC', null),
-		'db_database_src'   => env('DB_DATABASE_SRC', null),
-
 		'prefix' => 'lara_',
 
 		'entity' => [

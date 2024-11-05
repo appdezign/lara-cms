@@ -116,6 +116,15 @@
 					</x-formrow>
 				</div>
 
+				<div id="row_menu_url_edit" style="display:none">
+					<x-formrow>
+						<x-slot name="label">
+							{{ html()->label(_lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.column.url').':', 'url') }}
+						</x-slot>
+						{{ html()->text('url', null)->class('form-control') }}
+					</x-formrow>
+				</div>
+
 				<x-formrow>
 					<x-slot name="label">
 						{{ html()->label(_lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.column.route_has_auth').':', 'route_has_auth') }}

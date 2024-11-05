@@ -2,16 +2,14 @@
 
 namespace Lara\Common\Http\Controllers\Tools;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
-use Closure;
-use Intervention\Image\ImageManager;
+use Intervention\Image\Laravel\Facades\Image;
 
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Response as IlluminateResponse;
 use Config;
-
-use Image;
 
 class ImageCacheController extends BaseController
 {
@@ -57,10 +55,8 @@ class ImageCacheController extends BaseController
 	];
 
 	/**
-	 * Get HTTP response of template applied image file
-	 *
-	 * @param int|null $width
-	 * @param int|null $height
+	 * @param $width
+	 * @param $height
 	 * @param int $fit
 	 * @param string $fitpos
 	 * @param int $quality
@@ -70,126 +66,129 @@ class ImageCacheController extends BaseController
 	public function process($width = null, $height = null, int $fit, string $fitpos, int $quality, string $filename)
 	{
 
-		$path = $this->getImagePath($filename);
+		$cachedPath = storage_path('imgcache/x' . $width . '/y' . $height . '/f' . $fit . '/' . $fitpos . '/' . $filename);
 
-		// The Intervention\Image package does not support Gifs, so we exclude them
-		$mime = mime_content_type($path);
-		if($mime == 'image/gif') {
-			$content = file_get_contents($path);
+		// check cached version
+		if (file_exists($cachedPath) && is_file($cachedPath)) {
+			$mime = mime_content_type($cachedPath);
+			$content = file_get_contents($cachedPath);
 			return new IlluminateResponse($content, 200, array(
-				'Content-Type'  => $mime,
+				'Content-Type' => $mime,
 			));
+		} else {
+
+			$sourcePath = $this->getImagePath($filename);
+
+			// exclude gifs
+			$mime = mime_content_type($sourcePath);
+			if ($mime == 'image/gif') {
+				$content = file_get_contents($sourcePath);
+				return new IlluminateResponse($content, 200, array(
+					'Content-Type' => $mime,
+				));
+			}
+
+			$newCachedPath = $this->processImage($width, $height, $fit, $fitpos, $quality, $sourcePath, $cachedPath);
+
+			if (file_exists($newCachedPath) && is_file($newCachedPath)) {
+				$mime = mime_content_type($newCachedPath);
+				$content = file_get_contents($newCachedPath);
+				return new IlluminateResponse($content, 200, array(
+					'Content-Type' => $mime,
+				));
+			}
 		}
 
-		// resize and cache for a month
-		$content = Image::cache(function ($image) use ($path, $width, $height, $fit, $fitpos, $quality) {
+	}
 
-			if (is_numeric($fit) && ($fit == 2 || $fit == 1 || $fit == 0)) {
-				$this->fit = $fit;
-			}
+	/**
+	 * @param $width
+	 * @param $height
+	 * @param int $fit
+	 * @param string $fitpos
+	 * @param int $quality
+	 * @param string $sourcePath
+	 * @param string $cachedPath
+	 * @return void
+	 */
+	private function processImage($width = null, $height = null, int $fit, string $fitpos, int $quality, string $sourcePath, string $cachedPath) {
 
-			if (in_array($fitpos, $this->positions)) {
-				$this->fitpos = $fitpos;
-			}
+		$image = Image::read($sourcePath);
 
-			if (is_numeric($width)) {
-				if ($width > 0) {
-					$this->width = (int)$width;
-				} else {
-					$this->width = null;
-				}
-			}
+		if (is_numeric($fit) && ($fit == 2 || $fit == 1 || $fit == 0)) {
+			$this->fit = $fit;
+		}
 
-			if (is_numeric($height)) {
-				if ($height > 0) {
-					$this->height = (int)$height;
-				} else {
-					$this->height = null;
-				}
-			}
+		if (in_array($fitpos, $this->positions)) {
+			$this->fitpos = $fitpos;
+		}
 
-			if (is_numeric($quality) && $quality >= 0 && $quality <= 100) {
-				$this->quality = $quality;
-			}
-
-			if ($this->fit == 1) {
-
-				// cover given canvas
-				// use cropping
-
-				$image->make($path)->fit($this->width, $this->height, null, $this->fitpos);
-
-			} elseif ($this->fit == 2) {
-
-				// contain image in given canvas
-				// do not use cropping,
-				// fill canvas with default background-color (#fff, or transparent)
-
-				$img = Image::make($path);
-				$orinalAspectRatio = $img->width() / $img->height();
-
-				if ($this->width == 0) {
-
-					$this->width = (int)round($this->height * $orinalAspectRatio, 0);
-					$newAspectRatio = $orinalAspectRatio;
-
-				} elseif ($this->height == 0) {
-
-					$this->height = (int)round($this->width / $orinalAspectRatio, 0);
-					$newAspectRatio = $orinalAspectRatio;
-
-				} else {
-
-					$newAspectRatio = $this->width / $this->height;
-
-				}
-
-				if ($newAspectRatio < $orinalAspectRatio) {
-
-					$image->make($path)
-						->resize($this->width, null, function ($constraint) {
-							$constraint->aspectRatio();
-						});
-
-				} else {
-
-					$image->make($path)
-						->resize(null, $this->height, function ($constraint) {
-							$constraint->aspectRatio();
-						});
-
-				}
-
-				$image->resizeCanvas($this->width, $this->height);
-
+		if (is_numeric($width)) {
+			if ($width > 0) {
+				$this->width = (int)$width;
 			} else {
+				$this->width = null;
+			}
+		}
 
-				// resize
-				// do not use cropping
-				// do not use canvas filling
+		if (is_numeric($height)) {
+			if ($height > 0) {
+				$this->height = (int)$height;
+			} else {
+				$this->height = null;
+			}
+		}
 
-				if (is_null($this->width) || is_null($this->height)) {
+		if (is_numeric($quality) && $quality >= 0 && $quality <= 100) {
+			$this->quality = $quality;
+		}
 
-					// maintain aspect ration
-					$image->make($path)
-						->resize($this->width, $this->height, function ($constraint) {
-							$constraint->aspectRatio();
-						});
+		if ($this->fit == 1) {
 
-				} else {
-
-					// force resizing to given width height
-					// might result in stretching
-
-					$image->make($path)->resize($this->width, $this->height);
-
-				}
-
+			if (is_null($this->width)) {
+				//scale proportionally with fixed height
+				$image->scale(height: $this->height);
+			} elseif (is_null($this->height)) {
+				//scale proportionallywith fixed width
+				$image->scale(width: $this->width);
+			} else {
+				// cover given canvas, use cropping
+				$image->cover($this->width, $this->height, $this->fitpos);
 			}
 
-		}, 43200, false);
+		} elseif ($this->fit == 2) {
 
-		return $this->buildResponse($content);
+			// padding
+			$image->pad($this->width, $this->height, config('image.custom.paddingColor'));
+
+		} else {
+
+			if (is_null($this->width)) {
+				// scale proportionally with fixed height
+				// legacy (same as fit = 1)
+				$image->scale(height: $this->height);
+			} elseif (is_null($this->height)) {
+				// scale proportionallywith fixed width
+				// legacy (same as fit = 1)
+				$image->scale(width: $this->width);
+			} else {
+				// force resizing, might result in stretching
+				$image->resize($this->width, $this->height);
+			}
+
+		}
+
+		// check if specific cache direcory exists
+		$cacheDir = 'x' .$width . '/y' . $height . '/f' . $fit . '/' . $fitpos;
+		if(!File::isDirectory($cacheDir)) {
+			Storage::disk('imgcache')->makeDirectory($cacheDir);
+		}
+
+		// save to cache
+		$image->save($cachedPath, $quality);
+
+		return $cachedPath;
+
 	}
 
 	/**
@@ -220,22 +219,4 @@ class ImageCacheController extends BaseController
 		abort(404);
 	}
 
-	/**
-	 * Builds HTTP response from given image data
-	 *
-	 * @param string $content
-	 * @return IlluminateResponse
-	 */
-	private function buildResponse(string $content)
-	{
-		// define mime type
-		$mime = finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $content);
-
-		// return http response
-		return new IlluminateResponse($content, 200, array(
-			'Content-Type'  => $mime,
-			'Cache-Control' => 'max-age=' . (config('imagecache.lifetime') * 60) . ', public',
-			'Etag'          => md5($content),
-		));
-	}
 }

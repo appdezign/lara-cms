@@ -17,6 +17,7 @@
 		<div class="tools d-flex flex-row-reverse gap-3">
 
 			<a class="btn btn-sm btn-icon btn-outline btn-outline-primary"
+			   title="{{ _lanq('lara-admin::default.button.add') }}"
 			   data-bs-toggle="modal" data-bs-target="#menuCreateModal">
 				<i class="fal fa-plus"></i>
 			</a>
@@ -29,7 +30,7 @@
 
 			<a href="{{ route('admin.menu.index') }}"
 			   class="btn btn-sm btn-icon btn-outline btn-outline-primary"
-			   title="{{ _lanq('lara-admin::default.button.manage_tags') }}">
+			   title="{{ _lanq('lara-admin::default.button.manage_menu_positions') }}">
 				<i class="fal fa-clone"></i>
 			</a>
 

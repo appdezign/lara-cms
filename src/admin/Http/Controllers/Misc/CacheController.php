@@ -142,6 +142,9 @@ class CacheController extends Controller
 			if (in_array('routecache', $objectIDs)) {
 				$request->session()->put('routecacheclear', true);
 			}
+			if (in_array('imgcache', $objectIDs)) {
+				File::cleanDirectory(storage_path('imgcache'));
+			}
 			if (in_array('anacache', $objectIDs)) {
 				$this->refreshAnalytics();
 			}

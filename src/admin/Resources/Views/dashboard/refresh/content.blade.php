@@ -4,7 +4,7 @@
 			<tr>
 				<th class="w-5 text-center">
 					<div class="form-check">
-						{{ html()->checkbox('select_all', false, 1)->class('js-check-all  form-check-input')->id('check-all') }}
+						{{ html()->checkbox('select_all', true, 1)->class('js-check-all  form-check-input')->id('check-all') }}
 					</div>
 				</th>
 				</th>
@@ -20,7 +20,7 @@
 			<tr>
 				<td class="text-center">
 					<div class="form-check">
-						{{ html()->checkbox('objcts[]', $data->types->userstats, 'userstats')->class('js-check form-check-input') }}
+						{{ html()->checkbox('objcts[]', true, 'userstats')->class('js-check form-check-input') }}
 					</div>
 				</td>
 				<td>
@@ -30,7 +30,7 @@
 			<tr>
 				<td class="text-center">
 					<div class="form-check">
-						{{ html()->checkbox('objcts[]', $data->types->browserstats, 'browserstats')->class('js-check form-check-input') }}
+						{{ html()->checkbox('objcts[]', true, 'browserstats')->class('js-check form-check-input') }}
 					</div>
 				</td>
 				<td>
@@ -41,7 +41,7 @@
 			<tr>
 				<td class="text-center">
 					<div class="form-check">
-						{{ html()->checkbox('objcts[]', $data->types->sitestats, 'sitestats')->class('js-check form-check-input') }}
+						{{ html()->checkbox('objcts[]', true, 'sitestats')->class('js-check form-check-input') }}
 					</div>
 				</td>
 				<td>
@@ -51,7 +51,7 @@
 			<tr>
 				<td class="text-center">
 					<div class="form-check">
-						{{ html()->checkbox('objcts[]', $data->types->pagestats, 'pagestats')->class('js-check form-check-input') }}
+						{{ html()->checkbox('objcts[]', true, 'pagestats')->class('js-check form-check-input') }}
 					</div>
 				</td>
 				<td>
@@ -60,7 +60,7 @@
 			<tr>
 				<td class="text-center">
 					<div class="form-check">
-						{{ html()->checkbox('objcts[]', $data->types->refstats, 'refstats')->class('js-check form-check-input') }}
+						{{ html()->checkbox('objcts[]', true, 'refstats')->class('js-check form-check-input') }}
 					</div>
 				</td>
 				<td>
