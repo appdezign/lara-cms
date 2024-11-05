@@ -40,8 +40,6 @@ if (!App::runningInConsole() && !config('lara.needs_setup')) {
 			Route::get('dashboard', 'Dashboard\DashboardController@index')->name('admin.dashboard.index');
 			Route::get('dashboard/refresh', 'Dashboard\DashboardController@refresh')->name('admin.dashboard.refresh');
 			Route::post('dashboard/getrefresh', 'Dashboard\DashboardController@getrefresh')->name('admin.dashboard.getrefresh');
-			Route::get('dashboard/db', 'Dashboard\DashboardController@dbshow')->name('admin.dashboard.dbshow');
-			Route::post('dashboard/db', 'Dashboard\DashboardController@dbcheck')->name('admin.dashboard.dbcheck');
 			Route::get('dashboard/purge', 'Dashboard\DashboardController@purge')->name('admin.dashboard.purge');
 			Route::post('dashboard/purgeprocess', 'Dashboard\DashboardController@purgeprocess')->name('admin.dashboard.purgeprocess');
 
