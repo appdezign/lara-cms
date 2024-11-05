@@ -95,6 +95,17 @@
 				Refresh Analytics
 			</td>
 		</tr>
+		<tr>
+			<td class="text-center">
+				<div class="form-check">
+					{{ html()->checkbox('objcts[]', false, 'imgcache')->class('js-check form-check-input') }}
+				</div>
+			</td>
+			<td>
+				Refresh Image Cache
+			</td>
+		</tr>
+
 	</tbody>
 	<tfoot>
 		<tr>
