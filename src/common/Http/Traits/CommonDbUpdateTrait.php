@@ -38,6 +38,7 @@ trait CommonDbUpdateTrait
 			'8.2.30',
 			'8.2.33',
 			'8.2.40',
+			'8.5.0',
 		];
 
 		// current versions
@@ -164,6 +165,13 @@ trait CommonDbUpdateTrait
 				$this->addAuthTranslations();
 
 				$this->setSetting('system', 'lara_db_version', '8.2.40');
+
+			}
+
+			if (in_array('8.5.0', $updates)) {
+
+				// version bump
+				$this->setSetting('system', 'lara_db_version', '8.5.0');
 
 			}
 
