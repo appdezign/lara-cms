@@ -25,9 +25,9 @@ return new class extends Migration
 			$table->bigInteger('entity_id')->unsigned();
 
 			$table->string('seo_focus')->nullable();
-			$table->string('seo_title')->nullable();
-			$table->string('seo_description')->nullable();
-			$table->string('seo_keywords')->nullable();
+			$table->text('seo_title')->nullable();
+			$table->text('seo_description')->nullable();
+			$table->text('seo_keywords')->nullable();
 
 			$table->timestamps();
 

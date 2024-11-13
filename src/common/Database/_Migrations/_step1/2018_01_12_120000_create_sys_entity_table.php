@@ -80,6 +80,11 @@ return new class extends Migration
 			$table->bigInteger('locked_by')->nullable()->unsigned();
 
 			// foreign keys
+			$table->foreign('locked_by')
+				->references('id')
+				->on($tablenames['auth']['users'])
+				->onDelete('cascade');
+
 			$table->foreign('group_id')
 				->references('id')
 				->on($tablenames['ent']['entitygroups'])

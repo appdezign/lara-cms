@@ -48,6 +48,7 @@ return new class extends Migration
 				$table->timestamp('locked_at')->nullable();
 				$table->bigInteger('locked_by')->nullable()->unsigned();
 
+				// foreign keys
 				$table->foreign('locked_by')
 					->references('id')
 					->on($tablenames['auth']['users'])

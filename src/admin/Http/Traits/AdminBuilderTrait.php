@@ -1038,16 +1038,13 @@ trait AdminBuilderTrait
 
 		Schema::table($tablename, function ($table) use ($colname, $coltype, $realcoltype) {
 
-			if ($realcoltype == 'string') {
+			if ($realcoltype == 'varchar') {
 				$table->string($colname)->after('title')->nullable();
 			}
 			if ($realcoltype == 'text') {
 				$table->text($colname)->nullable()->after('title');
 			}
-			if ($realcoltype == 'email') {
-				$table->email($colname)->after('title');
-			}
-			if ($realcoltype == 'datetime') {
+			if ($realcoltype == 'timestamp') {
 				$table->timestamp($colname)->nullable()->after('title');
 			}
 			if ($realcoltype == 'date') {
@@ -1056,10 +1053,10 @@ trait AdminBuilderTrait
 			if ($realcoltype == 'time') {
 				$table->time($colname)->nullable()->after('title');
 			}
-			if ($realcoltype == 'boolean') {
+			if ($realcoltype == 'tinyint') {
 				$table->boolean($colname)->default(0)->after('title');
 			}
-			if ($realcoltype == 'integer') {
+			if ($realcoltype == 'int') {
 				if ($coltype == 'integer') {
 					$table->integer($colname)->default(0)->after('title');
 				}
