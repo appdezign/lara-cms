@@ -65,11 +65,6 @@ return new class extends Migration
 			$table->string('routename')->nullable();
 			$table->boolean('route_has_auth')->default(0);
 
-			// $table->string('entity_key')->nullable();
-			// $table->string('model_class')->nullable();
-			// $table->string('controller')->nullable();
-			// $table->string('method')->nullable();
-
 			$table->bigInteger('entity_id')->unsigned()->nullable();
 			$table->bigInteger('entity_view_id')->unsigned()->nullable();
 			$table->bigInteger('object_id')->unsigned()->nullable();
@@ -108,7 +103,7 @@ return new class extends Migration
 
 		});
 
-		Schema::create($tablenames['menu']['redirects'], function (Blueprint $table) {
+		Schema::create($tablenames['menu']['redirects'], function (Blueprint $table) use ($tablenames) {
 
 			// ID's
 			$table->bigIncrements('id');
@@ -133,6 +128,12 @@ return new class extends Migration
 			// record lock
 			$table->timestamp('locked_at')->nullable();
 			$table->bigInteger('locked_by')->nullable()->unsigned();
+
+			// foreign keys
+			$table->foreign('locked_by')
+				->references('id')
+				->on($tablenames['auth']['users'])
+				->onDelete('cascade');
 
 		});
 

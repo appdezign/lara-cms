@@ -17,7 +17,7 @@ return new class extends Migration
 
 		$tablenames = config('lara-common.database');
 
-		Schema::create($tablenames['sys']['dashboard'], function (Blueprint $table) {
+		Schema::create($tablenames['sys']['dashboard'], function (Blueprint $table) use ($tablenames) {
 
 			// ID's
 			$table->bigIncrements('id');
@@ -36,6 +36,12 @@ return new class extends Migration
 			// sortable
 			$table->integer('position')->unsigned()->nullable()->index();
 
+			// foreign keys
+			$table->foreign('locked_by')
+				->references('id')
+				->on($tablenames['auth']['users'])
+				->onDelete('cascade');
+
 		});
 
 		Schema::create($tablenames['sys']['jobs'], function (Blueprint $table) {
@@ -48,7 +54,7 @@ return new class extends Migration
 			$table->unsignedInteger('created_at');
 		});
 
-		Schema::create($tablenames['sys']['settings'], function (Blueprint $table) {
+		Schema::create($tablenames['sys']['settings'], function (Blueprint $table) use ($tablenames) {
 
 			// ID's
 			$table->bigIncrements('id');
@@ -67,6 +73,12 @@ return new class extends Migration
 
 			// sortable
 			$table->integer('position')->unsigned()->nullable()->index();
+
+			// foreign keys
+			$table->foreign('locked_by')
+				->references('id')
+				->on($tablenames['auth']['users'])
+				->onDelete('cascade');
 
 		});
 
@@ -135,6 +147,12 @@ return new class extends Migration
 
 			$table->timestamp('locked_at')->nullable();
 			$table->bigInteger('locked_by')->nullable()->unsigned();
+
+			// foreign keys
+			$table->foreign('locked_by')
+				->references('id')
+				->on($tablenames['auth']['users'])
+				->onDelete('cascade');
 
 		});
 
