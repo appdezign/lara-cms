@@ -16,6 +16,7 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 
 use Lara\Common\Models\Entity;
+use Lara\Common\Models\User;
 
 class SetupController extends Controller {
 
@@ -112,10 +113,14 @@ class SetupController extends Controller {
 
 		} elseif ($step == 5) {
 
+			$users = User::where('type', 'web')->get();
+
 			return view('lara-common::setup.step', [
 				'dbname' => $dbname,
+				'users' => $users,
 				'step' => $step,
 			]);
+
 		} elseif ($step == 6) {
 
 			return view('lara-common::setup.step', [
@@ -146,10 +151,11 @@ class SetupController extends Controller {
 	}
 
 	/**
+	 * @param Request $request
 	 * @param int $step
-	 * @return Application|RedirectResponse|\Illuminate\Routing\Redirector
+	 * @return \Illuminate\Foundation\Application|RedirectResponse|\Illuminate\Routing\Redirector
 	 */
-	public function stepprocess(int $step) {
+	public function stepprocess(Request $request, int $step) {
 
 		if ($step == 1) {
 
@@ -169,6 +175,10 @@ class SetupController extends Controller {
 
 		} elseif ($step == 5) {
 
+			$stepResult = $this->savePasswords($request, $step);
+
+		} elseif ($step == 6) {
+
 			$this->clearAllCache();
 
 			$this->setEnvironmentValue();
@@ -177,9 +187,51 @@ class SetupController extends Controller {
 
 		}
 
-		$nextstep = $step + 1;
+		if ($step == 5) {
+			if($stepResult) {
+				$nextstep = $step + 1;
+			} else {
+				$nextstep = $step;
+			}
+		} else {
+			$nextstep = $step + 1;
+		}
 
 		return redirect()->route('setup.stepshow', ['step' => $nextstep]);
+
+	}
+
+	private function savePasswords(Request $request, int $step) {
+
+		$passwordMinLength = config('lara-common.setup.passwords.min_length');
+
+		$users = User::where('type', 'web')->get();
+		$error = false;
+		foreach ($users as $user) {
+
+			if( $request->has('_user_' . $user->id)) {
+				$password = $request->input('_user_' . $user->id);
+
+				if(strlen($password) >= $passwordMinLength) {
+					$user->password = $password;
+					$user->save();
+				} else {
+					$error = true;
+					$errormessage = 'Password length must be ' . $passwordMinLength . ' characters or more.';
+				}
+			} else {
+				$error = true;
+				$errormessage = 'Unknown error';
+			}
+		}
+
+		if($error) {
+			flash($errormessage)->error();
+			return false;
+		} else {
+			flash('Step ' . $step . ' was completed successfully')->success();
+			return true;
+		}
 
 	}
 

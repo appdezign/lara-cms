@@ -27,6 +27,9 @@
 							@includeIf('lara-common::setup._partials.step'.$step)
 
 						</div>
+						<div class="box-footer p-10">
+							@include('flash::message')
+						</div>
 					</div>
 					<!-- /.box -->
 
@@ -46,7 +49,7 @@
 		$(document).ready(function () {
 			// spinner for save button
 			$(".next-button").click(function () {
-				$("button.next-button").html('<i class="fa fa-spin fa-circle-o-notch"></i>');
+				$("button.next-button").html('<i class="fas fa-circle-notch fa-spin p-0"></i>');
 			});
 		});
 
