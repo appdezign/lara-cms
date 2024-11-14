@@ -374,7 +374,7 @@ trait AdminBuilderTrait
 				if ($entity->columns->has_user) {
 					if ($useBigInt) {
 						$table->bigInteger('user_id')->unsigned();
-					} elseif ($userIdColtype == 'integer') {
+					} else {
 						$table->integer('user_id')->unsigned();
 					}
 					$table->foreign('user_id')
@@ -2627,9 +2627,15 @@ trait AdminBuilderTrait
 
 			$tablename = $table->$varname;
 
-			// skip migration table
-			if ($tablename != config('database.migrations')) {
+			$exclude = array();
 
+			// exclude migration table
+			$exclude[] = config('database.migrations');
+
+			// exclude users table
+			$exclude[] = config('lara-common.database.auth.users');
+
+			if (!in_array($tablename, $exclude)) {
 				Artisan::call('iseed', [
 					'tables'  => $tablename,
 					'--force' => true,

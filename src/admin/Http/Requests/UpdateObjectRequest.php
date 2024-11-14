@@ -64,17 +64,17 @@ class UpdateObjectRequest extends FormRequest
 				$value = $input[$name];
 
 				// fix empty values
-				if ($realtype == 'string' || $realtype == 'text') {
+				if ($realtype == 'varchar' || $realtype == 'text') {
 					if (empty($value)) {
 						$input[$name] = '';
 					}
 				}
-				if ($realtype == 'integer' || $realtype == 'decimal') {
+				if ($realtype == 'int' || $realtype == 'decimal') {
 					if (empty($value)) {
 						$input[$name] = 0;
 					}
 				}
-				if ($realtype == 'boolean') {
+				if ($realtype == 'tinyint') {
 					if (empty($value)) {
 						$input[$name] = 0;
 					}
@@ -99,17 +99,17 @@ class UpdateObjectRequest extends FormRequest
 					$value = $input[$name];
 
 					// fix empty values
-					if ($realtype == 'string' || $realtype == 'text') {
+					if ($realtype == 'varchar' || $realtype == 'text') {
 						if (empty($value)) {
 							$input[$name] = '';
 						}
 					}
-					if ($realtype == 'integer' || $realtype == 'decimal') {
+					if ($realtype == 'int' || $realtype == 'decimal') {
 						if (empty($value)) {
 							$input[$name] = 0;
 						}
 					}
-					if ($realtype == 'boolean') {
+					if ($realtype == 'tinyint') {
 						if (empty($value)) {
 							$input[$name] = 0;
 						}
@@ -142,17 +142,17 @@ class UpdateObjectRequest extends FormRequest
 				$value = $input[$name];
 
 				// fix empty values
-				if ($realtype == 'string' || $realtype == 'text') {
+				if ($realtype == 'varchar' || $realtype == 'text') {
 					if (empty($value)) {
 						$input[$name] = '';
 					}
 				}
-				if ($realtype == 'integer' || $realtype == 'decimal') {
+				if ($realtype == 'int' || $realtype == 'decimal') {
 					if (empty($value)) {
 						$input[$name] = 0;
 					}
 				}
-				if ($realtype == 'boolean') {
+				if ($realtype == 'tinyint') {
 					if (empty($value)) {
 						$input[$name] = 0;
 					}
