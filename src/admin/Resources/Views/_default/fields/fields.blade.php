@@ -158,6 +158,22 @@
 							}) }}
 					@endif
 
+					@if($cvar->fieldtype == 'radio')
+						<div class="d-flex">
+							@foreach($cvar->fieldvalues as $fldkey => $fldval)
+								<label class="radio-inline" style="margin-right: 1.25rem;">
+									{{ html()->radio($cvar->fieldname, null, $fldkey)
+										->id($cvar->fieldname.'_' . $loop->index)
+										->class('form-check-input')
+										->if($cvar->required, function ($el) {
+											return $el->required();
+										}) }}
+									{{ $fldval }}
+								</label>
+							@endforeach
+						</div>
+					@endif
+
 					@if($cvar->fieldtype == 'color')
 						{{ html()->text($cvar->fieldname, null)->class('form-control')->data('jscolor', '{}')
 							->if($cvardisabled, function ($el) {
