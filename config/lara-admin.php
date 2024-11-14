@@ -392,6 +392,11 @@ return [
 			'type'  => 'text',
 			'check' => true,
 		],
+		'radio'     => [
+			'name'  => 'radio',
+			'type'  => 'text',
+			'check' => true,
+		],
 		'color'         => [
 			'name'  => 'color',
 			'type'  => 'varchar',
