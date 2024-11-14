@@ -135,70 +135,72 @@ return [
 		'delete' => 'delete',
 	],
 
+	// Laravel 11
 	'defaultColumns' => [
 		'id'              => [
 			'name'     => 'id',
-			'type'     => 'integer',
+			'type'     => 'int',
 			'validate' => false,
 		],
 		'user_id'         => [
 			'name'     => 'user_id',
-			'type'     => 'integer',
+			'type'     => 'int',
 			'validate' => false,
 		],
 		'language'        => [
 			'name'     => 'language',
-			'type'     => 'string',
+			'type'     => 'varchar',
 			'validate' => false,
 		],
 		'language_parent' => [
 			'name'     => 'language_parent',
-			'type'     => 'integer',
+			'type'     => 'int',
 			'validate' => false,
 		],
 		'title'           => [
 			'name'     => 'title',
-			'type'     => 'string',
+			'type'     => 'varchar',
 			'validate' => true,
 		],
 		'slug'            => [
 			'name'     => 'slug',
-			'type'     => 'string',
+			'type'     => 'varchar',
 			'validate' => false,
 		],
 
 		'created_at' => [
 			'name'     => 'created_at',
-			'type'     => 'datetime',
+			'type'     => 'timestamp',
 			'validate' => false,
 		],
 		'updated_at' => [
 			'name'     => 'updated_at',
-			'type'     => 'datetime',
+			'type'     => 'timestamp',
 			'validate' => false,
 		],
 		'deleted_at' => [
 			'name'     => 'deleted_at',
-			'type'     => 'datetime',
+			'type'     => 'timestamp',
 			'validate' => false,
 		],
 
 		'locked_at' => [
 			'name'     => 'locked_at',
-			'type'     => 'datetime',
+			'type'     => 'timestamp',
 			'validate' => false,
 		],
 		'locked_by' => [
 			'name'     => 'locked_by',
-			'type'     => 'integer',
+			'type'     => 'int',
 			'validate' => false,
 		],
 	],
 
+	// Laravel 11
 	'optionalColumns' => [
 		'slug_lock'       => [
 			'name'     => 'slug_lock',
-			'type'     => 'boolean',
+			'type'     => 'tinyint',
 			'validate' => false,
 		],
 		'lead'            => [
@@ -213,62 +215,62 @@ return [
 		],
 		'publish'         => [
 			'name'     => 'publish',
-			'type'     => 'boolean',
+			'type'     => 'tinyint',
 			'validate' => true,
 		],
 		'publish_hide'    => [
 			'name'     => 'publish_hide',
-			'type'     => 'boolean',
+			'type'     => 'tinyint',
 			'validate' => true,
 		],
 		'publish_from'    => [
 			'name'     => 'publish_from',
-			'type'     => 'datetime',
+			'type'     => 'timestamp',
 			'validate' => true,
 		],
 		'publish_to'      => [
 			'name'     => 'publish_to',
-			'type'     => 'datetime',
+			'type'     => 'timestamp',
 			'validate' => false,
 		],
 		'show_in_app'     => [
 			'name'     => 'show_in_app',
-			'type'     => 'boolean',
+			'type'     => 'tinyint',
 			'validate' => false,
 		],
 		'seo_focus'       => [
 			'name'     => 'seo_focus',
-			'type'     => 'string',
+			'type'     => 'varchar',
 			'validate' => true,
 		],
 		'seo_title'       => [
 			'name'     => 'seo_title',
-			'type'     => 'string',
+			'type'     => 'varchar',
 			'validate' => true,
 		],
 		'seo_description' => [
 			'name'     => 'seo_description',
-			'type'     => 'string',
+			'type'     => 'varchar',
 			'validate' => true,
 		],
 		'seo_keywords'    => [
 			'name'     => 'seo_keywords',
-			'type'     => 'string',
+			'type'     => 'varchar',
 			'validate' => true,
 		],
 		'cgroup'          => [
 			'name'     => 'cgroup',
-			'type'     => 'string',
+			'type'     => 'varchar',
 			'validate' => false,
 		],
 		'position'        => [
 			'name'     => 'position',
-			'type'     => 'integer',
+			'type'     => 'int',
 			'validate' => false,
 		],
 		'ipaddress'       => [
 			'name'     => 'ipaddress',
-			'type'     => 'string',
+			'type'     => 'varchar',
 			'validate' => false,
 		],
 
@@ -277,7 +279,7 @@ return [
 	'userProfile' => [
 		'dark_mode' => [
 			'name'     => 'dark_mode',
-			'type'     => 'boolean',
+			'type'     => 'tinyint',
 			'default'  => 0,
 			'readonly' => false,
 		],
@@ -387,11 +389,6 @@ return [
 		],
 		'selectone2one' => [
 			'name'  => 'selectone2one',
-			'type'  => 'text',
-			'check' => true,
-		],
-		'radio'     => [
-			'name'  => 'radio',
 			'type'  => 'text',
 			'check' => true,
 		],

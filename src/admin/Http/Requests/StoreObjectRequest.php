@@ -2,7 +2,6 @@
 
 namespace Lara\Admin\Http\Requests;
 
-
 use Lara\Admin\Http\Traits\AdminTrait;
 use Lara\Admin\Http\Traits\AdminDbTrait;
 use Lara\Admin\Http\Traits\AdminEntityTrait;
@@ -65,17 +64,17 @@ class StoreObjectRequest extends FormRequest
 				$value = $input[$name];
 
 				// fix empty values
-				if ($realtype == 'string' || $realtype == 'text') {
+				if ($realtype == 'varchar' || $realtype == 'text') {
 					if (empty($value)) {
 						$input[$name] = '';
 					}
 				}
-				if ($realtype == 'integer' || $realtype == 'decimal') {
+				if ($realtype == 'int' || $realtype == 'decimal') {
 					if (empty($value)) {
 						$input[$name] = 0;
 					}
 				}
-				if ($realtype == 'boolean') {
+				if ($realtype == 'tinyint') {
 					if (empty($value)) {
 						$input[$name] = 0;
 					}
@@ -100,17 +99,17 @@ class StoreObjectRequest extends FormRequest
 					$value = $input[$name];
 
 					// fix empty values
-					if ($realtype == 'string' || $realtype == 'text') {
+					if ($realtype == 'varchar' || $realtype == 'text') {
 						if (empty($value)) {
 							$input[$name] = '';
 						}
 					}
-					if ($realtype == 'integer' || $realtype == 'decimal') {
+					if ($realtype == 'int' || $realtype == 'decimal') {
 						if (empty($value)) {
 							$input[$name] = 0;
 						}
 					}
-					if ($realtype == 'boolean') {
+					if ($realtype == 'tinyint') {
 						if (empty($value)) {
 							$input[$name] = 0;
 						}
@@ -143,17 +142,17 @@ class StoreObjectRequest extends FormRequest
 				$value = $input[$name];
 
 				// fix empty values
-				if ($realtype == 'string' || $realtype == 'text') {
+				if ($realtype == 'varchar' || $realtype == 'text') {
 					if (empty($value)) {
 						$input[$name] = '';
 					}
 				}
-				if ($realtype == 'integer' || $realtype == 'decimal') {
+				if ($realtype == 'int' || $realtype == 'decimal') {
 					if (empty($value)) {
 						$input[$name] = 0;
 					}
 				}
-				if ($realtype == 'boolean') {
+				if ($realtype == 'tinyint') {
 					if (empty($value)) {
 						$input[$name] = 0;
 					}
