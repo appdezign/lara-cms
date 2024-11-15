@@ -167,7 +167,10 @@
 										->class('form-check-input')
 										->if($cvar->required, function ($el) {
 											return $el->required();
-										}) }}
+										})
+										 ->if($loop->first, function ($el) {
+											return $el->checked();
+										})}}
 									{{ $fldval }}
 								</label>
 							@endforeach

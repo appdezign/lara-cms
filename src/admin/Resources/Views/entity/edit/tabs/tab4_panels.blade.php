@@ -38,7 +38,11 @@
 				</x-slot>
 				<div class="form-check">
 					{{ html()->hidden('_has_filters', 0) }}
-					{{ html()->checkbox('_has_filters', $data->object->panels->has_filters, 1)->class('form-check-input') }}
+					{{ html()->checkbox('_has_filters', $data->object->panels->has_filters, 1)
+							->class('form-check-input')
+							 ->if($data->relations->count() == 0, function ($el) {
+								return $el->disabled();
+							}) }}
 				</div>
 			</x-formrow>
 
