@@ -372,8 +372,9 @@ trait AdminMediaTrait
 			}
 
 			$base = $this->getImagePositionBase($entity, $object);
+			$gallery = $object->media()->where('ishero', 0)->where('featured', 0)->get();
 			$i = 1;
-			foreach ($object->gallery as $image) {
+			foreach ($gallery as $image) {
 				$pos = $base + $i;
 				if ($image->position != $pos) {
 					$image->position = $pos;
