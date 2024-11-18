@@ -72,6 +72,7 @@ class ImageCacheController extends BaseController
 		if (file_exists($cachedPath) && is_file($cachedPath)) {
 			$mime = mime_content_type($cachedPath);
 			$content = file_get_contents($cachedPath);
+
 			return new IlluminateResponse($content, 200, array(
 				'Content-Type' => $mime,
 			));
@@ -83,6 +84,7 @@ class ImageCacheController extends BaseController
 			$mime = mime_content_type($sourcePath);
 			if ($mime == 'image/gif') {
 				$content = file_get_contents($sourcePath);
+
 				return new IlluminateResponse($content, 200, array(
 					'Content-Type' => $mime,
 				));
@@ -93,6 +95,7 @@ class ImageCacheController extends BaseController
 			if (file_exists($newCachedPath) && is_file($newCachedPath)) {
 				$mime = mime_content_type($newCachedPath);
 				$content = file_get_contents($newCachedPath);
+
 				return new IlluminateResponse($content, 200, array(
 					'Content-Type' => $mime,
 				));
@@ -111,7 +114,8 @@ class ImageCacheController extends BaseController
 	 * @param string $cachedPath
 	 * @return void
 	 */
-	private function processImage($width = null, $height = null, int $fit, string $fitpos, int $quality, string $sourcePath, string $cachedPath) {
+	private function processImage($width = null, $height = null, int $fit, string $fitpos, int $quality, string $sourcePath, string $cachedPath)
+	{
 
 		$image = Image::read($sourcePath);
 
@@ -145,6 +149,9 @@ class ImageCacheController extends BaseController
 
 		if ($this->fit == 1) {
 
+			// cover given canvas
+			// use cropping
+
 			if (is_null($this->width)) {
 				//scale proportionally with fixed height
 				$image->scale(height: $this->height);
@@ -159,6 +166,23 @@ class ImageCacheController extends BaseController
 		} elseif ($this->fit == 2) {
 
 			// padding
+			// contain image in given canvas
+			// do not use cropping,
+			// fill canvas with default background-color (#fff, or transparent)
+
+			$this->width = (int)$width;
+			$this->height = (int)$height;
+
+			if ($this->width == 0 || $this->height == 0) {
+				$orinalAspectRatio = $image->width() / $image->height();
+				if ($this->width == 0) {
+					$this->width = (int)round($this->height * $orinalAspectRatio, 0);
+				}
+				if ($this->height == 0) {
+					$this->height = (int)round($this->width / $orinalAspectRatio, 0);
+				}
+			}
+
 			$image->pad($this->width, $this->height, config('image.custom.paddingColor'));
 
 		} else {
@@ -168,7 +192,7 @@ class ImageCacheController extends BaseController
 				// legacy (same as fit = 1)
 				$image->scale(height: $this->height);
 			} elseif (is_null($this->height)) {
-				// scale proportionallywith fixed width
+				// scale proportionally with fixed width
 				// legacy (same as fit = 1)
 				$image->scale(width: $this->width);
 			} else {
@@ -179,8 +203,8 @@ class ImageCacheController extends BaseController
 		}
 
 		// check if specific cache direcory exists
-		$cacheDir = 'x' .$width . '/y' . $height . '/f' . $fit . '/' . $fitpos;
-		if(!File::isDirectory($cacheDir)) {
+		$cacheDir = 'x' . $width . '/y' . $height . '/f' . $fit . '/' . $fitpos;
+		if (!File::isDirectory($cacheDir)) {
 			Storage::disk('imgcache')->makeDirectory($cacheDir);
 		}
 
