@@ -314,7 +314,15 @@ class FormController extends Controller
 		$maildata->content->data = $app->make('stdClass');
 		foreach ($this->entity->getCustomColumns() as $field) {
 			$fieldname = $field->fieldname;
-			$fieldvalue = $request->input($fieldname);
+			if($field->fieldtype == 'boolean' || $field->fieldtype == 'yesno') {
+				if($request->input($fieldname) == 1) {
+					$fieldvalue = _lanq('lara-admin::default.value.yes');
+				} else {
+					$fieldvalue = _lanq('lara-admin::default.value.no');
+				}
+			} else {
+				$fieldvalue = $request->input($fieldname);
+			}
 			$maildata->content->data->$fieldname = [
 				'colname' => _lanq('lara-eve::' . $this->entity->getEntityKey() . '.column.' . $fieldname),
 				'colval'  => $fieldvalue,

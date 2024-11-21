@@ -51,7 +51,7 @@
 			<x-slot name="label">
 				{{ _lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.column.' . $colname) }}
 			</x-slot>
-			@if($cvar->fieldtype == 'boolean')
+			@if($cvar->fieldtype == 'boolean' || $cvar->fieldtype == 'yesno')
 				@if($data->object->$colname == 1)
 					{{ _lanq('lara-admin::default.value.yes') }}
 				@else
@@ -100,7 +100,7 @@
 			<x-slot name="label">
 				{{ _lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.column.' .$colname) }}
 			</x-slot>
-			@if($cvar->fieldtype == 'boolean')
+			@if($cvar->fieldtype == 'boolean' || $cvar->fieldtype == 'yesno')
 				@if($data->object->$colname == 1)
 					{{ _lanq('lara-admin::default.value.yes') }}
 				@else
@@ -127,7 +127,7 @@
 			<x-slot name="label">
 				{{ _lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.column.' .$colname) }}
 			</x-slot>
-			@if($cvar->fieldtype == 'boolean')
+			@if($cvar->fieldtype == 'boolean' || $cvar->fieldtype == 'yesno')
 				@if($data->object->$colname == 1)
 					{{ _lanq('lara-admin::default.value.yes') }}
 				@else
