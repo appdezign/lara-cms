@@ -679,7 +679,8 @@ trait AdminObjectTrait
 					if ($pos !== false) {
 						$tname = substr($filename, 0, $pos);
 						if (str_ends_with($tname, $object->relentkey)) {
-							$fileArray[] = substr($tname, 0, strlen($tname) - strlen($object->relentkey) - 1);
+							$val = substr($tname, 0, strlen($tname) - strlen($object->relentkey) - 1);
+							$fileArray[$val] = $val;
 						}
 					}
 				}
