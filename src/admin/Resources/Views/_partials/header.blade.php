@@ -16,7 +16,7 @@
 		<div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
 			<a href="#" class="app-sidebar-mobile-logo d-lg-none">
 				<div class="text-logo">
-					Lara {{ $laraversion->major }}
+					Lara {{ $laraversion->major }}<span class="fs-6 fw-normal color-success">.{{ $laraversion->minor }}</span>
 				</div>
 			</a>
 		</div>
