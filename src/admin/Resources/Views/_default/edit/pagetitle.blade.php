@@ -6,7 +6,7 @@
 					<div class="d-none d-md-block">
 						<h1 class="page-heading text-dark fw-light fs-4">
 							{{ title_case(_lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.entity.entity_single')) }}
-							- <em>{{ $data->object->title }}</em>
+							- <em>{{ str_limit($data->object->title, 80, ' ..') }}</em>
 						</h1>
 					</div>
 					<div class="d-block d-md-none">
