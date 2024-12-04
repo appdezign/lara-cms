@@ -14,6 +14,7 @@
 		],
 		toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link",
 		menubar: 'edit insert view format table tools help',
+		convert_urls: false,
 		relative_urls: false,
 		paste_as_text: true,
 		extended_valid_elements: 'i[class]',
@@ -111,6 +112,7 @@
 			"template paste textcolor colorpicker textpattern"
 		],
 		toolbar: "code | styleselect | bold italic | alignleft aligncenter alignright alignjustify",
+		convert_urls: false,
 		relative_urls: false,
 		menubar: false,
 		paste_as_text: true,
