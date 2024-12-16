@@ -6,7 +6,10 @@
 	<!--begin::Logo-->
 	<div class="app-sidebar-logo @if($isbuilder) builder @endif px-9" id="kt_app_sidebar_logo">
 		<div class="text-logo">
-			Lara {{ $laraversion->major }}<span class="fs-6 fw-normal color-success">.{{ $laraversion->minor }}</span>
+			Lara {{ $laraversion->major }}
+			<div class="text-logo-minor">
+				{{ $laraversion->minor }}
+			</div>
 		</div>
 	</div>
 	<!--end::Logo-->
