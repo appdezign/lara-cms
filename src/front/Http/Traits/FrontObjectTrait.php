@@ -622,72 +622,138 @@ trait FrontObjectTrait
 			// See: Lara\Admin\Resources\Views\_scripts\tiny.blade.php
 
 			$columns = [
-				2 => [
+				[
+					'groupid' => 21,
+					'equalcols' => true,
 					'colcount' => 2,
 					'cols'     => [
 						[
-							'colnr'    => '1',
+							'order'    => 1,
+							'colid'    => '1',
 							'colwidth' => 6,
 						],
 						[
-							'colnr'    => '2',
+							'order'    => 2,
+							'colid'    => '2',
 							'colwidth' => 6,
 						],
 					],
 				],
-				3 => [
+				[
+					'groupid' => 31,
+					'equalcols' => true,
 					'colcount' => 3,
 					'cols'     => [
 						[
-							'colnr'    => '1',
+							'order'    => 1,
+							'colid'    => '1',
 							'colwidth' => 4,
 						],
 						[
-							'colnr'    => '2',
+							'order'    => 2,
+							'colid'    => '2',
 							'colwidth' => 4,
 						],
 						[
-							'colnr'    => '3',
+							'order'    => 3,
+							'colid'    => '3',
+							'colwidth' => 4,
+						],
+					],
+				],
+				[
+					'groupid' => 32,
+					'equalcols' => false,
+					'colcount' => 3,
+					'cols'     => [
+						[
+							'order'    => 1,
+							'colid'    => '1',
 							'colwidth' => 4,
 						],
 						[
-							'colnr'    => '12',
-							'colwidth' => 8,
-						],
-						[
-							'colnr'    => '23',
+							'order'    => 2,
+							'colid'    => '23',
 							'colwidth' => 8,
 						],
 					],
 				],
-				4 => [
+				[
+					'groupid' => 33,
+					'equalcols' => false,
+					'colcount' => 3,
+					'cols'     => [
+						[
+							'order'    => 1,
+							'colid'    => '12',
+							'colwidth' => 8,
+						],
+						[
+							'order'    => 2,
+							'colid'    => '3',
+							'colwidth' => 4,
+						],
+					],
+				],
+				[
+					'groupid' => 41,
+					'equalcols' => true,
 					'colcount' => 4,
 					'cols'     => [
 						[
-							'colnr'    => '1',
+							'order'    => 1,
+							'colid'    => '1',
 							'colwidth' => 3,
 						],
 						[
-							'colnr'    => '2',
+							'order'    => 2,
+							'colid'    => '2',
 							'colwidth' => 3,
 						],
 						[
-							'colnr'    => '3',
+							'order'    => 3,
+							'colid'    => '3',
 							'colwidth' => 3,
 						],
 						[
-							'colnr'    => '4',
+							'order'    => 4,
+							'colid'    => '4',
+							'colwidth' => 3,
+						],
+					],
+				],
+				[
+					'groupid' => 42,
+					'equalcols' => false,
+					'colcount' => 4,
+					'cols'     => [
+						[
+							'order'    => 1,
+							'colid'    => '1',
 							'colwidth' => 3,
 						],
 						[
-							'colnr'    => '123',
+							'order'    => 2,
+							'colid'    => '234',
+							'colwidth' => 9,
+						],
+					],
+				],
+				[
+					'groupid' => 43,
+					'equalcols' => false,
+					'colcount' => 4,
+					'cols'     => [
+						[
+							'order'    => 1,
+							'colid'    => '123',
 							'colwidth' => 9,
 						],
 						[
-							'colnr'    => '234',
-							'colwidth' => 9,
+							'order'    => 2,
+							'colid'    => '4',
+							'colwidth' => 3,
 						],
-
 					],
 				],
 			];
@@ -696,17 +762,17 @@ trait FrontObjectTrait
 
 			foreach ($columns as $cl) {
 
-				$varfound = 'sc_col' . $cl->colcount . '_found';
+				$sep = ($cl->equalcols) ? 'van' : '_van_';
+
+				$varfound = 'sc_col' . $cl->groupid . '_found';
 				$$varfound = false;
 
 				foreach ($cl->cols as $rcol) {
 
-					$rcol->colnr = $rcol->colnr;
-
-					$var_str = 'pos_str' . $rcol->colnr . $cl->colcount;
-					$var_end = 'pos_end' . $rcol->colnr . $cl->colcount;
-					$$var_str = strpos($str, '[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']');
-					$$var_end = strpos($str, '[/kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']');
+					$var_str = 'pos_str_' . $rcol->colid . '_' . $cl->groupid;
+					$var_end = 'pos_end_' . $rcol->colid . '_' . $cl->groupid;
+					$$var_str = strpos($str, '[kolom_' . $rcol->colid . $sep . $cl->colcount . ']');
+					$$var_end = strpos($str, '[/kolom_' . $rcol->colid . $sep . $cl->colcount . ']');
 
 					if ($$var_str !== false || $$var_end !== false) {
 						// shortcode found
@@ -714,34 +780,34 @@ trait FrontObjectTrait
 					}
 				}
 
-				if ($$varfound == true) {
+				if ($$varfound) {
 
 					// first remove the <p> tags form the shortcode
 					foreach ($cl->cols as $rcol) {
 
-						$str = str_replace('<p>[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']</p>', '[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']',
+						$str = str_replace('<p>[kolom_' . $rcol->colid . $sep . $cl->colcount . ']</p>', '[kolom_' . $rcol->colid . $sep . $cl->colcount . ']',
 							$str);
-						$str = str_replace('<p>[/kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']</p>',
-							'[/kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']', $str);
+						$str = str_replace('<p>[/kolom_' . $rcol->colid . $sep . $cl->colcount . ']</p>',
+							'[/kolom_' . $rcol->colid . $sep . $cl->colcount . ']', $str);
 					}
 
 					// check if shortcode is complete
 
-					$varcomplete = 'sc_col' . $cl->colcount . '_complete';
-					$$varcomplete = true;
+					$groupcomplete = 'sc_col' . $cl->groupid . '_complete';
+					$$groupcomplete = true;
 
 					foreach ($cl->cols as $rcol) {
 
-						$var_str = 'pos_str' . $rcol->colnr . $cl->colcount;
-						$var_end = 'pos_end' . $rcol->colnr . $cl->colcount;
+						$var_str = 'pos_str_' . $rcol->colid . '_' . $cl->groupid;
+						$var_end = 'pos_end_' . $rcol->colid . '_' . $cl->groupid;
 
 						if ($$var_str === false || $$var_end === false) {
 							// shortcode incomplete
-							$$varcomplete = false;
+							$$groupcomplete = false;
 						}
 					}
 
-					if ($$varcomplete = true) {
+					if ($$groupcomplete) {
 
 						// correct shortcode found, start replacing
 
@@ -750,29 +816,20 @@ trait FrontObjectTrait
 
 						foreach ($cl->cols as $rcol) {
 
-							if ($rcol->colnr == 1) {
-								$str = str_replace('[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']',
+							if ($rcol->order == 1) {
+								$str = str_replace('[kolom_' . $rcol->colid . $sep . $cl->colcount . ']',
 									'<div class="row '. $gutterClass .'"><div class="col-' . $breakpoint . '-' . $rcol->colwidth . '">', $str);
 							} else {
-								$str = str_replace('[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']',
+								$str = str_replace('[kolom_' . $rcol->colid . $sep . $cl->colcount . ']',
 									'<div class="col-' . $breakpoint . '-' . $rcol->colwidth . '">', $str);
 							}
 
-							if ($rcol->colnr < $cl->colcount) {
-								$str = str_replace('[/kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']', '</div>', $str);
+							if ($rcol->order < $cl->colcount) {
+								$str = str_replace('[/kolom_' . $rcol->colid . $sep . $cl->colcount . ']', '</div>', $str);
 							} else {
-								$str = str_replace('[/kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']', '</div></div>', $str);
+								$str = str_replace('[/kolom_' . $rcol->colid . $sep . $cl->colcount . ']', '</div></div>', $str);
 							}
 
-						}
-
-					} else {
-
-						// incorrect shortcode, remove all shortcodes
-						foreach ($cl->cols as $rcol) {
-
-							$str = str_replace('[kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']', '', $str);
-							$str = str_replace('[/kolom_' . $rcol->colnr . 'van' . $cl->colcount . ']', '', $str);
 						}
 
 					}
