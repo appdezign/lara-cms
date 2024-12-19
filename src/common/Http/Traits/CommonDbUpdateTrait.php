@@ -39,6 +39,7 @@ trait CommonDbUpdateTrait
 			'8.2.33',
 			'8.2.40',
 			'8.5.0',
+			'8.5.12',
 		];
 
 		// current versions
@@ -175,6 +176,14 @@ trait CommonDbUpdateTrait
 
 			}
 
+			if (in_array('8.5.12', $updates)) {
+
+				$this->checkLaraEntities();
+
+				$this->setSetting('system', 'lara_db_version', '8.5.12');
+
+			}
+
 			// Post-update actions
 			$this->clearCache();
 
@@ -188,7 +197,61 @@ trait CommonDbUpdateTrait
 
 	}
 
-	private function addAuthTranslations()
+	/**
+	 * @return bool
+	 */
+	private function checkLaraEntities(): bool
+	{
+
+		// remove legacy Dashboard entity
+		$dashboardEntity = Entity::where('entity_key', 'dashboard')->first();
+		if($dashboardEntity) {
+			$dashboardEntity->delete();
+		}
+
+		// add new Language entity
+		$languageEntity = Entity::where('entity_key', 'language')->first();
+		if(empty($languageEntity)) {
+
+			// get group
+			$menuGroup = EntityGroup::where('key', 'menu')->first();
+			if($menuGroup) {
+
+				$groupID = $menuGroup->id;
+
+				// create entity
+				$newEntity = Entity::create([
+					'group_id' => $groupID,
+					'title' => 'Languages',
+					'entity_model_class' => 'Lara\Common\Models\Language',
+					'entity_key' => 'language',
+					'entity_controller' => 'LanguagesController',
+					'resource_routes' => 1,
+					'has_front_auth' => 0,
+					'menu_parent' => 'menu',
+					'menu_position' => 154,
+				]);
+
+				$newEntity->columns()->create([
+					'has_lang' => 1,
+				]);
+
+				$newEntity->objectrelations()->create([]);
+				$newEntity->panels()->create([]);
+
+			}
+
+
+		}
+
+		return true;
+
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function addAuthTranslations(): bool
 	{
 
 		$this->checkTranslation('nl', 'lara-common', 'auth', 'button', 'send_password_reset_link', 'verstuur link', true);
@@ -207,9 +270,15 @@ trait CommonDbUpdateTrait
 
 		$this->exportTranslationsToFile(['lara-common']);
 
+		return true;
+
 	}
 
-	private function updateLaraTextWidget() {
+	/**
+	 * @return bool
+	 */
+	private function updateLaraTextWidget(): bool
+	{
 		$entity = Entity::where('entity_key', 'larawidget')->first();
 		if($entity) {
 			$customcol = $entity->customcolumns->where('fieldname', 'usecache')->first();
@@ -227,9 +296,15 @@ trait CommonDbUpdateTrait
 			$textWidget->usecache = 1;
 			$textWidget->save();
 		}
+
+		return true;
 	}
 
-	private function updateLaraWidgetTemplateField() {
+	/**
+	 * @return bool
+	 */
+	private function updateLaraWidgetTemplateField(): bool
+	{
 		$entity = Entity::where('entity_key', 'larawidget')->first();
 		if($entity) {
 			$customcol = $entity->customcolumns->where('fieldname', 'template')->first();
@@ -251,10 +326,17 @@ trait CommonDbUpdateTrait
 					$widget->save();
 				}
 			}
+			return true;
+		} else {
+			return false;
 		}
 	}
 
-	private function addSeoToSettings() {
+	/**
+	 * @return bool
+	 */
+	private function addSeoToSettings(): bool
+	{
 
 		$maxLen = 300;
 
@@ -285,9 +367,16 @@ trait CommonDbUpdateTrait
 			$seoKeyw->value = $maxLen;
 			$seoKeyw->save();
 		}
+
+		return true;
+
 	}
 
-	private function updateSeoTable() {
+	/**
+	 * @return bool
+	 */
+	private function updateSeoTable(): bool
+	{
 
 		Schema::table('lara_object_seo', function (Blueprint $table) {
 			// Change column type to text
@@ -295,9 +384,15 @@ trait CommonDbUpdateTrait
 			$table->text('seo_description')->change();
 			$table->text('seo_keywords')->change();
 		});
+
+		return true;
+
 	}
 
-	private function addBackendLanguages()
+	/**
+	 * @return bool
+	 */
+	private function addBackendLanguages(): bool
 	{
 
 		$tablenames = config('lara-common.database');
@@ -332,9 +427,14 @@ trait CommonDbUpdateTrait
 			$en->save();
 		}
 
+		return true;
+
 	}
 
-	private function addHeadertagTranslations()
+	/**
+	 * @return bool
+	 */
+	private function addHeadertagTranslations(): bool
 	{
 
 		$this->checkTranslation('nl', 'lara-admin', 'mainmenu', 'items', 'headertags', 'header tags', true);
@@ -351,9 +451,15 @@ trait CommonDbUpdateTrait
 		$this->checkTranslation('nl', 'lara-admin', 'headertag', 'column', 'subtitle_tag', 'subtitle tag', true);
 
 		$this->exportTranslationsToFile(['lara-admin']);
+
+		return true;
+
 	}
 
-	private function addSubtitleToHeaderTags()
+	/**
+	 * @return bool
+	 */
+	private function addSubtitleToHeaderTags(): bool
 	{
 
 		$tablenames = config('lara-common.database');
@@ -373,9 +479,14 @@ trait CommonDbUpdateTrait
 			}
 		}
 
+		return true;
+
 	}
 
-	private function updateConfigFiles()
+	/**
+	 * @return bool
+	 */
+	private function updateConfigFiles(): bool
 	{
 
 		// lara-admin
@@ -404,8 +515,13 @@ trait CommonDbUpdateTrait
 			}
 		}
 
+		return true;
+
 	}
 
+	/**
+	 * @return bool
+	 */
 	private function createSeoGroup(): bool
 	{
 
@@ -450,6 +566,9 @@ trait CommonDbUpdateTrait
 
 	}
 
+	/**
+	 * @return bool
+	 */
 	private function addHeaderTags(): bool
 	{
 
@@ -580,7 +699,10 @@ trait CommonDbUpdateTrait
 
 	}
 
-	private function updateMenuItemTable()
+	/**
+	 * @return bool
+	 */
+	private function updateMenuItemTable(): bool
 	{
 		$tablenames = config('lara-common.database');
 		$tablename = $tablenames['menu']['menuitems'];
@@ -589,9 +711,15 @@ trait CommonDbUpdateTrait
 				$table->boolean('slug_lock')->default(0)->after('slug');
 			});
 		}
+
+		return true;
+
 	}
 
-	private function updateImageTable()
+	/**
+	 * @return bool
+	 */
+	private function updateImageTable(): bool
 	{
 
 		$tablenames = config('lara-common.database');
@@ -602,9 +730,14 @@ trait CommonDbUpdateTrait
 			});
 		}
 
+		return true;
+
 	}
 
-	private function updateFormTranslations()
+	/**
+	 * @return bool
+	 */
+	private function updateFormTranslations(): bool
 	{
 
 		$formEntities = Entity::EntityGroupIs('form')->get();
@@ -634,8 +767,14 @@ trait CommonDbUpdateTrait
 
 		$this->exportTranslationsToFile(['lara-eve']);
 
+		return true;
+
 	}
-	private function addPreventCropping()
+
+	/**
+	 * @return bool
+	 */
+	private function addPreventCropping(): bool
 	{
 
 		$tablenames = config('lara-common.database');
@@ -645,9 +784,14 @@ trait CommonDbUpdateTrait
 				$table->boolean('prevent_cropping')->default(0)->after('image_alt');
 			});
 		}
+
+		return true;
 	}
 
-	private function fixFormSortOrder()
+	/**
+	 * @return bool
+	 */
+	private function fixFormSortOrder(): bool
 	{
 		$formGroup = Entitygroup::where('key', 'form')->first();
 		if ($formGroup) {
@@ -659,9 +803,15 @@ trait CommonDbUpdateTrait
 				$columns->save();
 			}
 		}
+
+		return true;
+
 	}
 
-	private function updateAdminMenuIcons()
+	/**
+	 * @return bool
+	 */
+	private function updateAdminMenuIcons(): bool
 	{
 
 		// dashboard
@@ -685,9 +835,14 @@ trait CommonDbUpdateTrait
 			$blogEntity->save;
 		}
 
+		return true;
+
 	}
 
-	private function addIndexToSlugColumn()
+	/**
+	 * @return bool
+	 */
+	private function addIndexToSlugColumn(): bool
 	{
 
 		$ents = Entity::where('group_id', 9)->get();
@@ -712,15 +867,23 @@ trait CommonDbUpdateTrait
 				});
 			}
 		}
+
+		return true;
+
 	}
 
-	private function addImageTranslations()
+	/**
+	 * @return bool
+	 */
+	private function addImageTranslations(): bool
 	{
 
 		$this->checkTranslation('nl', 'lara-admin', 'default', 'label', 'prevent_cropping', 'voorkom afsnijden', true);
 		$this->checkTranslation('en', 'lara-admin', 'default', 'label', 'prevent_cropping', 'prevent cropping', true);
 
 		$this->exportTranslationsToFile(['lara-admin']);
+
+		return true;
 
 	}
 
