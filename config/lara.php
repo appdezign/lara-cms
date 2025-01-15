@@ -119,6 +119,10 @@ return [
 		'video/webm',
 	],
 
+	'upload_maxwidth_image'     => 1920,
+	'upload_maxheight_image'     => 1920,
+	'upload_quality_image'     => 0.9,
+
 	'upload_maxsize_image'     => 10,
 	'upload_maxsize_file'      => 20,
 	'upload_maxsize_videofile' => 50,
