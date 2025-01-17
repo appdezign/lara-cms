@@ -117,6 +117,11 @@
 							</a>
 						</div>
 						<div class="menu-item px-5">
+							<a href="{{ route('admin.user.2fa') }}" class="menu-link px-5">
+								2FA
+							</a>
+						</div>
+						<div class="menu-item px-5">
 							<a href="{{ route('logout') }}" class="menu-link px-5"
 							   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 								{{ _lanq('lara-admin::user.menu.logout_text') }}

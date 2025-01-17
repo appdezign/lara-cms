@@ -28,7 +28,7 @@ $cvars = json_decode(json_encode($cols), false);
 				{{ html()->label(_lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.column.' .$cvarfname) .':', $cvarfieldname) }}
 			</x-slot>
 
-			@if($cvar->type == 'string')
+			@if($cvar->type == 'varchar')
 				{{ html()->text($cvarfieldname, $cvarvalue)->class('form-control') }}
 			@endif
 
@@ -36,19 +36,19 @@ $cvars = json_decode(json_encode($cols), false);
 				{{ html()->textarea($cvarfieldname, $cvarvalue)->class('form-control')->rows(4) }}
 			@endif
 
-			@if($cvar->type == 'integer')
+			@if($cvar->type == 'int')
 				{{ html()->input('number', $cvarfieldname, $cvarvalue)->class('form-control')->attributes(['step' => '1']) }}
 			@endif
 
-			@if($cvar->type == 'boolean')
+			@if($cvar->type == 'tinyint')
 				<div class="form-check">
 					{{ html()->hidden($cvarfieldname, 0) }}
 					{{ html()->checkbox($cvarfieldname, $cvarvalue, 1)->class('form-check-input') }}
-	</div>
-@endif
+				</div>
+			@endif
 
-</x-formrow>
-@endif
+		</x-formrow>
+	@endif
 
 @endforeach
 

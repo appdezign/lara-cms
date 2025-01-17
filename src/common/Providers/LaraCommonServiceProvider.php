@@ -8,8 +8,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 
 use Lara\Common\Http\Middleware\DateLocale;
+use Lara\Common\Http\Middleware\Force2fa;
 use Lara\Common\Http\Middleware\HasBackendAccess;
 use Lara\Common\Http\Middleware\UserLocale;
+
+use PragmaRX\Google2FALaravel\Middleware;
 
 use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes;
 use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter;
@@ -58,6 +61,8 @@ class LaraCommonServiceProvider extends ServiceProvider
 		$router->aliasMiddleware('userLocale', UserLocale::class);
 		$router->aliasMiddleware('dateLocale', DateLocale::class);
 		$router->aliasMiddleware('backend', HasBackendAccess::class);
+		$router->aliasMiddleware('lara2fa', Middleware::class);
+		$router->aliasMiddleware('force2fa', Force2fa::class);
 
 		$router->aliasMiddleware('localize', LaravelLocalizationRoutes::class);
 		$router->aliasMiddleware('localizationRedirect', LaravelLocalizationRedirectFilter::class);

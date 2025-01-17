@@ -11,7 +11,7 @@
 				<x-slot name="label">
 					{{ html()->label(_lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.column.username').':', 'username') }}
 				</x-slot>
-				{{ html()->text('username', null)->class('form-control')->required() }}
+				{{ html()->text('username', null)->class('form-control')->disabled()->required() }}
 			</x-formrow>
 
 			<x-formrow>
@@ -70,8 +70,7 @@
 
 </div>
 
-
-<div class="box box-default">
+<div class="box box-default" style="display: none">
 
 	<x-boxheader cstate="active" collapseid="fields">
 		{{ _lanq('lara-admin::default.boxtitle.settings') }}
@@ -86,18 +85,3 @@
 	</div>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -30,8 +30,7 @@ if (!App::runningInConsole() && !config('lara.needs_setup')) {
 		|
 		*/
 
-		Route::group(['middleware' => ['auth', 'verified', 'backend']], function () {
-
+		Route::group(['middleware' => ['auth', 'verified', 'backend', 'lara2fa', 'force2fa']], function () {
 
 			// Redirect to Dashboard
 			Route::get('/', 'Misc\RedirectorController@process')->name('admin.redirect.dashboard.index');
@@ -51,6 +50,10 @@ if (!App::runningInConsole() && !config('lara.needs_setup')) {
 			// Profile
 			Route::get('user/profile', 'Auth\ProfileController@edit')->name('admin.user.profile');
 			Route::patch('user/profile', 'Auth\ProfileController@update')->name('admin.user.saveprofile');
+
+			// Profile
+			Route::get('user/2fa', 'Auth\TwoFactorController@edit')->name('admin.user.2fa');
+			Route::patch('user/2fa', 'Auth\TwoFactorController@update')->name('admin.user.save2fa');
 
 			// translation check
 			Route::get('translation/check', 'Tools\\TranslationsController@check')->name('admin.translation.check');
