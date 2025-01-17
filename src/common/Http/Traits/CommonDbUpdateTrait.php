@@ -40,6 +40,7 @@ trait CommonDbUpdateTrait
 			'8.2.40',
 			'8.5.0',
 			'8.5.12',
+			'8.5.14',
 		];
 
 		// current versions
@@ -184,6 +185,15 @@ trait CommonDbUpdateTrait
 
 			}
 
+			if (in_array('8.5.14', $updates)) {
+
+				$this->addTwoFactorColumns();
+				$this->addTwoFactorTranslations();
+
+				$this->setSetting('system', 'lara_db_version', '8.5.14');
+
+			}
+
 			// Post-update actions
 			$this->clearCache();
 
@@ -194,6 +204,68 @@ trait CommonDbUpdateTrait
 			return null;
 
 		}
+
+	}
+
+	private function addTwoFactorColumns() {
+		$tablenames = config('lara-common.database');
+		$tablename = $tablenames['auth']['users'];
+		if (!Schema::hasColumn($tablename, 'two_factor_secret')) {
+			Schema::table($tablename, function ($table) {
+				$table->text('two_factor_secret')->after('password')->nullable();
+			});
+		}
+		if (!Schema::hasColumn($tablename, 'two_factor_recovery_codes')) {
+			Schema::table($tablename, function ($table) {
+				$table->text('two_factor_recovery_codes')->after('two_factor_secret')->nullable();
+			});
+		}
+	}
+
+	private function addTwoFactorTranslations(): bool
+	{
+
+		// NL
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'boxtitle', '2fa', 'Two Factor Authentication (2FA)', true);
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'button', 'deactivate_2fa_now', 'nu deactiveren', true);
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'button', 'activate_2fa_now', 'nu activeren', true);
+
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'column', 'status', 'status', true);
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'column', 'action', 'actie', true);
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'column', 'qrcode', 'QR code', true);
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'column', 'recovery_codes', 'backup codes', true);
+
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'message', 'is_enabled', 'Two-factor authentication is geactiveerd. Scan the QR code met de Google Authenticator app.', true);
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'message', 'is_disabled', 'Two-factor authentication is gedeactiveerd.', true);
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'message', 'force_is_enabled', 'Let op: u bent verplicht om Two Factor Authentication in te schakelen.', true);
+
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'pagetitle', 'title', 'Two Factor Authentication (2FA)', true);
+
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'value', 'status_enabled', 'actief', true);
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'value', 'status_disabled', 'niet actief', true);
+
+		// EN
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'boxtitle', '2fa', 'Two Factor Authentication (2FA)', true);
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'button', 'deactivate_2fa_now', 'deactivate now', true);
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'button', 'activate_2fa_now', 'activate now', true);
+
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'column', 'status', 'status', true);
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'column', 'action', 'action', true);
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'column', 'qrcode', 'QR code', true);
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'column', 'recovery_codes', 'recovery codes', true);
+
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'message', 'is_enabled', 'Two-factor authentication is enabled. Scan the QR code with your Google Authenticator app.', true);
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'message', 'is_disabled', 'Two-factor authentication is disabled.', true);
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'message', 'force_is_enabled', 'Alert: you need to enable Two Factor Authentication.', true);
+
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'pagetitle', 'title', 'Two Factor Authentication (2FA)', true);
+
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'value', 'status_enabled', 'enabled', true);
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'value', 'status_disabled', 'disabled', true);
+
+		$this->exportTranslationsToFile(['lara-admin']);
+
+		return true;
 
 	}
 

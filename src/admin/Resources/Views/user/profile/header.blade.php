@@ -7,7 +7,7 @@
 
 	<!-- Message -->
 	<div class="col-6">
-		@include('flash::message')
+		&nbsp;
 	</div>
 
 	<div class="col-3 text-end">

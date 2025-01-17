@@ -22,6 +22,14 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+use Google2FA;
+use PragmaRX\Recovery\Recovery;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
+
+use Lara\Common\Models\Setting;
 use Lara\Common\Models\User;
 
 use Jenssegers\Agent\Agent;
@@ -30,7 +38,7 @@ use LaravelLocalization;
 
 use Bouncer;
 
-class ProfileController extends Controller
+class TwoFactorController extends Controller
 {
 
 	use AdminTrait;
@@ -114,10 +122,16 @@ class ProfileController extends Controller
 		// get record
 		$this->data->object = User::findOrFail($id);
 
-		$this->data->backendLanguages = $this->getBackendLanguagesCodeList();
-
 		// lock record
 		$this->data->object->lockRecord();
+
+		if ($this->data->object->hasTwoFactor()) {
+			$this->data->qrCodeImage = $this->getQrCode($this->data->object->email, $this->data->object->two_factor_secret);
+			$this->data->object->recoverCodes = json_decode($this->data->object->two_factor_recovery_codes);
+		} else {
+			$this->data->newSecretKey = $this->getNewSecretKey();
+			$this->data->qrCodeImage = $this->getQrCode($this->data->object->email, $this->data->newSecretKey);
+		}
 
 		// get view file and partials
 		$this->data->partials = $this->getPartials($this->entity);
@@ -142,19 +156,24 @@ class ProfileController extends Controller
 
 		$object = $this->modelClass::findOrFail($id);
 
-		if ($request->input('_password') != '') {
-			$object->password = $request->input('_password');
+		if ($request->has('_activate_2fa')) {
+			$object->two_factor_secret = $request->input('_new_secret_key');
+			$object->two_factor_recovery_codes = $this->generateRecoveryCodes();
+			$message = _lanq('lara-admin::2fa.message.is_enabled');
+		} elseif ($request->has('_deactivate_2fa')) {
+			$object->two_factor_secret = null;
+			$object->two_factor_recovery_codes = null;
+			$message = _lanq('lara-admin::2fa.message.is_disabled');
+		} else {
+			//
 		}
 
 		// save object
 		$object->update($request->all());
 
-		// update profile
-		$this->saveUserProfile($request, $object);
+		flash($message)->success();
 
-		flash(ucfirst($this->entity->getEntityKey()) . ' saved successfully')->success();
-
-		return redirect()->route('admin.user.profile');
+		return redirect()->route('admin.user.2fa');
 
 	}
 
@@ -180,6 +199,86 @@ class ProfileController extends Controller
 		} else {
 			return redirect()->route($this->entity->getPrefix() . '.' . $this->entity->getEntityRouteKey() . '.index');
 		}
+
+	}
+
+	private function getQrCode($userEmail, $userSecretKey)
+	{
+
+		$companyName = $this->GetCompanyAppName();
+
+		$g2faUrl = Google2FA::getQRCodeUrl(
+			$companyName,
+			$userEmail,
+			$userSecretKey,
+		);
+
+		$writer = new Writer(
+			new ImageRenderer(
+				new RendererStyle(400),
+				new ImagickImageBackEnd()
+			)
+		);
+
+		return base64_encode($writer->writeString($g2faUrl));
+
+	}
+
+	private function GetCompanyAppName() {
+
+		$key = 'company_2fa_app_name';
+		$title = 'Company 2FA App Name';
+		$cgroup = 'company';
+		$defaulValue = 'Lara CMS 8';
+
+		$setting = Setting::where('cgroup', $cgroup)->where('key', $key)->first();
+		if($setting) {
+			return $setting->value;
+		} else {
+			// create setting
+			$newSetting = Setting::create([
+				'title' => $title,
+				'cgroup' => $cgroup,
+				'key' => $key,
+				'value' => $defaulValue,
+			]);
+
+			return $newSetting->value;
+
+		}
+
+	}
+
+	private function getNewSecretKey()
+	{
+
+		$sessionKey = 'lara_new_2fa_secret_key';
+
+		if (session()->has($sessionKey)) {
+			// Use secret key in current session
+			return session()->get($sessionKey);
+		} else {
+			// generate new Secret Key
+			$newSecretKey = Google2FA::generateSecretKey();
+
+			// store the new Secret Key in the session
+			session()->put($sessionKey, $newSecretKey);
+
+			return $newSecretKey;
+		}
+
+	}
+
+	private function generateRecoveryCodes()
+	{
+		$recovery = new Recovery();
+		$recoveryCodes = $recovery
+			->setCount(10)     // Generate 8 codes
+			->setBlocks(4)    // Every code must have 7 blocks
+			->setChars(16)    // Each block must have 16 chars
+			->toArray();
+
+		return json_encode($recoveryCodes, JSON_FORCE_OBJECT);
 
 	}
 

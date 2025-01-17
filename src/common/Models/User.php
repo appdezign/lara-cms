@@ -144,6 +144,10 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 		return $hasLevel;
 	}
 
+	public function hasTwoFactor() {
+		return !empty($this->two_factor_secret);
+	}
+
 	/**
 	 * lock record
 	 *
