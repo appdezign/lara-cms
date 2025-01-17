@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,9 @@ if (!App::runningInConsole()) {
 
 			// Auth
 			Auth::routes(['verify' => true]);
+
+			Route::post('2fa/verify', '\Lara\Common\Http\Controllers\Auth\TwoFactorController@verify')->name('2fa.verify');
+
 
 			// Dynamic Images
 			Route::get('images/cache/{width}/{height}/{fit}/{fitpos}/{quality}/{filename}', '\Lara\Common\Http\Controllers\Tools\ImageCacheController@process')->name('imgcache');

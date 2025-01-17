@@ -13,9 +13,9 @@
 			acceptedFiles: "{{ implode (", ", config('lara.upload_allowed_images')) }}",
 			maxFilesize: {{ config('lara.upload_maxsize_image') * 1024 * 1024 }},
 			parallelUploads: 20,
-			resizeWidth: 3840,
-			resizeHeight: 2560,
-			resizeQuality: 1.0,
+			resizeWidth: {{ config('lara.upload_maxwidth_image', 1920) }},
+			resizeHeight: {{ config('lara.upload_maxheight_image', 1920) }},
+			resizeQuality: {{ config('lara.upload_quality_image', 0.9) }},
 			previewsContainer: "#dz-preview-zone1",
 			clickable: "#dz-preview-zone1",
 			init: function() {
