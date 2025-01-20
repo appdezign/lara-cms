@@ -52,8 +52,8 @@ if (!App::runningInConsole() && !config('lara.needs_setup')) {
 			Route::patch('user/profile', 'Auth\ProfileController@update')->name('admin.user.saveprofile');
 
 			// Profile
-			Route::get('user/2fa', 'Auth\TwoFactorController@edit')->name('admin.user.2fa');
-			Route::patch('user/2fa', 'Auth\TwoFactorController@update')->name('admin.user.save2fa');
+			Route::get('user/2fa', 'Auth\TwoFactorController@edit')->name('admin.user.2fa')->withoutMiddleware('lara2fa');
+			Route::patch('user/2fa', 'Auth\TwoFactorController@update')->name('admin.user.save2fa')->withoutMiddleware('lara2fa');
 
 			// translation check
 			Route::get('translation/check', 'Tools\\TranslationsController@check')->name('admin.translation.check');

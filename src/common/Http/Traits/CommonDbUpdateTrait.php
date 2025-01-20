@@ -235,8 +235,10 @@ trait CommonDbUpdateTrait
 		$this->checkTranslation('nl', 'lara-admin', '2fa', 'column', 'qrcode', 'QR code', true);
 		$this->checkTranslation('nl', 'lara-admin', '2fa', 'column', 'recovery_codes', 'backup codes', true);
 
-		$this->checkTranslation('nl', 'lara-admin', '2fa', 'message', 'is_enabled', 'Two-factor authentication is geactiveerd. Scan the QR code met de Google Authenticator app.', true);
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'message', 'is_enabled', 'Two-factor authentication is geactiveerd. Scan the QR code met de Google Authenticator app. Kopieer de backup codes, en bewaar deze op een veilige plaats.', true);
 		$this->checkTranslation('nl', 'lara-admin', '2fa', 'message', 'is_disabled', 'Two-factor authentication is gedeactiveerd.', true);
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'message', 'are_you_sure_title', 'Weet u het zeker?', true);
+		$this->checkTranslation('nl', 'lara-admin', '2fa', 'message', 'are_you_sure_text', 'Hiermee wordt Two Factor Authentication ingeschakeld. Download de app en scan de QR code.', true);
 		$this->checkTranslation('nl', 'lara-admin', '2fa', 'message', 'force_is_enabled', 'Let op: u bent verplicht om Two Factor Authentication in te schakelen.', true);
 
 		$this->checkTranslation('nl', 'lara-admin', '2fa', 'pagetitle', 'title', 'Two Factor Authentication (2FA)', true);
@@ -254,8 +256,10 @@ trait CommonDbUpdateTrait
 		$this->checkTranslation('en', 'lara-admin', '2fa', 'column', 'qrcode', 'QR code', true);
 		$this->checkTranslation('en', 'lara-admin', '2fa', 'column', 'recovery_codes', 'recovery codes', true);
 
-		$this->checkTranslation('en', 'lara-admin', '2fa', 'message', 'is_enabled', 'Two-factor authentication is enabled. Scan the QR code with your Google Authenticator app.', true);
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'message', 'is_enabled', 'Two-factor authentication is enabled. Scan the QR code with your Google Authenticator app. Copy the backup codes, and save them in a secure place.', true);
 		$this->checkTranslation('en', 'lara-admin', '2fa', 'message', 'is_disabled', 'Two-factor authentication is disabled.', true);
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'message', 'are_you_sure_title', 'Are you sure?', true);
+		$this->checkTranslation('en', 'lara-admin', '2fa', 'message', 'are_you_sure_text', 'This will enableTwo Factor Authentication. Download the app and scan the QR code.', true);
 		$this->checkTranslation('en', 'lara-admin', '2fa', 'message', 'force_is_enabled', 'Alert: you need to enable Two Factor Authentication.', true);
 
 		$this->checkTranslation('en', 'lara-admin', '2fa', 'pagetitle', 'title', 'Two Factor Authentication (2FA)', true);

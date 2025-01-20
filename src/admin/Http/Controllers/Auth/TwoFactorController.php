@@ -127,7 +127,7 @@ class TwoFactorController extends Controller
 
 		if ($this->data->object->hasTwoFactor()) {
 			$this->data->qrCodeImage = $this->getQrCode($this->data->object->email, $this->data->object->two_factor_secret);
-			$this->data->object->recoverCodes = json_decode($this->data->object->two_factor_recovery_codes);
+			$this->data->object->recoveryCodes = json_decode($this->data->object->two_factor_recovery_codes);
 		} else {
 			$this->data->newSecretKey = $this->getNewSecretKey();
 			$this->data->qrCodeImage = $this->getQrCode($this->data->object->email, $this->data->newSecretKey);

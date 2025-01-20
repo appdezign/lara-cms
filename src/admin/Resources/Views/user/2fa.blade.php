@@ -5,7 +5,7 @@
 	{{ html()->modelForm($data->object,
 			'PATCH',
 			route('admin.user.save2fa'))
-			->id('lara-default-edit-form')
+			->id('two-factor-activate-form')
 			->attributes(['accept-charset' => 'UTF-8'])
 			->class('needs-validation')
 			->novalidate()
@@ -42,3 +42,26 @@
 
 @endsection
 
+@section('scripts-after')
+
+	<script>
+		const twoFactorActivate = document.querySelector('#_activate_2fa');
+		twoFactorActivate.addEventListener('click', e => {
+			e.preventDefault();
+			Swal.fire({
+				title: "{{ ucfirst(_lanq('lara-admin::2fa.message.are_you_sure_title')) }}",
+				text: "{{ ucfirst(_lanq('lara-admin::2fa.message.are_you_sure_text')) }}",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: "{{ strtoupper(_lanq('lara-admin::default.alert.confirm')) }}",
+				cancelButtonText: "{{ ucfirst(_lanq('lara-admin::default.alert.cancel')) }}"
+			}).then((result) => {
+				if (result.isConfirmed) {
+					$('#two-factor-activate-form').append("<input type='hidden' name='_activate_2fa' value='true' />");
+					$('#two-factor-activate-form').submit();
+				}
+			});
+		});
+	</script>
+
+@endsection
