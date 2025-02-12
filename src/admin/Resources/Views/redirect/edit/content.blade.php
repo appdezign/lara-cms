@@ -11,7 +11,7 @@
 	</div>
 	<div class="col-12 col-md-1 p-2 text-end">/{{ $clanguage }}/</div>
 	<div class="col-12 col-md-9 col-lg-8">
-		{{ html()->text('redirectfrom', null)->class('form-control')->required()->style(['text-transform' => 'lowercase']) }}
+		{{ html()->text('redirectfrom', null)->class('form-control')->required() }}
 
 		<div class="help-block with-errors"></div>
 	</div>
