@@ -2,6 +2,15 @@
 
 return [
 
+	'white_label' => [
+		'active' => false,
+		'title' => 'Acme Corp',
+		'short_title' => 'AC',
+		'major_version' => 1,
+		'minor_version' => 0,
+		'show_lara_versions' => false,
+	],
+
 	'filter_by_user' => [
 		'min_user_level' => 100,
 		'entities' => [],

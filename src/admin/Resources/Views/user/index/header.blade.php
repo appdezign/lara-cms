@@ -8,25 +8,10 @@
 					{{ _lanq('lara-admin::default.form.reset_search') }}
 				</a>
 			@else
-
-				@if($entity->hasFilters())
-					@include('lara-admin::_partials.filterbyrelation')
-				@elseif($entity->hasTags())
-					@include('lara-admin::_partials.filterbytaxonomy')
-				@elseif($entity->hasGroups())
-					@include('lara-admin::_partials.filterbygroup')
-				@else
-					<div class="text-muted p-2">
-						@if($data->objects instanceof \Illuminate\Pagination\LengthAwarePaginator )
-							{{ $data->objects->total() }} {{ _lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.entity.entity_plural') }}
-						@else
-							{{ $data->objects->count() }} {{ _lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.entity.entity_plural') }}
-						@endif
-					</div>
+				@if(!$data->showarchive)
+					@include('lara-admin::user.index.filterbyrole')
 				@endif
-
 			@endif
-
 		</div>
 	</div>
 

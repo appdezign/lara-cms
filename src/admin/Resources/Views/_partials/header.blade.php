@@ -16,10 +16,15 @@
 		<div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
 			<a href="#" class="app-sidebar-mobile-logo d-lg-none">
 				<div class="text-logo">
-					Lara {{ $laraversion->major }}
-					<div class="text-logo-minor">
-						{{ $laraversion->minor }}
-					</div>
+					@if(config('lara-admin.white_label.active'))
+						{{ config('lara-admin.white_label.short_title') }}
+						<span style="font-size:14px; letter-spacing: 0;">v{{ config('lara-admin.white_label.major_version') }}.{{ config('lara-admin.white_label.minor_version') }}</span>
+					@else
+						Lara {{ $laraversion->major }}
+						<div class="text-logo-minor">
+							{{ $laraversion->minor }}
+						</div>
+					@endif
 				</div>
 			</a>
 		</div>
@@ -46,6 +51,7 @@
 			<div class="app-navbar flex-shrink-0">
 
 				<!-- help -->
+				@if(!config('lara-admin.white_label.active'))
 				<div class="app-navbar-item ms-1 ms-md-3">
 					<a href="{{ config('lara-admin.manual.online.url') }}" target="_blank"
 					   class="btn btn-icon btn-custom w-30px h-30px w-md-40px h-md-40px">
@@ -54,6 +60,7 @@
 						</span>
 					</a>
 				</div>
+				@endif
 
 				<!-- languages -->
 				@if(!$isbuilder && isset($clanguage))
@@ -88,7 +95,6 @@
 						</span>
 					</a>
 				</div>
-
 
 				<!-- user profile -->
 				<div class="app-navbar-item ms-1 ms-md-3">

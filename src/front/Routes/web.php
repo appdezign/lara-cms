@@ -12,32 +12,11 @@ use Lara\Common\Models\Menuitem;
 use Lara\Common\Models\Redirect;
 use Lara\Common\Models\Entity;
 
-/*
-|
-|--------------------------------------------------------------------------
-| Route Order
-|--------------------------------------------------------------------------
-|
-| This Routes file is called last
-|
-| The order is:
-|
-| /routes/web
-| /Lara/Admin/Routes/web
-| /Lara/Common/Routes/web
-| /Lara/Entity/Routes/web
-| /Lara/Front/Routes/web
-|
-*/
-
 if (!App::runningInConsole() && !config('lara.needs_setup')) {
 
 	if (config('lara.has_frontend')) {
 
 		Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['web', 'httpcache', 'throttle:60,1', 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'dateLocale']], function () {
-
-			// $entity_prefix = 'entity';
-			// $entity_tag_prefix = 'entitytag';
 
 			$locale = LaravelLocalization::getCurrentLocale();
 

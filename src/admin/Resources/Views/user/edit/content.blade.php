@@ -73,7 +73,7 @@
 <div class="box box-default">
 
 	<x-boxheader cstate="active" collapseid="fields">
-		{{ _lanq('lara-admin::default.boxtitle.settings') }}
+		{{ _lanq('lara-' . $entity->getModule().'::'.$entity->getEntityKey().'.boxtitle.settings') }}
 	</x-boxheader>
 
 	<div id="kt_card_collapsible_fields" class="collapse show">

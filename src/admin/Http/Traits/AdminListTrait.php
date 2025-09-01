@@ -357,7 +357,7 @@ trait AdminListTrait
 
 		// custom Filter Hook
 		if(method_exists($this, 'customAdminEntityFilter')) {
-			$collection = $this->customAdminEntityFilter($entity, $collection);
+			$collection = $this->customAdminEntityFilter($request, $entity, $collection);
 		}
 
 		// archive

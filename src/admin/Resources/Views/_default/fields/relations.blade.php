@@ -1,5 +1,7 @@
 @foreach($entity->getRelations() as $relation)
 
+	@if($relation->type == 'belongsTo')
+
 		<?php
 		$relatedModelClass = $relation->relatedEntity->getEntityModelClass();
 		$relatedSortField = $relation->relatedEntity->columns->sort_field;
@@ -11,8 +13,6 @@
 			$relatedObjects = $relatedModelClass::orderBy($relatedSortField, $relatedSortOrder)->pluck('title', 'id');
 		}
 		?>
-
-	@if($relation->type == 'belongsTo')
 
 		<x-formrow>
 			<x-slot name="label">

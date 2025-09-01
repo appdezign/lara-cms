@@ -4,6 +4,8 @@ return [
 
 	'lara_maj_ver'    => '8',
 
+	'force_2fa' => env('LARA_FORCE_2FA', false),
+
 	'clanguage_default' => 'nl',
 	'is_multi_language' => false,
 	'multi_language_slugs_in_menu' => false,
@@ -11,6 +13,8 @@ return [
 	'lock_files' => env('LARA_LOCK_FILES', true),
 
 	'auth' => [
+		'has_teams'          => env('LARA_AUTH_HAS_TEAMS', false),
+		'has_licenses'        => env('LARA_AUTH_HAS_LICENSES', false),
 		'has_front_auth'     => env('LARA_AUTH_HAS_FRONT_AUTH', false),
 		'can_register'       => env('LARA_AUTH_CAN_REGISTER', false),
 		'can_reset_password' => env('LARA_AUTH_CAN_RESET_PASSWORD', false),

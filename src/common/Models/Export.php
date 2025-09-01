@@ -3,24 +3,23 @@
 namespace Lara\Common\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class UserProfile extends Model
+class Export extends Model
 {
 
 	/**
 	 * @var string
 	 */
-	protected $table = 'lara_auth_users_profiles';
+	protected $table = 'lara_sys_export';
 
 	/**
-	 * @var array
+	 * @var string[]
 	 */
-	protected $guarded = [
+	protected $guarded = array(
 		'id',
 		'created_at',
 		'updated_at',
-	];
+	);
 
 	// set table name
 	public function __construct(array $attributes = [])
@@ -36,14 +35,6 @@ class UserProfile extends Model
 	public function getTableColumns()
 	{
 		return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
-	}
-
-	/**
-	 * @return BelongsTo
-	 */
-	public function user()
-	{
-		return $this->belongsTo('Lara\Common\Models\User');
 	}
 
 }
