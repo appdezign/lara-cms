@@ -42,6 +42,11 @@ if (!App::runningInConsole() && !config('lara.needs_setup')) {
 			Route::get('dashboard/purge', 'Dashboard\DashboardController@purge')->name('admin.dashboard.purge');
 			Route::post('dashboard/purgeprocess', 'Dashboard\DashboardController@purgeprocess')->name('admin.dashboard.purgeprocess');
 
+			// Export
+			Route::get('export', 'Tools\ExportController@index')->name('admin.export.index');
+			Route::get('export/{id}', 'Tools\ExportController@show')->name('admin.export.show');
+			Route::get('export/{id}/export', 'Tools\ExportController@export')->name('admin.export.export');
+
 			// Cache Manager
 			Route::get('cache', 'Misc\CacheController@index')->name('admin.cache.index');
 			Route::post('cache', 'Misc\CacheController@clear')->name('admin.cache.clear');
@@ -51,7 +56,7 @@ if (!App::runningInConsole() && !config('lara.needs_setup')) {
 			Route::get('user/profile', 'Auth\ProfileController@edit')->name('admin.user.profile');
 			Route::patch('user/profile', 'Auth\ProfileController@update')->name('admin.user.saveprofile');
 
-			// Profile
+			// 2FA
 			Route::get('user/2fa', 'Auth\TwoFactorController@edit')->name('admin.user.2fa')->withoutMiddleware('lara2fa');
 			Route::patch('user/2fa', 'Auth\TwoFactorController@update')->name('admin.user.save2fa')->withoutMiddleware('lara2fa');
 
