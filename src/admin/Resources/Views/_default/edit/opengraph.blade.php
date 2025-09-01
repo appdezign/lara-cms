@@ -27,7 +27,7 @@ $og_descr_max = (isset($settngz->og_descr_max)) ? $settngz->og_descr_max : 300;
 							@elseif($data->object->media->count())
 								<img src="{{ route('imgcache', ['width' => 1200, 'height' => 630, 'fit' => 1, 'fitpos' => 'center', 'quality' => 90, 'filename' => $data->object->featured->filename]) }}">
 							@else
-								<img src="https://via.placeholder.com/1200x630/e8ecf0/d4d8dc">
+								<img src="https://dummyimage.com/1200x630/e8ecf0/d4d8dc">
 							@endif
 
 							<div class="og-preview-content">
