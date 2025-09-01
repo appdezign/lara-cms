@@ -16,8 +16,10 @@ class UserProfile extends Model
 	/**
 	 * @var array
 	 */
-	protected $fillable = [
-		'dark_mode',
+	protected $guarded = [
+		'id',
+		'created_at',
+		'updated_at',
 	];
 
 	// set table name

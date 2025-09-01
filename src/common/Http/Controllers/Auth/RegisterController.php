@@ -2,12 +2,17 @@
 
 namespace Lara\Common\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use Lara\Common\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
+use Silber\Bouncer\Database\Role;
+
 use Bouncer;
+
+use Carbon\Carbon;
 
 class RegisterController extends Controller
 {
@@ -29,14 +34,14 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected string $redirectTo = '/';
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
         $this->middleware('guest');
     }
@@ -52,7 +57,6 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'username' => 'required|string|max:20|unique:lara_auth_users',
             'email' => 'required|string|email|max:255|unique:lara_auth_users',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -85,15 +89,51 @@ class RegisterController extends Controller
 		    'firstname' => $data['firstname'],
 		    'middlename' => $data['middlename'],
 		    'lastname' => $data['lastname'],
-		    'username' => $data['username'],
+		    'username' => $data['email'],
 		    'email' => $data['email'],
 		    'password' => $data['password'],
 		    'user_language' => 'nl',
+		    'email_verified_at' => null,
 	    ]);
 
-	    $newUser->assign('member');
 
-        return $newUser;
+		// assign default role
+		$role = Role::where('has_backend_access', 0)->orderby('level', 'asc')->first();
+		if($role) {
+			$newUser->assign($role->name);
+		}
+
+		// add to team, if this was an invitation
+
+		    if(!empty($data['invite_id']) && !empty($data['invite_token'])) {
+
+			    $inviteId = $data['invite_id'];
+			    $inviteToken = $data['invite_token'];
+			    $inviteEmail = $data['email'];
+
+			    if(class_exists('\Eve\Models\FrontendUserTeam')) {
+				    $invite = \Eve\Models\FrontendUserTeam::where('id', $inviteId)
+					    ->where('token', $inviteToken)
+					    ->where('email', $inviteEmail)
+					    ->first();
+
+				    if ($invite) {
+					    $invite->member_id = $newUser->id;
+					    $invite->verified_at = Carbon::now();
+					    $invite->active = 1;
+					    $invite->save();
+				    }
+
+				    // set email to verified
+				    $newUser->email_verified_at = Carbon::now();
+				    $newUser->save();
+			    }
+
+		    }
+
+
+
+	    return $newUser;
 
     }
 }

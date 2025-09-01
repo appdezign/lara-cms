@@ -51,6 +51,23 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 		parent::__construct($attributes);
 	}
 
+	// Sync Role with Frontend User
+	public static function boot()
+	{
+		parent::boot();
+		$frontendUserModel = '\Eve\Models\FrontendUser';
+		self::updated(function($model) use ($frontendUserModel) {
+			if(class_exists($frontendUserModel)){
+				foreach($model->roles as $role) {
+					if($role->has_backend_access == 0) {
+						$frontendUser = $frontendUserModel::find($model->id);
+						$frontendUser->assign($role);
+					}
+				};
+			}
+		});
+	}
+
 	/**
 	 * get Table Columns
 	 *
@@ -66,11 +83,12 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 	 *
 	 * @return bool
 	 */
-	public function hasVerifiedEmail() {
-		if($this->hasBackendAccess()) {
+	public function hasVerifiedEmail()
+	{
+		if ($this->hasBackendAccess()) {
 			return true;
 		} else {
-			return ! is_null($this->email_verified_at);
+			return !is_null($this->email_verified_at);
 		}
 	}
 
@@ -82,7 +100,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 
 		$this->checkProfile($this->id);
 
-		return $this->hasOne('Lara\Common\Models\UserProfile');
+		return $this->hasOne('Lara\Common\Models\UserProfile', 'user_id');
 	}
 
 	/**
@@ -144,7 +162,8 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 		return $hasLevel;
 	}
 
-	public function hasTwoFactor() {
+	public function hasTwoFactor()
+	{
 		return !empty($this->two_factor_secret);
 	}
 
@@ -174,23 +193,23 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 
 	private function checkProfile($userId)
 	{
+		if ($userId) {
+			// check relation manually so we can create if not exist
+			$profile = UserProfile::where('user_id', $userId)->first();
+			if (empty($profile)) {
+				$profileFields = $this->getProfileFields();
+				$fields = array();
+				$fields['user_id'] = $userId;
+				foreach ($profileFields as $profileField) {
+					$fields[$profileField->name] = $profileField->default;
+				}
+				UserProfile::forceCreate($fields);
 
-		// check relation manually so we can create if not exist
-		$profile = UserProfile::where('user_id', $userId)->first();
-		if (empty($profile)) {
-			$profileFields = $this->getProfileFields();
-			$fields = array();
-			$fields['user_id'] = $userId;
-			foreach ($profileFields as $profileField) {
-				$fields[$profileField->name] = $profileField->default;
+				return false;
+			} else {
+				return true;
 			}
-			UserProfile::forceCreate($fields);
-
-			return false;
-		} else {
-			return true;
 		}
-
 	}
 
 	/**

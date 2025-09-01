@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 use Lara\Common\Models\User;
 
+use Lara\Front\Http\Traits\FrontAuthTrait;
 use Lara\Front\Http\Traits\FrontTrait;
 use Lara\Front\Http\Traits\FrontEntityTrait;
 use Lara\Front\Http\Traits\FrontListTrait;
@@ -18,6 +20,9 @@ use Lara\Front\Http\Traits\FrontMenuTrait;
 use Lara\Front\Http\Traits\FrontObjectTrait;
 use Lara\Front\Http\Traits\FrontThemeTrait;
 use Lara\Front\Http\Traits\FrontViewTrait;
+
+use Lara\Front\Notifications\InviteNewUser;
+use Lara\Front\Notifications\NewMembership;
 
 use Jenssegers\Agent\Agent;
 
@@ -33,6 +38,7 @@ class BaseProfileController extends Controller
 	use FrontObjectTrait;
 	use FrontThemeTrait;
 	use FrontViewTrait;
+	use FrontAuthTrait;
 
 	/**
 	 * @var string
@@ -118,11 +124,11 @@ class BaseProfileController extends Controller
 	public function form(Request $request)
 	{
 
-		if(!config('lara.auth.has_front_profile')) {
+		if (!config('lara.auth.has_front_profile')) {
 			return redirect()->route('special.home.show');
 		}
 
-		$this->data->object = User::find(Auth::user()->id);
+		$this->data->object = $this->modelClass::find(Auth::user()->id);
 
 		// get params
 		$this->data->params = $this->getFrontParams($this->entity, $request);
@@ -145,7 +151,6 @@ class BaseProfileController extends Controller
 		// header tags
 		$this->data->htag = $this->getEntityHeaderTag($this->entity);
 
-
 		// override default layout with custom module page layout
 		$this->data->layout = $this->getObjectThemeLayout($this->data->modulepage);
 		$this->data->grid = $this->getGrid($this->data->layout);
@@ -165,7 +170,7 @@ class BaseProfileController extends Controller
 	public function process(Request $request)
 	{
 
-		if(!config('lara.auth.has_front_profile')) {
+		if (!config('lara.auth.has_front_profile')) {
 			return redirect()->route('special.home.show');
 		}
 
@@ -183,10 +188,11 @@ class BaseProfileController extends Controller
 		// update profile
 		$this->saveFrontUserProfile($request, $object);
 
+		flash(_lanq('lara-front::user.message.profile_saved_successfully'))->success();
+
 		return redirect()->route('special.user.profile');
 
 	}
-
 
 }
 

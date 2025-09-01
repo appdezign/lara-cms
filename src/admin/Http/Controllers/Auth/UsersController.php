@@ -112,6 +112,10 @@ class UsersController extends Controller
 
 		$this->data->showarchive = $this->getRequestParam($request, 'archive', 'false', $this->entity->getEntityKey());
 
+		// filter by role
+		$this->data->activeRole = $this->getRequestParam($request, 'hasrole', 'false', $this->entity->getEntityKey());
+		$this->data->roles = Role::orderBy('level', 'desc')->pluck('name', 'name')->toArray();
+
 		// get user/group level of loggedin user
 		$mylevel = $this->getUserLevel(Auth::user());
 
@@ -133,14 +137,13 @@ class UsersController extends Controller
 					}
 				});
 
-			if($this->data->showarchive) {
+			if ($this->data->showarchive) {
 				$collection = $collection->onlyTrashed();
 			} else {
 				$collection = $collection->with('roles');
 			}
 
 			$collection = $collection->orderBy('name', 'asc');
-
 
 			$this->data->objects = $collection->get();
 
@@ -149,10 +152,15 @@ class UsersController extends Controller
 			// get all objects
 			$collection = $this->modelClass::isWeb();
 
-			if($this->data->showarchive) {
+			if ($this->data->showarchive) {
 				$collection = $collection->onlyTrashed();
 			} else {
 				$collection = $collection->with('roles');
+				if($this->data->activeRole) {
+					$collection = $this->modelClass::isWeb()->whereHas('roles', function ($q) {
+						$q->where('name', $this->data->activeRole);
+					});
+				}
 			}
 
 			$collection = $collection->orderBy('name', 'asc');
@@ -227,7 +235,7 @@ class UsersController extends Controller
 
 		$validatedData = $request->validate([
 			'username' => 'required|unique:lara_auth_users,username',
-			'email' => 'required|unique:lara_auth_users,email',
+			'email'    => 'required|unique:lara_auth_users,email',
 		]);
 
 		// check if the new username already exists
@@ -298,6 +306,10 @@ class UsersController extends Controller
 		// get record
 		$this->data->object = User::findOrFail($id);
 
+		if ($this->getUserLevel($this->data->object) > $mylevel) {
+			abort(403);
+		}
+
 		// lock record
 		$this->data->object->lockRecord();
 
@@ -347,7 +359,6 @@ class UsersController extends Controller
 
 		// update profile
 		$this->saveUserProfile($request, $object);
-
 
 		/**
 		 * Save roles.
