@@ -6,10 +6,15 @@
 	<!--begin::Logo-->
 	<div class="app-sidebar-logo @if($isbuilder) builder @endif px-9" id="kt_app_sidebar_logo">
 		<div class="text-logo">
-			Lara {{ $laraversion->major }}
-			<div class="text-logo-minor">
-				{{ $laraversion->minor }}
-			</div>
+			@if(config('lara-admin.white_label.active'))
+				{{ config('lara-admin.white_label.title') }}
+				<span style="font-size:14px; letter-spacing: 0;">v{{ config('lara-admin.white_label.major_version') }}.{{ config('lara-admin.white_label.minor_version') }}</span>
+			@else
+				Lara {{ $laraversion->major }}
+				<div class="text-logo-minor">
+					{{ $laraversion->minor }}
+				</div>
+			@endif
 		</div>
 	</div>
 	<!--end::Logo-->
@@ -85,7 +90,7 @@
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
 												</span>
-													<span class="menu-title">
+												<span class="menu-title">
 												{{ ucfirst(_lanq('lara-admin::mainmenu.items.' . strtolower($subMenuValue['name']))) }}
 												</span>
 											</a>

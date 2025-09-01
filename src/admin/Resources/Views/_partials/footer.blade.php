@@ -6,7 +6,12 @@
 				Media</a>
 		</div>
 		<div class="d-none d-md-block text-muted">
-			Powered by Lara v{{ $laraversion->version }} | DB v{{ $laradbversion }}  | App v{{ $eveversion }} | Laravel v{{ app()->version() }} | PHP v{{ phpversion() }}
+			@if(config('lara-admin.white_label.active') && !config('lara-admin.white_label.show_lara_versions'))
+				Powered by Laravel v{{ app()->version() }} | PHP v{{ phpversion() }}
+			@else
+				Powered by Lara v{{ $laraversion->version }} | DB v{{ $laradbversion }}  | App v{{ $eveversion }} |
+				Laravel v{{ app()->version() }} | PHP v{{ phpversion() }}
+			@endif
 		</div>
 	</div>
 </div>
