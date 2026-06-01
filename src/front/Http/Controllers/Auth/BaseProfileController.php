@@ -174,6 +174,13 @@ class BaseProfileController extends Controller
 			return redirect()->route('special.home.show');
 		}
 
+		$request->validate([
+			'name' => 'required|regex:/^[a-z\d\-_\s]+$/i|max:200',
+			'firstname' => 'required|regex:/^[a-z\d\-_\s]+$/i|max:200',
+			'middlename' => 'nullable|regex:/^[a-z\d\-_\s]+$/i|max:200',
+			'lastname' => 'required|regex:/^[a-z\d\-_\s]+$/i|max:200',
+		]);
+
 		$id = Auth::user()->id;
 
 		$object = $this->modelClass::findOrFail($id);

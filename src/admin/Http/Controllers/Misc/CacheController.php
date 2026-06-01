@@ -149,6 +149,11 @@ class CacheController extends Controller
 				$this->refreshAnalytics();
 			}
 
+			// flush OPCache to prevent race condition
+			if (function_exists('opcache_reset')) {
+				opcache_reset();
+			}
+
 			sleep(1);
 
 			// flash message

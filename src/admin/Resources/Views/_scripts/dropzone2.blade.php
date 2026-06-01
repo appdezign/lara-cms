@@ -46,6 +46,11 @@
 						$("#cancelImagesButton").fadeIn("fast", function () {
 							// Animation complete.
 						});
+						$("#saveImagesType").fadeIn("fast", function () {
+							// Animation complete.
+						});
+						$("#saveImagesTypeSelect").prop('required',true);
+
 
 					}, 1000);
 				});

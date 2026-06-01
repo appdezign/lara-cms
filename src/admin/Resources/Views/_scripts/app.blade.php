@@ -74,36 +74,18 @@
 
 </script>
 
-<?php $freshdeskWidgetId = config('lara.freshdesk_widget_id'); ?>
-@if(!empty($freshdeskWidgetId))
-	<!-- Freshdesk Widget - Start -->
-	<script>
-		window.fwSettings = {
-			'widget_id': {{ $freshdeskWidgetId }}
-		};
-		!function () {
-			if ("function" != typeof window.FreshworksWidget) {
-				var n = function () {
-					n.q.push(arguments)
-				};
-				n.q = [], window.FreshworksWidget = n
-			}
-		}()
-	</script>
-
-	<script type='text/javascript' src='https://widget.freshworks.com/widgets/{{ $freshdeskWidgetId }}.js' async
-	        defer></script>
-
-	<script type='text/javascript'>
-		FreshworksWidget('identify', 'ticketForm', {
-			name: '{{ Auth::user()->name }} ({{  Auth::user()->username }})',
-			email: '{{ Auth::user()->email }}',
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const langSwitchers = document.querySelectorAll('.js-lang-switcher');
+		langSwitchers.forEach((langSwitcher) => {
+			langSwitcher.addEventListener('click', function (event) {
+				document.body.classList.add("page-loading");
+				document.body.setAttribute("data-kt-app-page-loading","on");
+			})
 		});
-		FreshworksWidget('prefill', 'ticketForm', {
-			subject: 'Vraag over {{ substr(config('app.url'), strrpos(config('app.url'), '//') + 2) }}',
-		});
-	</script>
-	<!-- Freshdesk Widget - End -->
-@endif
+	});
+</script>
+
+
 
 

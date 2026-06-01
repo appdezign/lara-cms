@@ -1064,6 +1064,9 @@ trait AdminBuilderTrait
 					$table->integer($colname)->unsigned()->default(0)->after('title');
 				}
 			}
+			if ($realcoltype == 'bigint') {
+				$table->bigInteger($colname)->default(0)->after('title');
+			}
 			if ($realcoltype == 'decimal') {
 				if ($coltype == 'decimal101') {
 					$table->decimal($colname, 10, 1)->after('title');

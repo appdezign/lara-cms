@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Str;
+
 if (!function_exists('get_youtube_id')) {
 
 	/**
@@ -48,4 +50,27 @@ if (!function_exists('get_youtube_id')) {
 
 	}
 
+}
+
+if (!function_exists('get_audio_format')) {
+
+	/**
+	 * @param string $mimetype
+	 * @return string|null
+	 */
+	function get_audio_format(string $mimetype): ?string
+	{
+
+		if (Str::contains($mimetype, 'wav')) {
+			$format = 'wav';
+		} elseif (Str::contains($mimetype, 'mpeg')) {
+			$format = 'mp3';
+		} elseif (Str::contains($mimetype, 'midi')) {
+			$format = 'midi';
+		} else {
+			$format = null;
+		}
+
+		return $format;
+	}
 }

@@ -77,7 +77,7 @@
 
 					@endif
 
-					@if($cvar->fieldtype == 'integer')
+					@if($cvar->fieldtype == 'integer' || $cvar->fieldtype == 'biginteger')
 
 						{{ html()->input('number', $cvar->fieldname, null)->class('form-control')
 							->attributes(['step' => '1'])

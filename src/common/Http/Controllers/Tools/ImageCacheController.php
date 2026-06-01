@@ -2,8 +2,10 @@
 
 namespace Lara\Common\Http\Controllers\Tools;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 use Intervention\Image\Laravel\Facades\Image;
 
@@ -66,6 +68,8 @@ class ImageCacheController extends BaseController
 	public function process($width = null, $height = null, int $fit, string $fitpos, int $quality, string $filename)
 	{
 
+		$disk = 'imgcache';
+
 		$cachedPath = storage_path('imgcache/x' . $width . '/y' . $height . '/f' . $fit . '/' . $fitpos . '/' . $filename);
 
 		// check cached version
@@ -90,7 +94,7 @@ class ImageCacheController extends BaseController
 				));
 			}
 
-			$newCachedPath = $this->processImage($width, $height, $fit, $fitpos, $quality, $sourcePath, $cachedPath);
+			$newCachedPath = $this->processImage($disk, $width, $height, $fit, $fitpos, $quality, $sourcePath, $cachedPath);
 
 			if (file_exists($newCachedPath) && is_file($newCachedPath)) {
 				$mime = mime_content_type($newCachedPath);
@@ -104,6 +108,7 @@ class ImageCacheController extends BaseController
 
 	}
 
+
 	/**
 	 * @param $width
 	 * @param $height
@@ -114,7 +119,7 @@ class ImageCacheController extends BaseController
 	 * @param string $cachedPath
 	 * @return void
 	 */
-	private function processImage($width = null, $height = null, int $fit, string $fitpos, int $quality, string $sourcePath, string $cachedPath)
+	private function processImage($disk, $width = null, $height = null, int $fit, string $fitpos, int $quality, string $sourcePath, string $cachedPath)
 	{
 
 		$image = Image::read($sourcePath);
@@ -205,7 +210,7 @@ class ImageCacheController extends BaseController
 		// check if specific cache direcory exists
 		$cacheDir = 'x' . $width . '/y' . $height . '/f' . $fit . '/' . $fitpos;
 		if (!File::isDirectory($cacheDir)) {
-			Storage::disk('imgcache')->makeDirectory($cacheDir);
+			Storage::disk($disk)->makeDirectory($cacheDir);
 		}
 
 		// save to cache
@@ -223,7 +228,6 @@ class ImageCacheController extends BaseController
 	 */
 	private function getImagePath(string $filename)
 	{
-		// find file
 		foreach (config('imagecache.paths') as $path) {
 			// don't allow '..' in filenames
 			$image_path = $path . '/' . str_replace('..', '', $filename);
@@ -243,4 +247,17 @@ class ImageCacheController extends BaseController
 		abort(404);
 	}
 
+	public function nocache($filename)
+	{
+		$sourcePath = $this->getImagePath($filename);
+
+		if (file_exists($sourcePath) && is_file($sourcePath)) {
+			$mime = mime_content_type($sourcePath);
+			$content = file_get_contents($sourcePath);
+
+			return new IlluminateResponse($content, 200, array(
+				'Content-Type' => $mime,
+			));
+		}
+	}
 }

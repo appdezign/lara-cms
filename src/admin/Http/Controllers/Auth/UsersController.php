@@ -114,7 +114,7 @@ class UsersController extends Controller
 
 		// filter by role
 		$this->data->activeRole = $this->getRequestParam($request, 'hasrole', 'false', $this->entity->getEntityKey());
-		$this->data->roles = Role::orderBy('level', 'desc')->pluck('name', 'name')->toArray();
+		$this->data->roles = Role::where('has_backend_access', 1)->orderBy('level', 'desc')->pluck('name', 'name')->toArray();
 
 		// get user/group level of loggedin user
 		$mylevel = $this->getUserLevel(Auth::user());
@@ -130,12 +130,15 @@ class UsersController extends Controller
 			// get objects
 			$keywords = $this->data->filters->keywords;
 
-			$collection = $this->modelClass::isWeb()
-				->where(function ($q) use ($keywords) {
-					foreach ($keywords as $value) {
-						$q->orWhere('name', 'like', "%{$value}%");
-					}
-				});
+			$collection = $this->modelClass::isWeb()->whereHas('roles', function ($q) {
+				$q->where('has_backend_access', 1);
+			});
+
+			$collection = $collection->where(function ($q) use ($keywords) {
+				foreach ($keywords as $value) {
+					$q->orWhere('name', 'like', "%{$value}%");
+				}
+			});
 
 			if ($this->data->showarchive) {
 				$collection = $collection->onlyTrashed();
@@ -150,14 +153,16 @@ class UsersController extends Controller
 		} else {
 
 			// get all objects
-			$collection = $this->modelClass::isWeb();
+			$collection = $this->modelClass::isWeb()->whereHas('roles', function ($q) {
+				$q->where('has_backend_access', 1);
+			});
 
 			if ($this->data->showarchive) {
 				$collection = $collection->onlyTrashed();
 			} else {
 				$collection = $collection->with('roles');
-				if($this->data->activeRole) {
-					$collection = $this->modelClass::isWeb()->whereHas('roles', function ($q) {
+				if ($this->data->activeRole) {
+					$collection = $collection->whereHas('roles', function ($q) {
 						$q->where('name', $this->data->activeRole);
 					});
 				}

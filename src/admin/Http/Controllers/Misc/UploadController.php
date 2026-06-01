@@ -62,8 +62,12 @@ class UploadController extends Controller
 			$mediaName = pathinfo($originalMediaName, PATHINFO_FILENAME);
 			$cleanMediaName = str_slug($mediaName);
 
-			$timestamp = date('YmdHis');
-			$newMediaName = $timestamp . '-' . $cleanMediaName . '.' . $mediaExtension;
+			if(in_array($entityKey, config('lara.upload_preserve_filename'))) {
+				$newMediaName = $cleanMediaName . '.' . $mediaExtension;
+			} else {
+				$timestamp = date('YmdHis');
+				$newMediaName = $timestamp . '-' . $cleanMediaName . '.' . $mediaExtension;
+			}
 
 			Upload::create([
 				'user_id'       => Auth::user()->id,

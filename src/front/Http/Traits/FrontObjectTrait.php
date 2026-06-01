@@ -542,27 +542,28 @@ trait FrontObjectTrait
 		}
 
 		// Image
-		if ($object->media->count()) {
 
+		$og->og_image = null;
+		if ($object->media->count()) {
 			if ($object->opengraph && !empty($object->opengraph->og_image)) {
 				$og->og_image = $object->opengraph->og_image;
 			} else {
-				// use featured image
-				$og->og_image = $object->featured->filename;
+				if($object->hasFeatured()) {
+					$og->og_image = $object->featured->filename;
+				}
 			}
-
-			if (isset($settngz->og_image_width)) {
-				$og->og_image_width = $settngz->og_image_width;
-			} else {
-				$og->og_image_width = 1200; // Facebook recommended width
+			if($og->og_image) {
+				if (isset($settngz->og_image_width)) {
+					$og->og_image_width = $settngz->og_image_width;
+				} else {
+					$og->og_image_width = 1200; // Facebook recommended width
+				}
+				if (isset($settngz->og_image_height)) {
+					$og->og_image_height = $settngz->og_image_height;
+				} else {
+					$og->og_image_height = 630; // Facebook recommended height
+				}
 			}
-			if (isset($settngz->og_image_height)) {
-				$og->og_image_height = $settngz->og_image_height;
-			} else {
-				$og->og_image_height = 630; // Facebook recommended height
-			}
-		} else {
-			$og->og_image = null;
 		}
 
 		// Type
