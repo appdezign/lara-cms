@@ -42,6 +42,8 @@ class LaraAdminServiceProvider extends ServiceProvider
 	public function boot()
 	{
 
+		// opcache_reset();
+
 		// Publish Config
 		$this->publishes([
 			__DIR__ . '/../../../config/lara-admin.php' => config_path('lara-admin.php'),

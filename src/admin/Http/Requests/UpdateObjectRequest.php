@@ -65,7 +65,7 @@ class UpdateObjectRequest extends FormRequest
 
 				// fix empty values
 				if ($realtype == 'varchar' || $realtype == 'text') {
-					if (empty($value)) {
+					if (empty($value) && $value != 0) {
 						$input[$name] = '';
 					}
 				}
@@ -100,7 +100,7 @@ class UpdateObjectRequest extends FormRequest
 
 					// fix empty values
 					if ($realtype == 'varchar' || $realtype == 'text') {
-						if (empty($value)) {
+						if (empty($value) && $value != 0) {
 							$input[$name] = '';
 						}
 					}
@@ -143,7 +143,7 @@ class UpdateObjectRequest extends FormRequest
 
 				// fix empty values
 				if ($realtype == 'varchar' || $realtype == 'text') {
-					if (empty($value)) {
+					if (empty($value) && $value != 0) {
 						$input[$name] = '';
 					}
 				}

@@ -129,6 +129,7 @@ class LaraCommonServiceProvider extends ServiceProvider
 		if (!config('lara.needs_setup') && !App::runningInConsole()) {
 
 			$paths = array();
+			$privatePaths = array();
 			$entities = Entity::whereHas('objectrelations', function ($query) {
 				$query->where('has_images', 1);
 			})->get();
@@ -143,11 +144,18 @@ class LaraCommonServiceProvider extends ServiceProvider
 					// create media directory for this entity
 					mkdir($path);
 				}
+
 				// add path to array
-				$paths[] = $path;
+				if(config('filesystems.disks.' . $imageDisk . '.visibility') == 'public') {
+					$paths[] = $path;
+				} else {
+					$privatePaths[] = $path;
+				}
+
 			}
 
 			config(['imagecache.paths' => $paths]);
+			config(['imagecache.private_paths' => $privatePaths]);
 
 		}
 
