@@ -103,6 +103,8 @@ class RegisterController extends Controller
 			$newUser->assign($role->name);
 		}
 
+	    Bouncer::refresh();
+
 		// add to team, if this was an invitation
 
 		    if(!empty($data['invite_id']) && !empty($data['invite_token'])) {

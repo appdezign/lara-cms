@@ -6,7 +6,7 @@
 					@if($entity->hasBatch())
 						@can('update', $entity->getEntityModelClass())
 							<div class="form-check">
-							{{ html()->checkbox('select_all', false, 1)->id('check-all')->class('js-check-all form-check-input') }}
+								{{ html()->checkbox('select_all', false, 1)->id('check-all')->class('js-check-all form-check-input') }}
 							</div>
 						@else
 							{{ _lanq('lara-admin::default.column.id') }}
@@ -43,11 +43,10 @@
 				</th>
 
 				<th class="w-5 text-center">
-					@if($entity->getEgroup() == 'form')
-						{{ _lanq('lara-admin::default.button.view') }}
-					@else
-						{{ _lanq('lara-admin::default.button.edit') }}
-					@endif
+					{{ _lanq('lara-admin::default.button.view') }}
+				</th>
+				<th class="w-5 text-center">
+					{{ _lanq('lara-admin::default.button.edit') }}
 				</th>
 				<th class="w-5 text-center">
 					{{ _lanq('lara-admin::default.button.delete') }}
@@ -147,6 +146,12 @@
 						@else
 							&nbsp;
 						@endif
+					</td>
+
+					<td class="text-center action-icons">
+						<a href="{{ route('admin.'.$entity->getEntityRouteKey().'.show', ['id' => $obj->id]) }}">
+							<i class="las la-eye"></i>
+						</a>
 					</td>
 
 					@if(empty($obj->locked_by))

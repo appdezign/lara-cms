@@ -398,12 +398,11 @@ trait AdminAnalyticsTrait
 	/**
 	 * @return mixed
 	 */
-	private function getLaraUserStats(): mixed
+	private function getLaraUserStats($limit = 10): mixed
 	{
-
-		$limit = 10;
-
-		return User::isWeb()->limit($limit)->get();
+		return User::isWeb()->whereHas('roles', function ($q) {
+			$q->where('has_backend_access', 1);
+		})->limit($limit)->get();
 
 	}
 

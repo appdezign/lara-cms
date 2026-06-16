@@ -275,7 +275,7 @@ trait AdminListTrait
 				// get the GET request value AND store it in the session!!
 				$value = $this->getListRequestParam($request, $column, null, $entity->getEntityKey(), true);
 
-				if ($value) {
+				if ($value !== null && $value !== '') {
 					$filters->autofilters[$column] = $value;
 					$filters->autofilter = true;
 					$filters->filter = true;

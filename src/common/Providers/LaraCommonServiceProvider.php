@@ -109,21 +109,6 @@ class LaraCommonServiceProvider extends ServiceProvider
 		]);
 
 		/**
-		 * Disable email verification for backend users
-		 */
-		if (!config('lara.needs_setup') && !App::runningInConsole()) {
-			$backendUsers = \Lara\Common\Models\User::where('type', 'web')->get();
-			foreach ($backendUsers as $backendUser) {
-				if ($backendUser->hasBackendAccess()) {
-					if (isset($backendUser->email_verified_at) && empty($backendUser->email_verified_at)) {
-						$backendUser->email_verified_at = Carbon::today();
-						$backendUser->save();
-					}
-				}
-			}
-		}
-
-		/**
 		 * Override Image cache directories
 		 */
 		if (!config('lara.needs_setup') && !App::runningInConsole()) {
