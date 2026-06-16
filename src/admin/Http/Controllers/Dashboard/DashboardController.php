@@ -131,7 +131,18 @@ class DashboardController extends Controller
 
 		// get Lara Analytics
 		$this->data->content = $this->getContentStats();
-		$this->data->lara_users = $this->getLaraUserStats();
+		$this->data->lara_users = $this->getLaraUserStats(12);
+
+		// Manuals
+		$docEntity = Entity::where('entity_key', 'doc')->first();
+		if($docEntity) {
+			$docModelClass = $docEntity->entity_model_class;
+			$this->data->manuals = $docModelClass::where('publish', 1)->whereHas('tags', function ($query) {
+				$query->where(config('lara-common.database.object.tags') . '.slug', 'manuals');
+			})->get();
+		} else {
+			$this->data->manuals = null;
+		}
 
 		// get last sync
 		$this->data->lastsync = $this->getLastAnalyticsSync();

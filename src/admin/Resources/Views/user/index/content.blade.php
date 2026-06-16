@@ -67,36 +67,46 @@
 
 						@if(empty($obj->locked_by))
 
-							@if($obj->userlevel > $mylevel)
-
-								<td class="text-center action-icons">
-									<div class="action-icon-disabled text-muted">
-										<i class="las la-edit"></i>
-									</div>
-								</td>
-								<td class="text-center action-icons">
-									<div class="action-icon-disabled text-muted">
-										<i class="las la-trash"></i>
-									</div>
-								</td>
+							@can('update', $entity->getEntityModelClass())
+								@if($obj->userlevel > $mylevel)
+									<td class="text-center action-icons">
+										<div class="action-icon-disabled text-muted">
+											<i class="las la-edit"></i>
+										</div>
+									</td>
+									<td class="text-center action-icons">
+										<div class="action-icon-disabled text-muted">
+											<i class="las la-trash"></i>
+										</div>
+									</td>
+								@else
+									<td class="text-center action-icons">
+										<a href="{{ route('admin.'.$entity->getEntityRouteKey().'.edit', ['id' => $obj->id]) }}"
+										   class="">
+											<i class="las la-edit"></i>
+										</a>
+									</td>
+									<td class="text-center action-icons">
+										<a href="{{ route('admin.'.$entity->getEntityRouteKey().'.destroy', ['id' => $obj->id]) }}"
+										   data-token="{{ csrf_token() }}"
+										   data-confirm="{{ _lanq('lara-admin::default.message.confirm') }}"
+										   data-method="delete">
+											<i class="las la-trash"></i>
+										</a>
+									</td>
+								@endif
 
 							@else
-
 								<td class="text-center action-icons">
-									<a href="{{ route('admin.'.$entity->getEntityRouteKey().'.edit', ['id' => $obj->id]) }}"
-									   class="">
+									<div class="action-icon-disabled text-muted">
 										<i class="las la-edit"></i>
-									</a>
+									</div>
 								</td>
 								<td class="text-center action-icons">
-									<a href="{{ route('admin.'.$entity->getEntityRouteKey().'.destroy', ['id' => $obj->id]) }}"
-									   data-token="{{ csrf_token() }}"
-									   data-confirm="{{ _lanq('lara-admin::default.message.confirm') }}"
-									   data-method="delete">
+									<div class="action-icon-disabled text-muted">
 										<i class="las la-trash"></i>
-									</a>
+									</div>
 								</td>
-
 							@endif
 
 						@else

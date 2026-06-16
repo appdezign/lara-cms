@@ -307,6 +307,73 @@
 </div>
 <!--end::row-->
 
+@if($data->manuals && $data->manuals->isNotEmpty())
+	<!--begin::row-->
+	<div class="row mb-6">
+		<div class="col-md-12 col-lg-10 offset-lg-1">
+
+			<!--begin::card content stats-->
+			<div class="card">
+				<div class="card-header collapsible cursor-pointer rotate" data-bs-toggle="collapse"
+				     data-bs-target="#kt_card_collapsible_7">
+					<h3 class="card-title">
+						Handleidingen
+					</h3>
+					<div class="card-toolbar rotate-180">
+						<span class="svg-icon svg-icon-1">
+							@include('lara-admin::_icons.arrowdown_svg')
+						</span>
+					</div>
+				</div>
+				<div id="kt_card_collapsible_7" class="collapse show">
+					<div class="card-body">
+
+						<div class="table-responsive">
+							<table class="table table-lara table-row-bordered table-hover">
+								<thead>
+									<tr>
+										<th class="w-50">
+											Titel
+										</th>
+										<th class="w-50">
+											Link
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+
+									@foreach($data->manuals as $manual)
+										<tr>
+											<td>{{ $manual->title }}</td>
+											<td>
+												@foreach($manual->files as $file)
+													<a href="{{ route('fileprivate', ['entity' => 'doc', 'bundle' => 'manual', 'oid' => $manual->id, 'format' => 'doc', 'filename' => $file->filename]) }}" target="_blank">
+														download
+													</a>
+												@endforeach
+											</td>
+										</tr>
+									@endforeach
+
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan="2"></td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!--end::card content stats-->
+
+		</div>
+
+	</div>
+@endif
+
 <!--begin::row-->
 <div class="row mb-6">
 	<div class="col-md-12 col-lg-10 offset-lg-1">

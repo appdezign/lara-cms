@@ -2,7 +2,7 @@
 <div id="kt_app_header" class="app-header app-header-white">
 
 	<x-closeleft>
-		{{ route('admin.'.$entity->getEntityRouteKey().'.unlock', ['id' => $data->object->id]) }}
+		{{ route('admin.'.$entity->getEntityRouteKey().'.index') }}
 	</x-closeleft>
 
 	<div class="app-container container" id="kt_app_header_container">
@@ -18,6 +18,10 @@
 							</div>
 						@endif
 
+						@can('update', $entity->getEntityModelClass())
+							<a href="{{ route('admin.'.$entity->getEntityRouteKey().'.edit', ['id' => $data->object->id]) }}" class="btn btn-sm btn-info">bewerken</a>
+						@endcan
+
 					</div>
 
 				</div>
@@ -27,7 +31,7 @@
 	</div>
 
 	<x-closeright>
-		{{ route('admin.'.$entity->getEntityRouteKey().'.unlock', ['id' => $data->object->id]) }}
+		{{ route('admin.'.$entity->getEntityRouteKey().'.index') }}
 	</x-closeright>
 </div>
 <!--end::Header-->

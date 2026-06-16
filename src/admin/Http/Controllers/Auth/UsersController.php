@@ -250,7 +250,8 @@ class UsersController extends Controller
 
 		if (!$check) {
 
-			$request['type'] = 'web';
+			$request->merge(['type' => 'web']);
+			$request->merge(['email_verified_at' => Carbon::now()]);
 
 			// create object
 			$object = $this->modelClass::create($request->except('role_name'));

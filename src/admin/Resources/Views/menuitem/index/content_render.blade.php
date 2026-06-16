@@ -94,7 +94,7 @@ if ($node->type == 'entity') {
 			@elseif ($node->type == 'form')
 				{{ $node->entity->entity_key }}
 			@elseif ($node->type == 'page')
-				<?php $pg = \Lara\Common\Models\Page::where('id', $node->object_id)->first(); ?>
+					<?php $pg = \Lara\Common\Models\Page::where('id', $node->object_id)->first(); ?>
 				{{ str_limit($pg->title, 25, ' ...') }}
 			@elseif ($node->type == 'url')
 				<a href="{{ $node->url }}" target="_blank">{{ $node->url }}</a>
@@ -105,47 +105,59 @@ if ($node->type == 'entity') {
 		</div>
 
 		<div class="menu-edit col-2 col-sm-1 {{ $rowstyle }}">
-			@if($node->locked_by_admin == 0 || Auth::user()->isAn('administrator'))
-				<a class="open-menu-modal"
-				   data-bs-toggle="modal"
-				   data-bs-target="#menuEditModal"
-				   data-id="{{ $node->id }}"
-				   data-status="{{ $node->publish }}"
-				   data-title="{{ $node->title }}"
-				   data-type="{{ $node->type }}"
-				   data-locked="{{ $node->locked_by_admin }}"
-				   data-sluglock="{{ $node->slug_lock }}"
-				   data-auth="{{ $node->route_has_auth }}"
-				   data-slug="{{ $node->slug }}"
-				   data-route="{{ $node->route }}"
-				   data-entview="{{ $node->entity_view_id }}"
-				   data-tagid="{{ $node->tag_id }}"
-				   data-objectid="{{ $node->object_id }}"
-				   data-url="{{ $node->url }}">
-					<i class="las la-edit"></i>
-				</a>
+			@can('update', $node)
+				@if($node->locked_by_admin == 0 || Auth::user()->isAn('administrator'))
+					<a class="open-menu-modal"
+					   data-bs-toggle="modal"
+					   data-bs-target="#menuEditModal"
+					   data-id="{{ $node->id }}"
+					   data-status="{{ $node->publish }}"
+					   data-title="{{ $node->title }}"
+					   data-type="{{ $node->type }}"
+					   data-locked="{{ $node->locked_by_admin }}"
+					   data-sluglock="{{ $node->slug_lock }}"
+					   data-auth="{{ $node->route_has_auth }}"
+					   data-slug="{{ $node->slug }}"
+					   data-route="{{ $node->route }}"
+					   data-entview="{{ $node->entity_view_id }}"
+					   data-tagid="{{ $node->tag_id }}"
+					   data-objectid="{{ $node->object_id }}"
+					   data-url="{{ $node->url }}">
+						<i class="las la-edit"></i>
+					</a>
+				@else
+					<div class="action-icon-disabled text-muted">
+						<i class="las la-edit"></i>
+					</div>
+				@endif
 			@else
 				<div class="action-icon-disabled text-muted">
 					<i class="las la-edit"></i>
 				</div>
-			@endif
+			@endcan
 		</div>
 
 		<div class="menu-delete col-2 col-sm-1 {{ $rowstyle }}">
-			@if ($node->depth > 0)
-				@if($node->locked_by_admin == 0 || Auth::user()->isAn('administrator'))
-					@if($node->isLeaf() || (!$node->isLeaf() && sizeof($node->children) == 0))
-						<a href="{{ route('admin.'.$entity->getEntityRouteKey().'.destroy', ['id' => $node->id]) }}"
-						   data-token="{{ csrf_token() }}"
-						   data-confirm="{{ _lanq('lara-admin::default.message.confirm') }}" data-method="delete">
-							<i class="las la-trash"></i>
-						</a>
+			@can('update', $node)
+				@if ($node->depth > 0)
+					@if($node->locked_by_admin == 0 || Auth::user()->isAn('administrator'))
+						@if($node->isLeaf() || (!$node->isLeaf() && sizeof($node->children) == 0))
+							<a href="{{ route('admin.'.$entity->getEntityRouteKey().'.destroy', ['id' => $node->id]) }}"
+							   data-token="{{ csrf_token() }}"
+							   data-confirm="{{ _lanq('lara-admin::default.message.confirm') }}" data-method="delete">
+								<i class="las la-trash"></i>
+							</a>
+						@else
+							<div class="action-icon-disabled text-muted">
+								<i class="las la-trash"></i>
+							</div>
+						@endif
+
 					@else
 						<div class="action-icon-disabled text-muted">
 							<i class="las la-trash"></i>
 						</div>
 					@endif
-
 				@else
 					<div class="action-icon-disabled text-muted">
 						<i class="las la-trash"></i>
@@ -155,7 +167,7 @@ if ($node->type == 'entity') {
 				<div class="action-icon-disabled text-muted">
 					<i class="las la-trash"></i>
 				</div>
-			@endif
+			@endcan
 		</div>
 
 	</div>
