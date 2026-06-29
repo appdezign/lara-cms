@@ -43,6 +43,9 @@ class HeadertagsController extends BaseController
 
 		// get filters
 		$this->data->filters = $this->getIndexFilters($this->entity, $request);
+		if ($this->data->filters instanceof \Illuminate\Http\RedirectResponse) {
+			return $this->data->filters;
+		}
 
 		// get params
 		$this->data->params = $this->getIndexParams($this->entity, $request, $this->data->filters);
