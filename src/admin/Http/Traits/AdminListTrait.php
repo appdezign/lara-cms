@@ -153,7 +153,7 @@ trait AdminListTrait
 			opcache_reset();
 			sleep(2);
 
-			return redirect()->route($entity->getPrefix() . '.' . $entity->getEntityRouteKey() . '.' . $entity->getMethod())->send();
+			return redirect()->route($entity->getPrefix() . '.' . $entity->getEntityRouteKey() . '.' . $entity->getMethod());
 		}
 
 
