@@ -30,6 +30,8 @@ use LaravelLocalization;
 
 use Bouncer;
 
+use Carbon\Carbon;
+
 class UsersController extends Controller
 {
 
