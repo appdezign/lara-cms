@@ -16,7 +16,7 @@ if (!App::runningInConsole() && !config('lara.needs_setup')) {
 
 	if (config('lara.has_frontend')) {
 
-		Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['web', 'httpcache', 'throttle:60,1', 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'dateLocale']], function () {
+		Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['web', 'throttle:60,1', 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'dateLocale']], function () {
 
 			$locale = LaravelLocalization::getCurrentLocale();
 
@@ -33,9 +33,6 @@ if (!App::runningInConsole() && !config('lara.needs_setup')) {
 				$specialMiddleware = array();
 				if ((isset($rootMenuItem->entity) && $rootMenuItem->entity->hasFrontAuth()) == 1 || $rootMenuItem->route_has_auth) {
 					$specialMiddleware[] = 'auth';
-				}
-				if (config('app.env') == 'production' && config('httpcache.enabled')) {
-					$specialMiddleware[] = 'ttl:' . config('lara.httpcache_ttl');
 				}
 				/* ~~~~~~~~~~~~ DYNAMIC ROUTE MIDDLEWARE (end) ~~~~~~~~~~~~ */
 
