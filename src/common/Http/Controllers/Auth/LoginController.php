@@ -204,6 +204,7 @@ class LoginController extends Controller
 
 		$user->last_login = Carbon::now();
 		$user->is_loggedin = 1;
+		$user->login_count++;
 		$user->save();
 
 		// redirect
