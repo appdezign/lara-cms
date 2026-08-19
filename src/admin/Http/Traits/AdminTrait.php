@@ -487,12 +487,16 @@ trait AdminTrait
 	private function getModulePageModule(object $object)
 	{
 
-		list($relatedEntityKey, $method, $mpage, $lang) = explode('-', $object->slug);
+		$slugArray = explode('-', $object->slug);
+		if(sizeof($slugArray) > 4) {
+			$slugArray = array_slice($slugArray, -4);
+		}
+
+		list($relatedEntityKey, $method, $mpage, $lang) = $slugArray;
 
 		$laraClass = $this->getEntVarByKey($relatedEntityKey);
-		$modulePageModule = new $laraClass;
 
-		return $modulePageModule;
+		return new $laraClass;
 
 	}
 

@@ -123,46 +123,56 @@ trait AdminMediaTrait
 
 				} else {
 
-					// get temp files from database
-					$uploads = Upload::currentUser()
-						->entityTypeIs($entity->getEntityModelClass())
-						->objectIs($object->id)
-						->tokenIs($request->get('_token'))
-						->typeIs('image')
-						->get();
+					// Quick Fix SH d.d. 05-06-2026
+					// check the maximum number of images for this object
+					$maxImages = $entity->getMaxImages();
+					$currentImages = $object->media()->count();
+					$imgDiff = $maxImages - $currentImages;
+					$imagesLeft = ($imgDiff < 0) ? 0 : $imgDiff;
 
-					// save images
-					foreach ($uploads as $upload) {
+					if($imagesLeft > 0) {
+						// get temp files from database
+						$uploads = Upload::currentUser()
+							->entityTypeIs($entity->getEntityModelClass())
+							->objectIs($object->id)
+							->tokenIs($request->get('_token'))
+							->typeIs('image')
+							->limit($imagesLeft)
+							->get();
 
-						// move file to public folder
-						$tempPath = '_temp/' . $upload->filename;
-						$imgPath = $entity->getEntityKey() . '/' . $upload->filename;
+						// save images
+						foreach ($uploads as $upload) {
 
-						if (Storage::disk($entity->getDiskForImages())->exists($tempPath)) {
+							// move file to public folder
+							$tempPath = '_temp/' . $upload->filename;
+							$imgPath = $entity->getEntityKey() . '/' . $upload->filename;
 
-							try {
-								Storage::disk($entity->getDiskForImages())->move($tempPath, $imgPath);
-							} catch (\Exception $e) {
-								// dd($e);
+							if (Storage::disk($entity->getDiskForImages())->exists($tempPath)) {
+
+								try {
+									Storage::disk($entity->getDiskForImages())->move($tempPath, $imgPath);
+								} catch (\Exception $e) {
+									// dd($e);
+								}
+
+								// Save to DB using relation
+								$object->media()->create([
+									'filename'         => $upload->filename,
+									'mimetype'         => $upload->mimetype,
+									'title'            => $upload->filename,
+									'featured'         => 0,
+									'ishero'           => 0,
+									'herosize'         => 0,
+									'prevent_cropping' => 0,
+									'hide_in_gallery'  => config('lara-admin.featured.hide_in_gallery'),
+								]);
+
 							}
-
-							// Save to DB using relation
-							$object->media()->create([
-								'filename'         => $upload->filename,
-								'mimetype'         => $upload->mimetype,
-								'title'            => $upload->filename,
-								'featured'         => 0,
-								'ishero'           => 0,
-								'herosize'         => 0,
-								'prevent_cropping' => 0,
-								'hide_in_gallery'  => config('lara-admin.featured.hide_in_gallery'),
-							]);
 
 						}
 
+						$this->checkImagePosition($entity, $object);
 					}
-
-					$this->checkImagePosition($entity, $object);
 
 				}
 
