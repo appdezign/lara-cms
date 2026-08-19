@@ -111,7 +111,7 @@
 			"insertdatetime media nonbreaking save table contextmenu directionality",
 			"template paste textcolor colorpicker textpattern"
 		],
-		toolbar: "code | styleselect | bold italic | alignleft aligncenter alignright alignjustify",
+		toolbar: "code | styleselect | bold italic | bullist numlist | alignleft aligncenter alignright alignjustify",
 		convert_urls: false,
 		relative_urls: false,
 		menubar: false,
