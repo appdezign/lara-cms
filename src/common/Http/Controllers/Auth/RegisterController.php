@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
+use Lara\Front\Rules\ReCaptcha;
+
 use Silber\Bouncer\Database\Role;
 
 use Bouncer;
@@ -54,12 +56,19 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
+        $rules = [
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:lara_auth_users',
             'password' => 'required|string|min:6|confirmed',
-        ]);
+        ];
+
+        // Google reCAPTCHA v2 (only enforced when a site key is configured)
+        if (config('app.env') == 'production' && config('lara.google_recaptcha_site_key')) {
+            $rules['g-recaptcha-response'] = [new ReCaptcha];
+        }
+
+        return Validator::make($data, $rules);
     }
 
 	public function showRegistrationForm()
