@@ -19,7 +19,6 @@ use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter;
 use Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect;
 use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath;
 
-use Igaster\LaravelTheme\Middleware\setTheme;
 use Barryvdh\HttpCache\Middleware\CacheRequests;
 use Barryvdh\HttpCache\Middleware\SetTtl;
 
