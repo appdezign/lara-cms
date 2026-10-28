@@ -39,7 +39,7 @@ use ReflectionClass;
 use ReflectionException;
 
 // use Theme;
-use Qirolab\Theme\Theme;
+use Lara\Front\LaraTheme\Theme;
 
 class FormController extends Controller
 {

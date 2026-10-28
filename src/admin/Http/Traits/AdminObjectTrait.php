@@ -11,7 +11,7 @@ use Lara\Common\Models\Setting;
 
 use Spatie\Geocoder\Facades\Geocoder;
 
-use Qirolab\Theme\Theme;
+use Lara\Front\LaraTheme\Theme;
 
 trait AdminObjectTrait
 {

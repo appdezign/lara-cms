@@ -24,7 +24,7 @@ use Jenssegers\Agent\Agent;
 
 use LaravelLocalization;
 
-use Qirolab\Theme\Theme;
+use Lara\Front\LaraTheme\Theme;
 
 class BaseHomeController extends Controller
 {

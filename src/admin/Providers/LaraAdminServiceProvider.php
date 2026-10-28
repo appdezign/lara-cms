@@ -24,7 +24,7 @@ use Lara\Common\Models\Setting;
 use LaravelLocalization;
 
 // use Theme;
-use Qirolab\Theme\Theme;
+use Lara\Front\LaraTheme\Theme;
 
 use Lang;
 

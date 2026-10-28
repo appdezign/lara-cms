@@ -4,7 +4,7 @@ namespace Lara\Front\Http\Traits;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\File;
-use Qirolab\Theme\Theme;
+use Lara\Front\LaraTheme\Theme;
 
 trait FrontViewTrait
 {
