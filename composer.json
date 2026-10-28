@@ -1,7 +1,7 @@
 {
     "name": "appdezign/lara-cms",
     "description": "Lara CMS",
-	"version": "8.7.6",
+	"version": "8.7.7",
     "keywords": ["Lara", "CMS"],
     "license": "proprietary",
     "homepage": "https://firmaq.nl",
@@ -30,7 +30,7 @@
 		"jenssegers/date": "^4.0",
 		"kalnoy/nestedset": "^6.0",
 		"laracasts/flash": "^3.2",
-		"laravel/framework": "^11.0",
+		"laravel/framework": "^11.0|^12.0|^13",
 		"league/flysystem-aws-s3-v3": "^3.0",
 		"maatwebsite/excel": "^3.1",
 		"mcamara/laravel-localization": "^2.0",
