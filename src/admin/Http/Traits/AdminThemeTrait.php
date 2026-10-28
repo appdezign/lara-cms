@@ -3,7 +3,7 @@
 namespace Lara\Admin\Http\Traits;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Qirolab\Theme\Theme;
+use Lara\Front\LaraTheme\Theme;
 
 trait AdminThemeTrait
 {

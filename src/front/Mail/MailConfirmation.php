@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Lara\Front\Http\Traits\FrontThemeTrait;
 
 // use Theme;
-use Qirolab\Theme\Theme;
+use Lara\Front\LaraTheme\Theme;
 
 class MailConfirmation extends Mailable {
 

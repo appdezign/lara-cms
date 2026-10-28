@@ -18,7 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
 // use Theme;
-use Qirolab\Theme\Theme;
+use Lara\Front\LaraTheme\Theme;
 
 class LoginController extends Controller
 {

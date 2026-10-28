@@ -2,7 +2,7 @@
 
 namespace Lara\Front\Helpers;
 
-use Qirolab\Theme\Theme;
+use Lara\Front\LaraTheme\Theme;
 
 class LaraTheme
 {

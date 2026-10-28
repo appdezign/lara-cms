@@ -2,6 +2,7 @@
 
 namespace Lara\Front\Providers;
 
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\App;
@@ -19,7 +20,8 @@ use Lara\Common\Models\Setting;
 use LaravelLocalization;
 
 // use Theme;
-use Qirolab\Theme\Theme;
+use Lara\Front\LaraTheme\Theme;
+use Lara\Front\LaraTheme\ThemeViewFinder;
 
 class LaraFrontServiceProvider extends ServiceProvider
 {
@@ -95,6 +97,31 @@ class LaraFrontServiceProvider extends ServiceProvider
 		$this->mergeConfigFrom($configPath, 'lara-front');
 
 		$this->app->register(RouteServiceProvider::class);
+
+		$this->registerThemeFinder();
+
+		// register facade alias, so we can use it in templates
+		$this->app->booting(function () {
+			$loader = AliasLoader::getInstance();
+			$loader->alias('Theme', '\Lara\Front\LaraTheme\Facade\LaraTheme');
+		});
+
+	}
+
+	protected function registerThemeFinder(): void
+	{
+		$this->app->singleton('theme.finder', function ($app) {
+			$themeFinder = new ThemeViewFinder(
+				$app['files'],
+				$app['config']['view.paths']
+			);
+
+			$themeFinder->setHints(
+				$this->app->make('view')->getFinder()->getHints()
+			);
+
+			return $themeFinder;
+		});
 
 	}
 
