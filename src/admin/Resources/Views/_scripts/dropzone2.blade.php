@@ -29,7 +29,7 @@
 					data.append("_token", "{{ csrf_token() }}");
 					data.append("object_id", "{{ $data->object->id }}");
 					data.append("entity_key", "{{ $entity->getEntityKey() }}");
-					data.append("dz_session_id", "{{ Date::parse(\Carbon\Carbon::now())->format('YmdHis') }}");
+					data.append("dz_session_id", "{{ \Carbon\Carbon::now()->format('YmdHis') }}");
 				});
 
 				this.on("queuecomplete", function (file) {
@@ -81,7 +81,7 @@
 					data.append("_token", "{{ csrf_token() }}");
 					data.append("object_id", "{{ $data->object->id }}");
 					data.append("entity_key", "{{ $entity->getEntityKey() }}");
-					data.append("dz_session_id", "{{ Date::parse(\Carbon\Carbon::now())->format('YmdHis') }}");
+					data.append("dz_session_id", "{{ \Carbon\Carbon::now()->format('YmdHis') }}");
 				});
 
 				this.on("success", function(file, response) {
@@ -129,7 +129,7 @@
 					data.append("_token", "{{ csrf_token() }}");
 					data.append("object_id", "{{ $data->object->id }}");
 					data.append("entity_key", "{{ $entity->getEntityKey() }}");
-					data.append("dz_session_id", "{{ Date::parse(\Carbon\Carbon::now())->format('YmdHis') }}");
+					data.append("dz_session_id", "{{ \Carbon\Carbon::now()->format('YmdHis') }}");
 				});
 
 				this.on("success", function(file, response) {

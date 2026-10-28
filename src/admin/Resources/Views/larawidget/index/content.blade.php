@@ -57,9 +57,9 @@
 
 					<td class="show-medium-up">
 						@if(!empty($obj->publish_from))
-							{{ Date::parse($obj->publish_from)->format('d M Y') }}
+							{{ \Carbon\Carbon::parse($obj->publish_from)->translatedFormat('d M Y') }}
 						@else
-							{{ Date::parse($obj->created_at)->format('d M Y') }}
+							{{ \Carbon\Carbon::parse($obj->created_at)->translatedFormat('d M Y') }}
 						@endif
 					</td>
 					<td>

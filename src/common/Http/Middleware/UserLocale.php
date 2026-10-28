@@ -9,7 +9,7 @@ use Config;
 
 use Lara\Common\Models\Language;
 
-use Jenssegers\Date\Date;
+use Carbon\Carbon;
 
 class UserLocale {
 
@@ -36,7 +36,7 @@ class UserLocale {
 
 		App::setLocale($language);
 
-		Date::setLocale($language);
+		Carbon::setLocale($language);
 
 		return $next($request);
 	}
