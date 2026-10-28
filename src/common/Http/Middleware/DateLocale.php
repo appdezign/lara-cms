@@ -6,7 +6,7 @@ use Closure;
 
 use LaravelLocalization;
 
-use Jenssegers\Date\Date;
+use Carbon\Carbon;
 
 class DateLocale {
 
@@ -21,7 +21,7 @@ class DateLocale {
 
 		$language = LaravelLocalization::getCurrentLocale();
 
-		Date::setLocale($language);
+		Carbon::setLocale($language);
 
 		return $next($request);
 	}

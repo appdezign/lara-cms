@@ -255,7 +255,7 @@
 												<span class="color-primary">{{ $lara_user->mainrole->title }}</span>
 											</td>
 											<td>
-												<span class="color-primary">{{ Date::parse($lara_user->last_login)->format('d M Y, H:i:s') }}</span>
+												<span class="color-primary">{{ \Carbon\Carbon::parse($lara_user->last_login)->translatedFormat('d M Y, H:i:s') }}</span>
 											</td>
 
 										</tr>
@@ -276,7 +276,7 @@
 											</td>
 											<td>
 												@if($lara_user->last_login)
-													{{ Date::parse($lara_user->last_login)->format('d M Y, H:i:s') }}
+													{{ \Carbon\Carbon::parse($lara_user->last_login)->translatedFormat('d M Y, H:i:s') }}
 												@else
 													{{ _lanq('lara-admin::dashboard.message.never_logged_in') }}
 												@endif

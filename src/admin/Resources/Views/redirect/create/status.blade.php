@@ -53,13 +53,13 @@
 	@else
 
 		{{ html()->hidden('publish', 1) }}
-		{{ html()->hidden('publish_from', Date::parse(\Carbon\Carbon::now())->format('Y-m-d H:i:s')) }}
+		{{ html()->hidden('publish_from', \Carbon\Carbon::now()->format('Y-m-d H:i:s')) }}
 
 	@endif
 
 @else
 
 	{{ html()->hidden('publish', 1) }}
-	{{ html()->hidden('publish_from', Date::parse(\Carbon\Carbon::now())->format('Y-m-d H:i:s')) }}
+	{{ html()->hidden('publish_from', \Carbon\Carbon::now()->format('Y-m-d H:i:s')) }}
 
 @endif
