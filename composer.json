@@ -39,7 +39,7 @@
 		"pragmarx/recovery": "^0.2.1",
 		"rutorika/sortable": "^9.2",
 		"silber/bouncer": "^1.0",
-		"spatie/geocoder": "^3.16|^3.0",
+		"spatie/geocoder": "^3.16|^4.0",
 		"spatie/laravel-analytics": "^5.4",
 		"spatie/laravel-honeypot": "^4.5",
 		"spatie/laravel-html": "^3.11",
