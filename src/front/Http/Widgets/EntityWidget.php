@@ -112,7 +112,7 @@ class EntityWidget extends AbstractWidget
 			}
 
 			if ($this->config['since']) {
-				$days = $this->config['since'];
+				$days = (int) $this->config['since'];
 				$collection = $collection->where('created_at', '>', Carbon::now()->subDays($days)->toDateTimeString());
 			}
 
